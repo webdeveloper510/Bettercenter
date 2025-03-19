@@ -12,6 +12,34 @@ body {
     height: 100vh;
 }
 
+/* Make the body and HTML take full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Ensure the main container takes the full height */
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Push the footer to the bottom */
+  .main-content {
+    flex: 1; /* This makes the content expand and pushes footer down */
+  }
+  
+  .footer {
+    background-color: #0a0a23; /* Dark background */
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
 /* //////signup//// */
 .form_sign {
     width: 55%;

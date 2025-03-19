@@ -7,9 +7,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./Component/Pages/home";
 import Signup from "./Component/Pages/signup";
 import Subscription from "./Component/Pages/subscriptions";
+import Ourteam from "./Component/Pages/ourteam";
 import Signin from "./Component/Pages/signin";
-import Header from "./Component/header"; // Create a Header component
-import Footer from "./Component/footer"; // Create a Footer component
+import Header from "./Component/header"; 
+import Footer from "./Component/footer"; 
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/subscriptions" element={<Subscription />} />
+          <Route path="/ourteam" element={<Ourteam />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
         </Routes>
