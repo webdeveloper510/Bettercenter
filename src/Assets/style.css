@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+body {
+    margin: 0;
+}
+
+.backgroung_image {
+    background-image: url("./images/Sign\ up\ .png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+   height: fit-content;
+    background-color: #faf5f500;
+}
+
+/* //////signup//// */
+.form_sign {
+    width: 55%;
+    height: auto;
+    padding: 25px;
+    margin: auto;
+}
+
+.sign_up {
+    width: 100%;
+    border: 1px solid #fff;
+    border-radius: 40px;
+    background-color: #fff;
+    height: 55px !important;
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+
+.sign_heading {
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+}
+
+.sign_heading_one {
+    font-size: 67px;
+    font-weight: 900;
+}
+
+.sign_heading_two {
+    font-size: 20px;
+    font-weight: 400;
+
+}
+
+.sign_up_one {
+    width: 30%;
+    height: 50px !important;
+    padding-left: 20px;
+    font-size: 14px;
+    color: #757272;
+    font-weight: 500;
+}
+
+.sign_up_two {
+    width: 50%;
+    height: 48px !important;
+    border: none;
+    outline: none;
+    /* border-left: 1px solid #757272; */
+
+
+}
+
+.btn_sign {
+    background-color: #0F93EB;
+    text-align: center;
+    margin: auto;
+    width: 40%;
+    padding: 15px 20px;
+    margin-top: 20px;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    display: flex;
+    justify-content: center;
+    border-radius: 30px;
+
+}
+
+.sign_account {
+    text-align: center;
+    margin-top: 10px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.sign_in {
+    text-align: center;
+    margin-top: 10px;
+    color: #0F93EB;
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* //////signin css//// */
+.form_sign_in {
+    width: 55%;
+    height: auto;
+    padding: 35px;
+    margin: auto;
+    margin-bottom: 95px;
+}
+
+.sign_heading_in {
+    font-size: 67px;
+    font-weight: 900;
+}
+
+.sign_heading_in_one {
+    font-size: 20px;
+    font-weight: 400;
+
+}
+.btn_sign_in {
+    background-color: #0F93EB;
+    text-align: center;
+    margin: auto;
+    width: 20%;
+    padding: 15px 20px;
+    margin-top: 20px;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    display: flex;
+    justify-content: center;
+    border-radius: 30px;
+
+}
+.btn_link{
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+}
+
+.sign_in_link{
+    margin-top: 10px;
+    color: #0F93EB;
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+}
