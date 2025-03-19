@@ -5,9 +5,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Home from './Component/Pages/home';
 import Signup from './Component/Pages/signup';
 import Signin from './Component/Pages/signin';
+
 function App() {
   return (
     <>
+    <header/>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -17,7 +19,8 @@ function App() {
           
         </Routes>
       </Router>
-    </>
+      <footer/>
+      </>
   );
 }
 
