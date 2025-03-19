@@ -5,12 +5,11 @@ body {
 }
 
 .backgroung_image {
-    background-image: url("./images/Sign\ up\ .png");
+    background-image: url("../Assets/images/Sign\ up.png");
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: no-rnopepeat;
     background-size: cover;
-   height: fit-content;
-    background-color: #faf5f500;
+    height: 100vh;
 }
 
 /* //////signup//// */
