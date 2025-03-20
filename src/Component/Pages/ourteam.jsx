@@ -1,9 +1,11 @@
 import React from "react";
+import "../../Assets/ourteam.css";
 import { Container, Row, Col, Card, Button, Accordion } from "react-bootstrap";
 import team1 from "../../Assets/images/team1.png";
 import team2 from "../../Assets/images/team2.png";
 import team3 from "../../Assets/images/team3.png";
 import team4 from "../../Assets/images/team4.png";
+import Faq from "./faq";
 
 const Ourteam = () => {
   const teamMembers = [
@@ -34,50 +36,31 @@ const Ourteam = () => {
   ];
 
   return (
-    <section className="team-section">
+    <section className="main">
       <Container>
-        <h2 className="text-center">OUR TEAM</h2>
+        <h2 className="text-center our_team_head">OUR TEAM</h2>
         <p className="text-center team-subtitle">
           From winning huge capping contests to features on HBO Sports & ESPN among other networks and publications, our cappers have over 100 years of combined experience backed by a proprietary database.
+          <br></br>
+          Whether you need free picks, parlays, teasers, or our most confident picks, we’re here to help you build a winning strategy.
         </p>
 
-        <Row className="justify-content-center">
+        <Row className="justify-content-center tem_menber">
           {teamMembers.map((member, index) => (
             <Col md={3} sm={6} key={index}>
               <Card className="team-card" style={{ backgroundColor: member.bgColor }}>
                 <Card.Img variant="top" src={member.image} className="team-img" />
-                <Card.Body className="text-center">
+                <Card.Body className="text-center team_details">
                   <Card.Title className="team-name">{member.name}</Card.Title>
                   <Card.Text className="team-description">{member.description}</Card.Text>
-                  <Button variant="outline-light">BUY PICKS</Button>
+                  <Button variant="outline-light buy_pick">BUY PICKS</Button>
                 </Card.Body>
               </Card>
             </Col>
           ))}
         </Row>
 
-        {/* FAQ Section */}
-        <h2 className="text-center mt-5">FREQUENTLY ASKED QUESTIONS</h2>
-        <p className="text-center team-subtitle">
-          Reference site about Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.
-        </p>
-
-        <Accordion defaultActiveKey="0" className="faq-section">
-          {[
-            "How to Use OddsJam's NBA Odds Comparison Tool",
-            "How to Read NBA Moneylines",
-            "How to Read NBA Point Spreads",
-            "How to Read NBA Over/Under or Totals",
-            "What are NBA Prop Bets?",
-          ].map((question, idx) => (
-            <Accordion.Item eventKey={idx.toString()} key={idx}>
-              <Accordion.Header>{question}</Accordion.Header>
-              <Accordion.Body>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </Accordion.Body>
-            </Accordion.Item>
-          ))}
-        </Accordion>
+        <Faq/>
       </Container>
     </section>
   );

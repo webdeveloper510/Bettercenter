@@ -24,12 +24,23 @@ const signup = () => {
                                     <input type="text" className='sign_up_two' placeholder='Enter Email' />
                                 </div>
                                 <div className='sign_up'>
-                                    <label className='sign_up_one' htmlFor="">Create Password</label>
-                                    <input type="text" className='sign_up_two' placeholder='Enter Password' />
+                                    <label className='sign_up_one' htmlFor="create-password">Create Password</label>
+                                    <input 
+                                        type="password" 
+                                        className='sign_up_two' 
+                                        placeholder='Enter Password' 
+                                        id="create-password" 
+                                    />
                                 </div>
+
                                 <div className='sign_up'>
-                                    <label className='sign_up_one' htmlFor="">Re-type Password</label>
-                                    <input type="text" className='sign_up_two' placeholder='Re-type Password' />
+                                    <label className='sign_up_one' htmlFor="confirm-password">Re-type Password</label>
+                                    <input 
+                                        type="password" 
+                                        className='sign_up_two' 
+                                        placeholder='Re-type Password' 
+                                        id="confirm-password" 
+                                    />
                                 </div>
                                 <button type="submit" className='btn_sign'>Create Account</button>
                                 <h6 className='sign_account'>Already have an account? <a href="" className='sign_in'>Sign in</a></h6>

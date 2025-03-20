@@ -14,6 +14,34 @@ h1, h2, h3, h4, h5, h6 {
     font-family: var(--heading-font);
     letter-spacing: 1px;
   }
+/* Import fonts */
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+
+/* Define font variables */
+:root {
+  --font-heading: 'Zuume', sans-serif;
+  --font-body: 'Gilroy', sans-serif;
+}
+
+/* Apply global styles */
+body {
+  font-family: var(--font-body);
+
+}
+
+/* Headings (Use Zuume) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: bold;
+}
+
+/* Paragraphs and other text (Use Gilroy) */
+p, span, a, button, input, label {
+  font-family: var(--font-body);
+}
+
+
 .backgroung_image {
     background-image: url("../Assets/images/Sign\ up.png");
     background-position: center;
@@ -61,7 +89,7 @@ html, body {
     width: 100%;
     border: 1px solid #fff;
     border-radius: 40px;
-    background-color: #fff;
+    background: #FFFFFF1A;
     height: 55px !important;
     margin-top: 20px;
     text-transform: uppercase;
@@ -74,7 +102,7 @@ html, body {
 }
 
 .sign_heading_one {
-    font-size: 67px;
+    font-size: 67px !important;
     font-weight: 900;
 }
 
@@ -83,13 +111,17 @@ html, body {
     font-weight: 400;
 
 }
+.sign_up input {
+    background: transparent;
+    color: #fff;
+}
 
 .sign_up_one {
     width: 30%;
     height: 50px !important;
     padding-left: 20px;
     font-size: 14px;
-    color: #757272;
+    color: #fff;
     font-weight: 500;
 }
 
@@ -98,26 +130,24 @@ html, body {
     height: 48px !important;
     border: none;
     outline: none;
-    /* border-left: 1px solid #757272; */
-
-
 }
-
-.btn_sign {
-    background-color: #0F93EB;
-    text-align: center;
+.form_sign_in {
+    width: 55%;
+    height: auto;
+    padding: 25px;
     margin: auto;
-    width: 40%;
-    padding: 15px 20px;
-    margin-top: 20px;
-    text-transform: uppercase;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 800;
-    display: flex;
-    justify-content: center;
+}
+.btn_sign {
+    background: #0F93EB;
+    border: 2px solid #007bff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
     border-radius: 30px;
-
+    transition: all 0.3s ease-in-out;
+    margin: 0 auto;
+    display: block;
 }
 
 .sign_account {
@@ -138,14 +168,6 @@ html, body {
 }
 
 /* //////signin css//// */
-.form_sign_in {
-    width: 55%;
-    height: auto;
-    padding: 35px;
-    margin: auto;
-    margin-bottom: 95px;
-}
-
 .sign_heading_in {
     font-size: 67px;
     font-weight: 900;
@@ -157,31 +179,161 @@ html, body {
 
 }
 .btn_sign_in {
-    background-color: #0F93EB;
-    text-align: center;
-    margin: auto;
-    width: 20%;
-    padding: 15px 20px;
-    margin-top: 20px;
-    text-transform: uppercase;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 800;
+    background: #0F93EB;
+    border: 2px solid #007bff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 30px;
+    transition: all 0.3s ease-in-out;
+    margin: 0 auto;
+    display: block;
+}
+.btn_link {
     display: flex;
     justify-content: center;
-    border-radius: 30px;
-
+    gap: 30px;
+    align-items: center;
+    width: 100%;
+    align-items: center;
 }
-.btn_link{
-    display: flex;
-    justify-content: space-between;
-    padding: 30px;
+a.sign_in_link.forgot_pass {
+    color: #6C6683;
 }
-
 .sign_in_link{
     margin-top: 10px;
     color: #0F93EB;
     font-size: 20px;
     font-weight: 600;
     text-decoration: none;
+}
+/* Background Image Section */
+.backgroung_image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
+    background: url('../Assets/images/Sign\ up.png') no-repeat center center/cover;
+  }
+  
+  /* Heading Styles */
+  .sign_heading_one {
+    font-size: 2rem;
+    font-family: var(--font-heading);
+    color: white;
+  }
+  
+  .sign_heading_two {
+    font-size: 1rem;
+    font-family: var(--font-body);
+    color: #ddd;
+  }
+  
+  /* Input Fields */
+  .sign_up {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+  
+  
+  .sign_up_two::placeholder {
+    color: #bbb;
+  }
+  
+  /* Submit Button */
+  
+  .btn_sign:hover {
+    background: #0056b3;
+  }
+  
+  /* Already have an account */
+  .sign_account {
+    margin-top: 15px;
+    color: white;
+  }
+  
+  .sign_in {
+    color: #00aaff;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .sign_in:hover {
+    text-decoration: underline;
+  }
+  .sign_up_two:-webkit-autofill,
+.sign_up_two:-webkit-autofill:hover, 
+.sign_up_two:-webkit-autofill:focus, 
+.sign_up_two:-webkit-autofill:active {
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    color: white !important; 
+}
+.sign_up_two:-webkit-autofill {
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset !important;
+    box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset !important;
+    -webkit-text-fill-color: white !important; /* Ensures text color remains white */
+    transition: background-color 5000s ease-in-out 0s; /* Delays autofill background */
+}
+
+  /* Media quaries start */
+  @media screen and (max-width: 767px) {
+    .form_sign_in {
+        width: 90%;
+        height: auto;
+        padding: 25px;
+        margin: auto;
+    }
+    .btn_link {
+        display: block;
+        width: 100%;
+        align-items: center;
+    }
+    .btn_link a.sign_in_link {
+        width: 100%;
+        float: left;
+        text-align: center;
+    }
+    .btn_sign_in {
+        padding: 11px 30px;
+    }
+    .form_sign {
+        width: 90%;
+        height: auto;
+        padding: 25px;
+        margin: auto;
+    }
+    .form_sign label.sign_up_one {
+        display: none;
+    }
+    .form_sign_in label.sign_up_one {
+        display: none;
+    }
+    .sign_up input {
+        background: transparent;
+        color: #fff;
+        padding-left: 20px;
+        width: 100% !important;
+    }
+    .main img.pick-image {
+        width: 100%;
+    }
+    .pick-details-container.container .col-md-7 {
+        padding: 50px 20px;
+    }
+    .faq-section.accordion {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .accordion-body {
+        padding: 15px 10px;}
+        .accordion-button {
+            background: linear-gradient(90deg, #0A0228 0%, #221B3D 43.5%, #221B3D 57%, #0A0228 100%);
+            color: #ffffff;
+            font-weight: 500;
+            padding: 15px 20px;
+        }
 }

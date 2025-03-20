@@ -1,0 +1,30 @@
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+.main {
+    background-image: url("../Assets/images/page-bg.png");
+    background-repeat: no-repeat, repeat;
+    padding-top: 90px;  
+}
+h2.section-title {
+    color: #fff;
+    font-family: 'Zuume', sans-serif;
+    font-size: 67px;
+    font-weight: 900;
+}
+.membership-card.card {
+    background: transparent;
+    border: none !important;
+    text-align: left;
+}
+.membership-title.card-title.h5 {
+    color: #fff;
+    font-family: 'Zuume', sans-serif;
+    font-size: 35px;
+    font-weight: 900;
+}
+p.team-description.card-text {
+    font-family: 'Gilroy-Regular', sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    min-height: 115px;
+}

@@ -1,0 +1,50 @@
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+.main {
+    background-image: url("../Assets/images/page-bg.png");
+    background-repeat: no-repeat, repeat;
+    padding-top: 90px;  
+}
+h2.pick-title {
+    color: #fff;
+    font-family: 'Zuume', sans-serif;
+    font-size: 67px;
+    font-weight: 900;
+    text-align: center;
+}
+h3.membership-title {
+    color: #fff;
+    font-family: 'Zuume', sans-serif;
+    font-size: 35px;
+    font-weight: 900;
+}
+.align-items-center.row {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+p.membership-description {
+    color: #fff !important;
+    font-family: 'Gilroy-Regular', sans-serif;
+    font-size: 15px;
+}
+.bottom_detsil {
+    width: 60%;
+}
+.purchase {
+    background: #0F93EB;
+    border: 2px solid #007bff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 30px;
+    transition: all 0.3s ease-in-out;
+}
+select.quantity-select.form-select {
+    background: #0F93EB1A;
+    color: #fff;
+}
+select.quantity-select.form-select option {
+    background: #1d163c;
+    color: #fff;
+}

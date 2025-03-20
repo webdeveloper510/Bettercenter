@@ -1,6 +1,6 @@
 /* Footer Base Styles */
 .footer {
-    background-color: #0a0a23;
+    background-color: #0d052c;
     color: white;
     padding: 40px 20px;
     text-align: left;
@@ -16,7 +16,17 @@
     height: auto;
     margin-bottom: 10px;
   }
-  
+  .footer-inputs input {
+    background: #FFFFFF1A;
+    border-radius: 30px;
+    border: 1px solid #FFFFFF4D;
+    padding: 10px;
+    font-size: 14px;
+    color: #fff;
+}
+input[type="text"] {
+  width: 50%;
+}
   /* Footer Links */
   .footer-column ul {
     list-style: none;
@@ -69,6 +79,9 @@
   }
   
   .signup-btn {
+    background-color: #007bff;
+    border: 2px solid #007bff;
+    color: white;
     padding: 10px 20px;
     font-size: 14px;
     font-weight: 600;

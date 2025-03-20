@@ -2,6 +2,7 @@ import React from "react";
 import "../Component/header.css";
 import logo1 from "../better_logo.png";
 import { FaShoppingBag } from "react-icons/fa"; 
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const Header = () => {
   return (
@@ -35,12 +36,12 @@ const Header = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <a className="nav-link" href="/ourteam">
                   TEAM
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <a className="nav-link" href="/allpicks">
                   FREE PICKS
                 </a>
               </li>

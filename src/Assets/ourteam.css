@@ -1,0 +1,129 @@
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+.team-card.card {
+    background: transparent;
+    border: none !important;
+    text-align: left;
+}
+.main {
+    background-image: url("../Assets/images/page-bg.png");
+    background-repeat: no-repeat, repeat;
+    padding-top: 90px;  
+}
+p.membership-price.card-text {
+    color: #ccc;
+}
+
+.our_team_head {
+    color: #fff;
+    font-family: 'Zuume', sans-serif;
+    font-size: 67px;
+    font-weight: 900;
+}
+p.text-center.team-subtitle {
+    width: 80%;
+    margin: 0 auto;
+    border-radius: 30px;
+    color: #fff !important;
+    font-size: 15px;
+    font-family: 'Gilroy-Regular', sans-serif;
+    font-size: 15px;
+}
+.justify-content-center.tem_menber.row {
+    margin-top: 50px;
+}
+.text-center.team_details.card-body {
+    text-align: left !important;
+    color: #fff;
+    padding-top: 25px;
+}
+.buy_pick {
+    background: #534E68;
+    border-radius: 30px;
+    color: #fff !important;
+    font-size: 15px;
+    font-family: 'Gilroy-Regular', sans-serif;
+    font-size: 13px;
+}
+.accordion-item {
+    background: linear-gradient(90deg, #0A0228 0%, #221B3D 43.5%, #221B3D 57%, #0A0228 100%);
+}
+.faq-section {
+    background-color: #0b0c1e; /* Dark background */
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .accordion {
+    background-color: transparent;
+  }
+  
+  .accordion-item {
+    background-color: #1a1b2f; /* Dark accordion background */
+    border: none;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .accordion-header {
+    background-color: transparent;
+  }
+  
+  .accordion-button {
+    background: linear-gradient(90deg, #0A0228 0%, #221B3D 43.5%, #221B3D 57%, #0A0228 100%);
+    color: #ffffff;
+    font-weight: 500;
+    padding: 15px 60px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-family: 'Gilroy-Regular', sans-serif;
+    font-size: 15px;
+  }
+  
+  .accordion-button:hover {
+    background-color: #292b4b;
+    color: #ffffff;
+  }
+  
+  .accordion-button:focus {
+    box-shadow: none;
+  }
+  
+  .accordion-button:not(.collapsed) {
+    background-color: #292b4b;
+    box-shadow: none;
+    border-radius: 30px;
+    color: #fff !important;
+    font-size: 15px;
+    font-family: 'Gilroy-Regular', sans-serif;
+    font-size: 15px;
+}
+  
+  .accordion-button::after {
+    filter: invert(1); /* Make the arrow white */
+  }
+  
+  .accordion-body {
+    color: #c3b8b8;
+    padding: 15px 60px;
+    background: linear-gradient(90deg, #0A0228 0%, #221B3D 43.5%, #221B3D 57%, #0A0228 100%);
+  }
+  .faq-section.accordion {
+    padding-bottom: 100px;
+    padding-bottom: 100px;
+    width: 80%;
+    margin: 0 auto;
+}
+.team-name.card-title.h5 {
+    color: #fff;
+    font-family: 'Zuume', sans-serif;
+    font-size: 35px;
+    font-weight: 900;
+}
+p.team-description.card-text {
+    font-family: 'Gilroy-Regular', sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    min-height: 115px;
+}
