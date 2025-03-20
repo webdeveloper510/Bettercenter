@@ -2,6 +2,7 @@ import React from "react";
 import "../Component/header.css";
 import logo1 from "../better_logo.png";
 import { FaShoppingBag } from "react-icons/fa"; 
+import { Link } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const Header = () => {
@@ -61,7 +62,10 @@ const Header = () => {
               </div>
 
               {/* Login */}
-              <span className="login-text">LOGIN</span>
+              {/* <span className="login-text">LOGIN</span> */}
+              <span className="login-text">
+  <Link to="/signin" className="login-link">LOGIN</Link>
+</span>
 
               {/* Divider */}
               <div className="divider"></div>
