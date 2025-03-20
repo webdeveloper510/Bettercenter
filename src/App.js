@@ -9,8 +9,9 @@ import Signup from "./Component/Pages/signup";
 import Subscription from "./Component/Pages/subscriptions";
 import Ourteam from "./Component/Pages/ourteam";
 import Signin from "./Component/Pages/signin";
-import Header from "./Component/header"; 
-import Footer from "./Component/footer"; 
+import Header from "./Component/header";
+// import Footer from "./Component/footer";
+import Checkout from "./Component/Pages/checkout";
 
 function App() {
   return (
@@ -23,9 +24,10 @@ function App() {
           <Route path="/ourteam" element={<Ourteam />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </Router>
   );
 }

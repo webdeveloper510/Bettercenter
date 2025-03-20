@@ -8,7 +8,7 @@ const signin = () => {
                         <div className='col-12'>
                             <form className='form_sign_in'>
                                 <div className='sign_heading'>
-                                    <h1 className='sign_heading_in'>Sign IN</h1>
+                                    <h1 className='sign_heading_in'>Sign in</h1>
                                     <p className='sign_heading_in_one'>Welcome to BettorCenter</p>
                                 </div>
                                 <div className='sign_up'>

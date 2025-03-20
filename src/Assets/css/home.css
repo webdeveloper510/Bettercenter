@@ -1,0 +1,52 @@
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+
+:root {
+    --body-font: 'Gilroy-Bold', sans-serif;
+    --heading-font: 'Zuume', sans-serif;
+}
+
+body {
+    font-family: var(--body-font);
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--heading-font);
+    letter-spacing: 1px;
+}
+
+.animated-heading {
+    animation: fadeInUp 1.5s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.backgroung_image {
+    background-image: url("../images/Sign\ up.png");
+    background-position: center;
+    background-repeat: no-rnopepeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+.nba_odds{
+    color: #fff;
+    font-size: 40px;
+    font-weight: 600;
+}
