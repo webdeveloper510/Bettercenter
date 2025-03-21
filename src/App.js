@@ -12,9 +12,10 @@ import Pickdetail from "./Component/Pages/pickdetail";
 import AllPicks from "./Component/Pages/allpicks";
 import Signin from "./Component/Pages/signin";
 import Header from "./Component/header";
-// import Footer from "./Component/footer";
 import Checkout from "./Component/Pages/checkout";
-import Footer from "./Component/footer";
+import Data from "./Component/Pages/data";
+
+// import Footer from "./Component/footer";
 
 function Layout() {
   const location = useLocation(); // Get the current route
@@ -28,17 +29,19 @@ function Layout() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/subscriptions" element={<Subscription />} />
+          <Route path="/" element={<Subscription />} />
           <Route path="/ourteam" element={<Ourteam />} />
           <Route path="/allpicks" element={<AllPicks />} />
           <Route path="/pickdetail" element={<Pickdetail />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/data" element={<Data />} /> 
+
         </Routes>
       </main>
-      {/* <Footer /> */}
-      {!hideHeaderFooter && <Footer />}
+   
+      {/* {!hideHeaderFooter && <Footer />} */}
     </>
   );
 }

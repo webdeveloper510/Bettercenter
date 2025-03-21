@@ -26,7 +26,7 @@ const signin = () => {
                             </div>
                                 <button type="submit" className='btn_sign_in'>Sign in</button>
                                 <div className='btn_link'> 
-                                    <a href="" className='sign_in_link forgot_pass'>Forget password </a> <a href="" className='sign_in_link'> create account</a>
+                                    <a href="" className='sign_in_link forgot_pass'>Forget password </a> <a href="/signup" className='sign_in_link'> create account</a>
                                 </div>
                             </form>
 
@@ -34,6 +34,7 @@ const signin = () => {
                     </div>
                 </div>
             </section>
+            
         </>
     )
 }

@@ -37,16 +37,126 @@ h6 {
         opacity: 1;
     }
 }
+
 .backgroung_image {
-    background-image: url("../images/Sign\ up.png");
+    background-image: url("../images/page-bg.png");
     background-position: center;
-    background-repeat: no-rnopepeat;
+    background-repeat: no-repeat;
     background-size: cover;
-    height: 100vh;
 }
 
-.nba_odds{
+.nba_odds {
     color: #fff;
     font-size: 40px;
     font-weight: 600;
+}
+
+.btn_tab {
+    background: transparent;
+    outline: none;
+    border: 1px solid #0F93EB;
+    border-radius: 18px;
+    padding: 3px 20px;
+    color: #999797;
+}
+
+.overview_tab {
+    width: 100%;
+    border: 1px solid red;
+}
+
+.nfl_games {
+    background-color: #1B1E3D;
+    border: 1px solid #1B1E3D;
+    border-radius: 15px;
+    padding: 0px !important;
+}
+
+.nfl_games_heading {
+    background-color: #23274A;
+    border: 1p solid #23274A;
+    border-radius: 15px 15px 0px 0px;
+    color: #fff;
+    padding: 15px 15px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.icon_heading {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+
+}
+
+.Open_tab {
+    border-left: 1px solid #696767;
+    padding-left: 10px;
+
+}
+
+.open_number {
+    background-color: #0F93EB;
+    color: #fff;
+    padding: 5px 15px;
+    border: 1px solid #0F93EB;
+    border-radius: 15px;
+}
+
+.open_number_one {
+    background-color: #23274A;
+    color: #fff;
+    padding: 5px 15px;
+    border: 1px solid #23274A;
+    border-radius: 15px;
+}
+
+.open_number_two {
+    background-color: #376c8f;
+    color: #fff;
+    padding: 5px 15px;
+    border: 1px solid #376c8f;
+    border-radius: 15px;
+}
+
+.image_icon {
+    padding: 5px;
+    background-color: #23274A;
+    border: 1px solid #575555;
+    border-radius: 10px;
+    width: 35px;
+    height: 35px;
+}
+
+.draw_icon {
+    width: 35px;
+    height: 35px;
+    fill: #a3a1a1;
+}
+
+.image_scorll {
+
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.image_scorll::-webkit-scrollbar {
+    height: 10px;
+}
+
+.image_scorll::-webkit-scrollbar-thumb {
+    background-color: #0F93EB;
+    border-radius: 5px;
+}
+
+.image_scorll::-webkit-scrollbar-track {
+    background: #23274A;
+}
+
+.home_Games {
+    padding-top: 100%;
+}
+:hover.tab_hover{
+background-color: #3d4375;
 }
