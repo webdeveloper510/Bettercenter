@@ -268,3 +268,13 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     top: -48px !important;
 }
+h2.section-title {
+    color: #fff;
+    font-family: 'Zuume', sans-serif;
+    font-size: 67px;
+    font-weight: 900;
+    text-align: center;
+}
+.main {
+ padding-top: 90px;
+}

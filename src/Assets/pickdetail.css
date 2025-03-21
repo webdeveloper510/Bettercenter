@@ -48,3 +48,6 @@ select.quantity-select.form-select option {
     background: #1d163c;
     color: #fff;
 }
+.pick-details-container .col-md-5 img {
+    width: 100%;
+}

@@ -57,7 +57,9 @@ const AllPicks = () => {
         {membershipPlans.map((plan) => (
           <Col key={plan.id} md={4} sm={6}>
             <Card className="membership-card">
+            <a href="/pickdetail">
               <Card.Img variant="top" src={plan.image} alt={plan.title} />
+            </a>
               <Card.Body>
                 <Card.Title className="membership-title">
                   DAVID SMITH'S <br />

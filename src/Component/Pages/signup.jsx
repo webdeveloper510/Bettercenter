@@ -2,7 +2,7 @@ import React from 'react';
 const signup = () => {
     return (
         <>
-            <section className='backgroung_image'>
+            <section className='login_page'>
                 <div className='container'>
                     <div className='row'>
                         <div className='col-12'>

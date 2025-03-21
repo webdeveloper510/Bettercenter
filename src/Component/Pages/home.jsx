@@ -26,7 +26,7 @@ const Home = () => {
     const toggleTab = (tabIndex) => {
         setActiveTab(tabIndex); // Always set a tab, never null
     };
-    const totalPages = 10;
+    const totalPages = 5;
     const [currentPage, setCurrentPage] = useState(1);
 
     const goToPage = (page) => {
@@ -1983,7 +1983,8 @@ const Home = () => {
                                                     border: "1px solid #0F93EB",
                                                     padding: "7px 15px",
                                                     borderRadius: "15px",
-                                                    cursor: "pointer"
+                                                    cursor: "pointer",
+                                                    color: "#ffffff",
                                                 }}
                                                 onClick={() => goToPage(page)}
                                             >

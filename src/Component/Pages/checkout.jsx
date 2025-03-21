@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Faq from "./faq";
 import "../../Assets/css/checkout.css";
 import cards from "../../Assets/images/Mask group.png"
 const Checkout = () => {
@@ -10,10 +11,10 @@ const Checkout = () => {
     };
     return (
         <>
-            <section className="backgroung_image ">
+            <section className="backgroung_image main">
                 <div className="container ">
                     <div className="row pb-5">
-                        <h1 className="text-uppercase fs-1 fw-bold text-white text-center my-5 animated-heading ">Checkout</h1>
+                        <h2 className="section-title">Checkout</h2>
                         <div className="col-7 card_checkout ">
                             <h1 className="card_heading text-uppercase fs-6 fw-bold text-white">Order Summary</h1>
                             <div className="card_image">
@@ -123,9 +124,11 @@ const Checkout = () => {
                         </div>
 
                     </div>
-
+                    <Faq/>
                 </div>
 
+             
+         
             </section>
 
         </>

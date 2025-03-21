@@ -209,12 +209,14 @@ a.sign_in_link.forgot_pass {
     text-decoration: none;
 }
 /* Background Image Section */
-.backgroung_image {
+.login_page
+{
     display: flex;
     align-items: center;
     justify-content: center;
     background: url('../Assets/images/Sign\ up.png') no-repeat center center/cover;
     background-size: cover;
+    height: 100vh;
   }
   
   /* Heading Styles */
