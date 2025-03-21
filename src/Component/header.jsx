@@ -31,21 +31,21 @@ const Header = () => {
           {/* Navbar Links & Right Section */}
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="/">
+            <li className="nav-item">
+              <Link className="nav-link active" to="/">
                 SUBSCRIPTIONS
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/ourteam">
-                  TEAM
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/allpicks">
-                  FREE PICKS
-                </a>
-              </li>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/ourteam">
+                TEAM
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/allpicks">
+                FREE PICKS
+              </Link>
+            </li>
               <li className="nav-item">
                 <a className="nav-link" href="#">
                   BLOG
