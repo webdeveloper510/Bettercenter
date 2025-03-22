@@ -2,7 +2,7 @@ import React from 'react';
 const signin = () => {
     return (
         <>
-            <section className='login_page'>
+            <section className='login_page signin_login_page'>
                 <div className='container'>
                     <div className='row'>
                         <div className='col-12'>

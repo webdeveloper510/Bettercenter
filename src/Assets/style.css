@@ -281,6 +281,9 @@ a.sign_in_link.forgot_pass {
     -webkit-text-fill-color: white !important; /* Ensures text color remains white */
     transition: background-color 5000s ease-in-out 0s; /* Delays autofill background */
 }
+.main {
+  background-size: cover !important;
+}
 
   /* Media quaries start */
   @media screen and (max-width: 767px) {
@@ -328,9 +331,23 @@ a.sign_in_link.forgot_pass {
         padding: 50px 20px;
     }
     .faq-section.accordion {
-        width: 100%;
+        width: 100% !important;
         margin: 0 auto;
     }
+    .accordion-button:not(.collapsed) {
+      font-size: 13px !important;
+      padding: 15px 30px !important;
+  }
+  .accordion-body {
+    padding: 15px 30px !important;
+    font-size: 12px;
+}
+.our_team_head {
+  font-size: 40px !important;
+}
+button.accordion-button.collapsed {
+  padding: 15px 30px !important;
+}
     .accordion-body {
         padding: 15px 10px;}
         .accordion-button {
@@ -339,4 +356,10 @@ a.sign_in_link.forgot_pass {
             font-weight: 500;
             padding: 15px 20px;
         }
+        .login_page {
+          height: auto;
+      }
+    .signin_login_page {
+        height: 100vh !important;
+    }
 }
