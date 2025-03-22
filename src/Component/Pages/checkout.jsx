@@ -13,8 +13,9 @@ const Checkout = () => {
         <>
             <section className="backgroung_image main">
                 <div className="container ">
-                    <div className="row pb-5">
-                        <h2 className="section-title">Checkout</h2>
+                <h2 className="section-title">Checkout</h2>
+
+                    <div className="row pb-5 checkout_responsive">
                         <div className="col-7 card_checkout ">
                             <h1 className="card_heading text-uppercase fs-6 fw-bold text-white">Order Summary</h1>
                             <div className="card_image">
@@ -71,10 +72,10 @@ const Checkout = () => {
                         </div>
 
 
-                        <div className="col-5">
+                        <div className="col-5 card_responsive">
                             <div className=" card_email">
                                 <h1 className="card_heading text-uppercase fs-6 fw-bold text-white">Your Email</h1>
-                                <div className="p-3">
+                                <div className="p-3 card_padding">
                                     <div className='card_input '>
                                         <label className='Discount_email' htmlFor="">E-mail</label>
                                         <input type="text" className='email_type' placeholder='jaspreet@codenomad.net' />
@@ -99,7 +100,7 @@ const Checkout = () => {
                             {isOpen && (
                                 <div className=" card_Additional">
                                     <h1 className="card_heading text-uppercase fs-6 fw-bold text-white">Additional Information</h1>
-                                    <div className="p-3">
+                                    <div className="p-3 card_padding">
                                         <div className='card_input '>
                                             <label className='Discount_email' htmlFor="">Phone</label>
                                             <input type="text" className='email_type' placeholder='6565+6646555' />

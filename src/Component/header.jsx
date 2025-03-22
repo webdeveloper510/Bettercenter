@@ -1,11 +1,13 @@
 import React from "react";
 import "../Component/header.css";
 import logo1 from "../better_logo.png";
-import { FaShoppingBag } from "react-icons/fa"; 
-import { Link } from "react-router-dom";
+import { FaShoppingBag } from "react-icons/fa";
+import { Link, useLocation } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const Header = () => {
+  const location = useLocation();
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light">
@@ -31,28 +33,39 @@ const Header = () => {
           {/* Navbar Links & Right Section */}
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link active" to="/">
-                SUBSCRIPTIONS
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/ourteam">
-                TEAM
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/allpicks">
-                FREE PICKS
-              </Link>
-            </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link
+                  className={`nav-link ${location.pathname === "/" ? "active-link" : ""}`}
+                  to="/"
+                >
+                  SUBSCRIPTIONS
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  className={`nav-link ${location.pathname === "/ourteam" ? "active-link" : ""}`}
+                  to="/ourteam"
+                >
+                  TEAM
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  className={`nav-link ${location.pathname === "/allpicks" ? "active-link" : ""}`}
+                  to="/allpicks"
+                >
+                  FREE PICKS
+                </Link>
+              </li>
+              <li className="nav-item">
+                <a
+                  className={`nav-link ${location.pathname === "/blog" ? "active-link" : ""}`}
+                  href="#"
+                >
                   BLOG
                 </a>
               </li>
             </ul>
-
             {/* Right Section: Cart, Login, and CTA Button */}
             <div className="header-content">
               {/* Cart Icon with Badge */}
@@ -64,8 +77,8 @@ const Header = () => {
               {/* Login */}
               {/* <span className="login-text">LOGIN</span> */}
               <span className="login-text">
-  <Link to="/signin" className="login-link">LOGIN</Link>
-</span>
+                <Link to="/signin" className="login-link">LOGIN</Link>
+              </span>
 
               {/* Divider */}
               <div className="divider"></div>

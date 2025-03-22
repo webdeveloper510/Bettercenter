@@ -57,7 +57,7 @@ h6 {
     border: 1px solid #0F93EB;
     border-radius: 18px;
     padding: 3px 20px;
-    color: #999797;
+    color: #fff !important;
 }
 
 .overview_tab {
@@ -120,17 +120,17 @@ h6 {
 }
 
 .image_icon {
-    padding: 5px;
+    padding: 2px 5px;
     background-color: #23274A;
     border: 1px solid #575555;
     border-radius: 10px;
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
 }
 
 .draw_icon {
-    width: 35px;
-    height: 35px;
+    width: 22px;
+    height: 22px;
     fill: #a3a1a1;
 }
 
@@ -157,6 +157,135 @@ h6 {
 .home_Games {
     padding-top: 100%;
 }
-:hover.tab_hover{
-background-color: #3d4375;
+
+:hover.tab_hover {
+    background-color: #3d4375;
+}
+
+.tab-bar {
+    display: flex;
+    justify-content: start;
+    gap: 7px;
+}
+
+
+
+.tab_drag {
+    display: block;
+    text-align: center;
+}
+
+.tab-image {
+    width: 45px !important;
+    height: 45px !important;
+    object-fit: contain;
+}
+
+
+
+
+
+
+@media (min-width: 320px) and (max-width: 580px) {
+
+    .tab_hover {
+
+        display: block !important;
+        padding: 5px;
+    }
+
+    .drag_responsive {
+        width: 100% !important;
+        margin: auto !important;
+    }
+    .drag_responsive_one {
+        width: 100% !important;
+        margin: auto !important;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+    .drag_responsive_one::-webkit-scrollbar {
+        height: 10px;
+    }
+    
+    .drag_responsive_one::-webkit-scrollbar-thumb {
+        background-color: #0F93EB;
+        border-radius: 5px;
+    }
+    
+    .drag_responsive_one::-webkit-scrollbar-track {
+        background: #23274A;
+    }
+    .home_pagination {
+        width: 100%;
+        margin: auto;
+        margin: 5px;
+        text-align: center;
+        margin: auto;
+        display: block !important;
+    }
+    .btn_next{
+        margin-top: 10px !important;
+
+    }
+    .btn_tab{
+        width: 100%;
+        margin: auto;
+    }
+}
+
+    
+
+
+@media (min-width: 580px) and (max-width: 768px) {
+    .tab_hover {
+
+        display: block !important;
+        padding: 5px;
+    }
+
+    .drag_responsive {
+        width: 100% !important;
+        margin: auto !important;
+    }
+    .drag_responsive_one {
+        width: 100% !important;
+        margin: auto !important;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+    .drag_responsive_one::-webkit-scrollbar {
+        height: 10px;
+    }
+    
+    .drag_responsive_one::-webkit-scrollbar-thumb {
+        background-color: #0F93EB;
+        border-radius: 5px;
+    }
+    
+    .drag_responsive_one::-webkit-scrollbar-track {
+        background: #23274A;
+    }
+    .home_pagination {
+        width: 100%;
+        margin: auto;
+        margin: 5px;
+        text-align: center;
+        margin: auto;
+        display: block !important;
+    }
+    .btn_next{
+        margin-top: 10px !important;
+
+    }
+    .btn_tab{
+        width: 100%;
+        margin: auto;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
 }

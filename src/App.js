@@ -36,11 +36,11 @@ function Layout() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/data" element={<Data />} /> 
+          <Route path="/data" element={<Data />} />
 
         </Routes>
       </main>
-   
+
       {/* {!hideHeaderFooter && <Footer />} */}
     </>
   );
