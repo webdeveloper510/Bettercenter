@@ -309,7 +309,9 @@ h2.section-title {
     .card_responsive {
         width: 100%;
         margin-top: 20px;
+        padding: 0px !important;
     }
+
 
     .card_code {
         display: block !important;
@@ -374,6 +376,12 @@ h2.section-title {
         width: 50%;
         margin-top: 15px;
     }
+    .faq-section.accordion {
+        padding-bottom: 100px;
+        padding-bottom: 100px;
+        width: 100%;
+        margin: 0 auto;
+    }
 }
 
 @media (min-width:580px) and (max-width: 768px) {
@@ -395,7 +403,9 @@ h2.section-title {
     .card_responsive {
         width: 100%;
         margin-top: 20px;
+        padding: 0px !important;
     }
+
 
     .card_code {
         display: block !important;
@@ -481,6 +491,7 @@ h2.section-title {
     .card_responsive {
         width: 100%;
         margin-top: 20px;
+        padding: 0px !important;
     }
 
     .card_code {
@@ -555,4 +566,5 @@ h2.section-title {
     padding-top: 15px;
     padding-left: 16px;
 }
+
 }

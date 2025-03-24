@@ -14,7 +14,7 @@ import Signin from "./Component/Pages/signin";
 import Header from "./Component/header";
 import Checkout from "./Component/Pages/checkout";
 import Data from "./Component/Pages/data";
-
+import TeamDetails from "./Component/Pages/teamdetails"
 // import Footer from "./Component/footer";
 
 function Layout() {
@@ -37,6 +37,7 @@ function Layout() {
           <Route path="/signin" element={<Signin />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/data" element={<Data />} />
+          <Route path="/teamDetails" element={<TeamDetails />} />
 
         </Routes>
       </main>

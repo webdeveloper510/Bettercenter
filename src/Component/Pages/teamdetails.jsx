@@ -44,7 +44,6 @@ const Tab = ({ tab, index, moveTab }) => {
 };
 
 const Home = () => {
-    const [selectedTeam, setSelectedTeam] = useState(null);
 
     const [activeTab, setActiveTab] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
@@ -62,13 +61,7 @@ const Home = () => {
         { id: 7, image: group, title: "UnibetNJ", value: "-210" },
         { id: 8, image: group1, title: "Open", value: "-210" },
     ]);
-    const handleTabClick = (team1, team2, time, league) => {
-        // Create a URL with team details
-        const url = `/teamdetails`;
 
-        // Open the URL in a new tab
-        window.open(url, "_blank");
-    };
     const moveTab = (fromIndex, toIndex) => {
         const updatedTabs = [...tabs];
         const [movedTab] = updatedTabs.splice(fromIndex, 1);
@@ -148,16 +141,18 @@ const Home = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-12 mt-5">
-                            <h1 className="nba_odds">NBA Odds, Betting Lines, Point Spreads, Totals, Moneylines</h1>
+                            <h1 className="nba_odds">Minnesota Timberwolves vs Indiana Pacers</h1>
                             <div className="mt-4">
                                 <div className="d-flex flex-wrap gap-2">
                                     {[
-                                        { id: 1, label: "Overview" },
-                                        { id: 2, label: "Games" },
-                                        { id: 3, label: "Futures" },
-                                        { id: 4, label: "Teams" },
-                                        { id: 5, label: "Schedule" },
-                                        { id: 6, label: "Injuries" }
+                                        { id: 1, label: "Main Markets" },
+                                        { id: 2, label: "Moneyline" },
+                                        { id: 3, label: "Point Spread" },
+                                        { id: 4, label: "Total Points" },
+                                        { id: 5, label: "1st Quarter Moneyline" },
+                                        { id: 6, label: "1st Half Moneyline" },
+                                        { id: 7, label: "1st Half Total Points" },
+                                        { id: 8, label: "Team Total" },
                                     ].map((tab) => (
                                         <button
                                             key={tab.id}
@@ -181,35 +176,8 @@ const Home = () => {
                                     {activeTab === 1 && (
                                         <div className="container">
                                             <div className="row">
-                                                <h1 className="nba_odds">Upcoming NBA Games</h1>
-                                                <div className="col-12 nfl_games mt-3">
-                                                    <h6 className="nfl_games_heading">Tomorrow - 5:30AM - NBA</h6>
+                                                <h1 className="nba_odds">Timberwolves vs Pacers Moneyline</h1>
 
-                                                    {/* Clickable Tab */}
-                                                    <div
-                                                        className="d-flex px-2 tab_hover"
-                                                        onClick={() => handleTabClick("team1", "team2")}
-                                                        style={{ cursor: "pointer" }}
-                                                    >
-                                                        <div className="py-2">
-                                                            {/* Away Team */}
-                                                            <div className="d-flex gap-1">
-                                                                <div className="image_icon">
-                                                                    <img src={vector5} alt="" width={19} height={19} />
-                                                                </div>
-                                                                <h6 className="icon_heading pt-2">team1</h6>
-                                                            </div>
-
-                                                            {/* Home Team */}
-                                                            <div className="d-flex gap-1 mt-2">
-                                                                <div className="image_icon">
-                                                                    <img src={vector5} alt="" width={19} height={19} />
-                                                                </div>
-                                                                <h6 className="icon_heading pt-2">team2</h6>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 {allGames.length === 0 ? (
                                                     <div className="col-12 text-center my-5">
                                                         <p>No upcoming games available at the moment.</p>
@@ -232,13 +200,12 @@ const Home = () => {
                                                         return (
 
                                                             <div key={gameIndex} className="col-12 nfl_games mt-3">
-                                                                <h6 className="nfl_games_heading">Tomorrow - 5:30AM - NBA</h6>
 
 
 
                                                                 <div className="d-flex px-2 tab_hover" >
 
-                                                                    <div className="d-flex py-5 col-6 drag_responsive_one">
+                                                                    <div className="d-flex py-5 col-3 drag_responsive_one">
                                                                         <div className="pt-2">
                                                                             {/* Away Team */}
                                                                             <div className="d-flex mt-5 gap-1">
@@ -264,6 +231,17 @@ const Home = () => {
 
                                                                         {/* Betting Categories */}
                                                                         <div className="d-flex pt-2 px-2">
+                                                                            {/* Best Odds */}
+                                                                            <div className="text-center px-2">
+                                                                                <img src={vector1} alt="Best Odds" />
+                                                                                <h6 className="icon_heading">Best Odds</h6>
+                                                                                <div className="open_number_one">
+                                                                                    {awayTeam["Away Best odds"]}
+                                                                                </div>
+                                                                                <div className="open_number_one mt-2">
+                                                                                    {homeTeam["Home Best odds"]}
+                                                                                </div>
+                                                                            </div>
                                                                             {/* Open */}
                                                                             <div className="text-center px-2">
                                                                                 <img src={vector} alt="Open" />
@@ -278,20 +256,10 @@ const Home = () => {
 
                                                                             </div>
 
-                                                                            {/* Best Odds */}
-                                                                            <div className="text-center px-2">
-                                                                                <img src={vector1} alt="Best Odds" />
-                                                                                <h6 className="icon_heading">Best Odds</h6>
-                                                                                <div className="open_number_one">
-                                                                                    {awayTeam["Away Best odds"]}
-                                                                                </div>
-                                                                                <div className="open_number_one mt-2">
-                                                                                    {homeTeam["Home Best odds"]}
-                                                                                </div>
-                                                                            </div>
 
-                                                                            {/* Cash */}
-                                                                            <div className="text-center px-2">
+
+
+                                                                            {/* <div className="text-center px-2">
                                                                                 <img src={vector2} alt="Cash" />
                                                                                 <h6 className="icon_heading">FanDuel </h6>
                                                                                 <div className="open_number_one">
@@ -300,10 +268,10 @@ const Home = () => {
                                                                                 <div className="open_number_two mt-2">
                                                                                     {homeTeam["Home Fanduel"]}
                                                                                 </div>
-                                                                            </div>
+                                                                            </div> */}
 
                                                                             {/* Tickets */}
-                                                                            <div className="text-center px-2">
+                                                                            {/* <div className="text-center px-2">
                                                                                 <img src={vector3} alt="Tickets" />
                                                                                 <h6 className="icon_heading">DraftKings </h6>
                                                                                 <div className="open_number_one">
@@ -312,10 +280,10 @@ const Home = () => {
                                                                                 <div className="open_number_two mt-2">
                                                                                     {homeTeam["Home Dk"]}
                                                                                 </div>
-                                                                            </div>
+                                                                            </div> */}
 
                                                                             {/* AI */}
-                                                                            <div className="text-center px-2">
+                                                                            {/* <div className="text-center px-2">
                                                                                 <img src={vector4} alt="AI" />
                                                                                 <h6 className="icon_heading">BetMGM </h6>
                                                                                 <div className="open_number_two">
@@ -324,12 +292,12 @@ const Home = () => {
                                                                                 <div className="open_number_one mt-2">
                                                                                     {homeTeam["Home Betmgm"]}
                                                                                 </div>
-                                                                            </div>
+                                                                            </div> */}
                                                                         </div>
                                                                     </div>
 
                                                                     {/* Drag & Drop Section */}
-                                                                    <div className="d-flex px-2 image_scorll col-6 drag_responsive">
+                                                                    <div className="d-flex px-2 image_scorll col-9 drag_responsive">
                                                                         <DndProvider backend={HTML5Backend}>
                                                                             <div className="tab-bar mt-4">
                                                                                 {tabs.map((tab, index) => {
@@ -348,6 +316,8 @@ const Home = () => {
                                                                                         value = awayTeam["Away Fanduel"];
                                                                                     } else if (tab.title === "UnibetNJ" && awayTeam["Away Unibetnj"]) {
                                                                                         value = awayTeam["Away Unibetnj"];
+                                                                                    } else if (tab.title === "Open" && awayTeam["Away Open"]) {
+                                                                                        value = awayTeam["Away Open"];
                                                                                     } else if (tab.title === "Open" && awayTeam["Away Open"]) {
                                                                                         value = awayTeam["Away Open"];
                                                                                     }
@@ -393,62 +363,8 @@ const Home = () => {
                                 </div>
                             </div>
 
-                            {/* Pagination */}
-                            <div className="home_pagination d-flex justify-content-center align-items-center my-5">
-                                <button
-                                    className="btn me-2"
-                                    style={{
-                                        backgroundColor: currentPage === 1 ? "#ccc" : "#0F93EB",
-                                        color: "white",
-                                        padding: "7px 15px",
-                                        borderRadius: "15px",
-                                        cursor: currentPage === 1 ? "not-allowed" : "pointer"
-                                    }}
-                                    onClick={() => goToPage(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                >
-                                    Previous
-                                </button>
 
-                                {[...Array(totalPages)].map((_, index) => {
-                                    const page = index + 1;
-                                    return (
-                                        <button
-                                            key={page}
-                                            className={`btn me-2 ${currentPage === page ? "fw-bold text-white" : ""}`}
-                                            style={{
-                                                backgroundColor: currentPage === page ? "#0F93EB" : "transparent",
-                                                border: "1px solid #0F93EB",
-                                                padding: "7px 15px",
-                                                borderRadius: "15px",
-                                                cursor: "pointer",
-                                                color: currentPage === page ? "#ffffff" : "#0F93EB",
-                                            }}
-                                            onClick={() => goToPage(page)}
-                                        >
-                                            {page}
-                                        </button>
-                                    );
-                                })}
 
-                                <button
-                                    className="btn_next"
-                                    style={{
-                                        backgroundColor: currentPage === totalPages ? "#ccc" : "#0F93EB",
-                                        color: "white",
-                                        padding: "7px 15px",
-                                        borderRadius: "15px",
-                                        cursor: currentPage === totalPages ? "not-allowed" : "pointer"
-                                    }}
-                                    onClick={() => goToPage(currentPage + 1)}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    Next
-                                </button>
-                            </div>
-
-                            {/* FAQ Component */}
-                            <Faq />
                         </div>
                     </div>
                 </div>

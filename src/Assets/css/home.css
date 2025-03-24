@@ -160,6 +160,7 @@ h6 {
 
 :hover.tab_hover {
     background-color: #3d4375;
+    border-radius: 15px;
 }
 
 .tab-bar {
@@ -198,6 +199,7 @@ h6 {
         width: 100% !important;
         margin: auto !important;
     }
+
     .drag_responsive_one {
         width: 100% !important;
         margin: auto !important;
@@ -205,18 +207,20 @@ h6 {
         overflow-y: hidden;
         white-space: nowrap;
     }
+
     .drag_responsive_one::-webkit-scrollbar {
         height: 10px;
     }
-    
+
     .drag_responsive_one::-webkit-scrollbar-thumb {
         background-color: #0F93EB;
         border-radius: 5px;
     }
-    
+
     .drag_responsive_one::-webkit-scrollbar-track {
         background: #23274A;
     }
+
     .home_pagination {
         width: 100%;
         margin: auto;
@@ -225,18 +229,17 @@ h6 {
         margin: auto;
         display: block !important;
     }
-    .btn_next{
+
+    .btn_next {
         margin-top: 10px !important;
 
     }
-    .btn_tab{
+
+    .btn_tab {
         width: 100%;
         margin: auto;
     }
 }
-
-    
-
 
 @media (min-width: 580px) and (max-width: 768px) {
     .tab_hover {
@@ -249,6 +252,7 @@ h6 {
         width: 100% !important;
         margin: auto !important;
     }
+
     .drag_responsive_one {
         width: 100% !important;
         margin: auto !important;
@@ -256,18 +260,20 @@ h6 {
         overflow-y: hidden;
         white-space: nowrap;
     }
+
     .drag_responsive_one::-webkit-scrollbar {
         height: 10px;
     }
-    
+
     .drag_responsive_one::-webkit-scrollbar-thumb {
         background-color: #0F93EB;
         border-radius: 5px;
     }
-    
+
     .drag_responsive_one::-webkit-scrollbar-track {
         background: #23274A;
     }
+
     .home_pagination {
         width: 100%;
         margin: auto;
@@ -276,16 +282,16 @@ h6 {
         margin: auto;
         display: block !important;
     }
-    .btn_next{
+
+    .btn_next {
         margin-top: 10px !important;
 
     }
-    .btn_tab{
+
+    .btn_tab {
         width: 100%;
         margin: auto;
     }
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
-
-}
+@media (min-width: 768px) and (max-width: 1024px) {}
