@@ -295,3 +295,65 @@ h6 {
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {}
+
+.rd-text-button {
+	--arrowAnimation: all 0.2s ease-in-out;
+	--arrowColor: var(--e-global-color-text, white);
+	
+	display: inline-flex;
+	align-items: center;
+  font-weight: 600;
+  color: var(--e-global-color-text, white);
+  text-decoration: none;
+	
+	&:hover {
+		--arrowColor: var(--e-global-color-primary, #fff);
+		
+		color: var(--e-global-color-text, #fff) 
+	}
+}
+
+
+/* Arrow icon */
+.rd-text-button {	
+	i {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		width: 15px;
+		height: 1px;
+		border-radius: 2px;
+		margin-left: 4px;
+		background: #fff;
+		transition: #ffff;
+
+		&::before,
+		&::after {
+			content: '';
+			position: absolute;
+			right: 0;
+			width: 0.25em;
+			height: 2px;
+			border-radius: 2px;
+			background: var(--arrowColor);
+			transition: var(--arrowAnimation);
+		}
+		&::before {
+			transform: rotate(45deg);
+			transform-origin: top right;
+		}
+		&::after {
+			transform: rotate(-45deg);
+			transform-origin: bottom right;
+		}
+	}
+
+	&:hover i {
+		width: 20px;
+	}
+}
+
+.Alternate_btn{
+    font-size: 14px;
+    color: #fff;
+}

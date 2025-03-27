@@ -44,7 +44,6 @@ const Tab = ({ tab, index, moveTab }) => {
 };
 
 const Home = () => {
-    const [selectedTeam, setSelectedTeam] = useState(null);
 
     const [activeTab, setActiveTab] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
@@ -62,13 +61,7 @@ const Home = () => {
         { id: 7, image: group, title: "UnibetNJ", value: "-210" },
         { id: 8, image: group1, title: "Open", value: "-210" },
     ]);
-    const handleTabClick = (team1, team2, time, league) => {
-        // Create a URL with team details
-        const url = `/teamdetails`;
 
-        // Open the URL in a new tab
-        window.open(url, "_blank");
-    };
     const moveTab = (fromIndex, toIndex) => {
         const updatedTabs = [...tabs];
         const [movedTab] = updatedTabs.splice(fromIndex, 1);
@@ -85,7 +78,7 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyODk0Mjc3LCJpYXQiOjE3NDI4MDc4NzcsImp0aSI6IjMwNTU4MWU3MTk5ODQ3YTg4NzcyY2VkZjIyZTAzYTM2IiwidXNlcl9pZCI6MX0.8ahp9raCkPqIq88acbuVx2ZP_bpuJx0Dj0b6fipVk7o"
+        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyOTgxNTM3LCJpYXQiOjE3NDI4OTUxMzcsImp0aSI6IjFmZDgyYzE1NWM5ODQ0MTRiMjNjMDM2ODcxYmI2MDUyIiwidXNlcl9pZCI6MX0.1pW1R6AvctDiYxatlHiD_aVZMQIc4M5EDfB7grKelTo";
 
         setLoading(true);
         fetch("http://54.174.64.250:8000/money-data", {
@@ -104,19 +97,31 @@ const Home = () => {
             .then((data) => {
                 console.log("API Response:", data);
                 if (data && data.data) {
-                    const extractedGames = [];
-                    Object.keys(data.data).forEach(gameKey => {
-                        if (Array.isArray(data.data[gameKey])) {
-                            extractedGames.push(...data.data[gameKey]);
-                        }
+                    const extractedGames = Object.values(data.data).map((gameArray) => {
+                        const game = gameArray[0]; // Access the first object in each game array
+                        const homeTeam = Object.keys(game).find((team) => game[team]["Home Team"]);
+                        const awayTeam = Object.keys(game).find((team) => game[team]["Away Team"]);
+
+                        return { homeTeam, awayTeam };
                     });
+
                     setAllGames(extractedGames);
                 } else {
                     setAllGames([]);
                 }
                 setLoading(false);
             })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+                setLoading(false);
+            });
     }, []);
+
+    const handleTabClick = (homeTeam, awayTeam) => {
+        console.log(`Clicked on: ${homeTeam} vs ${awayTeam}`);
+        const url = `/teamdetails`;
+        window.open(url, "/teamdetails");
+    };
     if (loading) return (
         <div className="container">
             <div className="row">
@@ -185,189 +190,37 @@ const Home = () => {
                                                 <div className="col-12 nfl_games mt-3">
                                                     <h6 className="nfl_games_heading">Tomorrow - 5:30AM - NBA</h6>
 
-                                                    {/* Clickable Tab */}
-                                                    <div
-                                                        className="d-flex px-2 tab_hover"
-                                                        onClick={() => handleTabClick("team1", "team2")}
-                                                        style={{ cursor: "pointer" }}
-                                                    >
-                                                        <div className="py-2">
-                                                            {/* Away Team */}
-                                                            <div className="d-flex gap-1">
-                                                                <div className="image_icon">
-                                                                    <img src={vector5} alt="" width={19} height={19} />
-                                                                </div>
-                                                                <h6 className="icon_heading pt-2">team1</h6>
-                                                            </div>
+                                                    {loading ? (
+                                                        <p>Loading...</p>
+                                                    ) : (
+                                                        allGames.map((game, index) => (
+                                                            <div
+                                                                key={index}
+                                                                className="d-flex px-3 tab_hover py-3"
+                                                                onClick={() => handleTabClick(game.homeTeam, game.awayTeam)}
+                                                                style={{ cursor: "pointer" }}
+                                                            >
+                                                                <div className="py-2">
+                                                                    {/* Away Team */}
+                                                                    <div className="d-flex gap-3">
+                                                                        <div className="image_icon">
+                                                                            <img src={vector5} alt="Away Team" width={19} height={19} />
+                                                                        </div>
+                                                                        <h6 className="icon_heading pt-2">{game.awayTeam}</h6>
+                                                                    </div>
 
-                                                            {/* Home Team */}
-                                                            <div className="d-flex gap-1 mt-2">
-                                                                <div className="image_icon">
-                                                                    <img src={vector5} alt="" width={19} height={19} />
+                                                                    {/* Home Team */}
+                                                                    <div className="d-flex gap-3 mt-2">
+                                                                        <div className="image_icon">
+                                                                            <img src={vector5} alt="Home Team" width={19} height={19} />
+                                                                        </div>
+                                                                        <h6 className="icon_heading pt-2">{game.homeTeam}</h6>
+                                                                    </div>
                                                                 </div>
-                                                                <h6 className="icon_heading pt-2">team2</h6>
                                                             </div>
-                                                        </div>
-                                                    </div>
+                                                        ))
+                                                    )}
                                                 </div>
-                                                {allGames.length === 0 ? (
-                                                    <div className="col-12 text-center my-5">
-                                                        <p>No upcoming games available at the moment.</p>
-                                                    </div>
-                                                ) : (
-                                                    allGames?.map((gameMatch, gameIndex) => {
-
-                                                        const teamKeys = Object.keys(gameMatch);
-                                                        if (teamKeys.length !== 2) return null;
-                                                        const awayTeam = teamKeys.find(key => gameMatch[key]["Away Team"])
-                                                            ? gameMatch[teamKeys.find(key => gameMatch[key]["Away Team"])]
-                                                            : null;
-                                                        console.log("team1", awayTeam)
-                                                        const homeTeam = teamKeys.find(key => gameMatch[key]["Home Team"])
-                                                            ? gameMatch[teamKeys.find(key => gameMatch[key]["Home Team"])]
-                                                            : null;
-
-                                                        if (!homeTeam || !awayTeam) return null;
-
-                                                        return (
-
-                                                            <div key={gameIndex} className="col-12 nfl_games mt-3">
-                                                                <h6 className="nfl_games_heading">Tomorrow - 5:30AM - NBA</h6>
-
-
-
-                                                                <div className="d-flex px-2 tab_hover" >
-
-                                                                    <div className="d-flex py-5 col-6 drag_responsive_one">
-                                                                        <div className="pt-2">
-                                                                            {/* Away Team */}
-                                                                            <div className="d-flex mt-5 gap-1">
-                                                                                <div className="image_icon">
-                                                                                    <img src={vector5} alt="Team Icon" width={19} height={19} />
-                                                                                </div>
-                                                                                <h6 className="icon_heading pt-2">
-                                                                                    {awayTeam["Away Team"]}
-                                                                                </h6>
-                                                                            </div>
-
-                                                                            {/* Home Team */}
-                                                                            <div className="d-flex gap-1 mt-2">
-                                                                                <div className="image_icon">
-                                                                                    <img src={vector5} alt="Team Icon" width={19} height={19} />
-                                                                                </div>
-                                                                                <h6 className="icon_heading pt-2">
-                                                                                    {homeTeam["Home Team"]}
-                                                                                </h6>
-
-                                                                            </div>
-                                                                        </div>
-
-                                                                        {/* Betting Categories */}
-                                                                        <div className="d-flex pt-2 px-2">
-                                                                            {/* Open */}
-                                                                            <div className="text-center px-2">
-                                                                                <img src={vector} alt="Open" />
-                                                                                <h6 className="icon_heading">Open</h6>
-                                                                                <div className="open_number">
-
-                                                                                    {awayTeam["Away Open"]}
-                                                                                </div>
-                                                                                <div className="open_number mt-2">
-                                                                                    {homeTeam["Home Open"]}
-                                                                                </div>
-
-                                                                            </div>
-
-                                                                            {/* Best Odds */}
-                                                                            <div className="text-center px-2">
-                                                                                <img src={vector1} alt="Best Odds" />
-                                                                                <h6 className="icon_heading">Best Odds</h6>
-                                                                                <div className="open_number_one">
-                                                                                    {awayTeam["Away Best odds"]}
-                                                                                </div>
-                                                                                <div className="open_number_one mt-2">
-                                                                                    {homeTeam["Home Best odds"]}
-                                                                                </div>
-                                                                            </div>
-
-                                                                            {/* Cash */}
-                                                                            <div className="text-center px-2">
-                                                                                <img src={vector2} alt="Cash" />
-                                                                                <h6 className="icon_heading">FanDuel </h6>
-                                                                                <div className="open_number_one">
-                                                                                    {awayTeam["Away Fanduel"]}
-                                                                                </div>
-                                                                                <div className="open_number_two mt-2">
-                                                                                    {homeTeam["Home Fanduel"]}
-                                                                                </div>
-                                                                            </div>
-
-                                                                            {/* Tickets */}
-                                                                            <div className="text-center px-2">
-                                                                                <img src={vector3} alt="Tickets" />
-                                                                                <h6 className="icon_heading">DraftKings </h6>
-                                                                                <div className="open_number_one">
-                                                                                    {awayTeam["Away Dk"]}
-                                                                                </div>
-                                                                                <div className="open_number_two mt-2">
-                                                                                    {homeTeam["Home Dk"]}
-                                                                                </div>
-                                                                            </div>
-
-                                                                            {/* AI */}
-                                                                            <div className="text-center px-2">
-                                                                                <img src={vector4} alt="AI" />
-                                                                                <h6 className="icon_heading">BetMGM </h6>
-                                                                                <div className="open_number_two">
-                                                                                    {awayTeam["Away Betmgm"]}
-                                                                                </div>
-                                                                                <div className="open_number_one mt-2">
-                                                                                    {homeTeam["Home Betmgm"]}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    {/* Drag & Drop Section */}
-                                                                    <div className="d-flex px-2 image_scorll col-6 drag_responsive">
-                                                                        <DndProvider backend={HTML5Backend}>
-                                                                            <div className="tab-bar mt-4">
-                                                                                {tabs.map((tab, index) => {
-                                                                                    let value = "-210"; // Default value
-                                                                                    if (tab.title === "Bet365" && awayTeam["Away Bet365"]) {
-                                                                                        value = awayTeam["Away Bet365"];
-                                                                                    } else if (tab.title === "BetMGM" && awayTeam["Away Betmgm"]) {
-                                                                                        value = awayTeam["Away Betmgm"];
-                                                                                    } else if (tab.title === "BetRivers" && awayTeam["Away Betrivers"]) {
-                                                                                        value = awayTeam["Away Betrivers"];
-                                                                                    } else if (tab.title === "Caesars" && awayTeam["Away Caesars"]) {
-                                                                                        value = awayTeam["Away Caesars"];
-                                                                                    } else if (tab.title === "DraftKings" && awayTeam["Away Dk"]) {
-                                                                                        value = awayTeam["Away Dk"];
-                                                                                    } else if (tab.title === "FanDuel" && awayTeam["Away Fanduel"]) {
-                                                                                        value = awayTeam["Away Fanduel"];
-                                                                                    } else if (tab.title === "UnibetNJ" && awayTeam["Away Unibetnj"]) {
-                                                                                        value = awayTeam["Away Unibetnj"];
-                                                                                    } else if (tab.title === "Open" && awayTeam["Away Open"]) {
-                                                                                        value = awayTeam["Away Open"];
-                                                                                    }
-                                                                                    return (
-                                                                                        <Tab
-                                                                                            key={tab.id}
-                                                                                            tab={{ ...tab, value }}
-                                                                                            index={index}
-                                                                                            moveTab={moveTab}
-                                                                                        />
-                                                                                    );
-                                                                                })}
-                                                                            </div>
-                                                                        </DndProvider>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    })
-                                                )}
                                             </div>
                                         </div>
                                     )}
