@@ -12,6 +12,14 @@ import vector5 from "../../Assets/images/Group 1171276542.png";
 import group from "../../Assets/images/Group 1171276547.png";
 import group1 from "../../Assets/images/Group 1171276551.png";
 import { Divide } from "lucide-react";
+import group2 from "../../Assets/images/Group 1171276552.png";
+
+import group3 from "../../Assets/images/Group 1171276553.png";
+import group4 from "../../Assets/images/Group 1171276554.png";
+import group5 from "../../Assets/images/Group 1171276555.png";
+
+import group6 from "../../Assets/images/Group 1171276556.png";
+import group7 from "../../Assets/images/Group 1171276556.png";
 
 const Tab = ({ tab, index, moveTab }) => {
     const [, ref] = useDrag({
@@ -52,14 +60,14 @@ const Home = () => {
     const [error, setError] = useState(null);
     const totalPages = 4;
     const [tabs, setTabs] = useState([
-        { id: 1, image: group, title: "Bet365", value: "-210" },
-        { id: 2, image: group1, title: "BetMGM", value: "-210" },
-        { id: 3, image: group, title: "BetRivers", value: "-210" },
-        { id: 4, image: group1, title: "Caesars", value: "-210" },
-        { id: 5, image: group, title: "DraftKings", value: "-210" },
-        { id: 6, image: group1, title: "FanDuel", value: "-210" },
-        { id: 7, image: group, title: "UnibetNJ", value: "-210" },
-        { id: 8, image: group1, title: "Open", value: "-210" },
+        { id: 1, image: group,  },
+        { id: 2, image: group1,  },
+        { id: 3, image: group2, },
+        { id: 4, image: group3, },
+        { id: 5, image: group4,  },
+        { id: 6, image: group5,  },
+        { id: 7, image: group6,  },
+        { id: 8, image: group7, },
     ]);
 
     const moveTab = (fromIndex, toIndex) => {
@@ -78,7 +86,7 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyOTgxNTM3LCJpYXQiOjE3NDI4OTUxMzcsImp0aSI6IjFmZDgyYzE1NWM5ODQ0MTRiMjNjMDM2ODcxYmI2MDUyIiwidXNlcl9pZCI6MX0.1pW1R6AvctDiYxatlHiD_aVZMQIc4M5EDfB7grKelTo";
+        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMTM2MTA4LCJpYXQiOjE3NDMwNDk3MDgsImp0aSI6IjdjMjM2YzFjODU0NTQ3ODFiODQ5ZWYwNDY0OTkxYmI1IiwidXNlcl9pZCI6MX0.33e8qRp-yjrq5K2b_Gf3nCpa243A002_RWUw8eM_P4o";
 
         setLoading(true);
         fetch("http://54.174.64.250:8000/money-data", {

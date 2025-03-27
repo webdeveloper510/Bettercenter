@@ -11,7 +11,13 @@ import vector5 from "../../Assets/images/Group 1171276542.png";
 import group from "../../Assets/images/Group 1171276547.png";
 import group1 from "../../Assets/images/Group 1171276551.png";
 import { Divide } from "lucide-react";
+import group3 from "../../Assets/images/Group 1171276553.png";
+import group4 from "../../Assets/images/Group 1171276554.png";
+import group5 from "../../Assets/images/Group 1171276555.png";
+import group2 from "../../Assets/images/Group 1171276552.png";
 
+import group6 from "../../Assets/images/Group 1171276556.png";
+import group7 from "../../Assets/images/Group 1171276556.png";
 const Tab = ({ tab, index, moveTab }) => {
     const [, ref] = useDrag({
         type: "TAB",
@@ -60,7 +66,7 @@ const Data = () => {
     };
 
     useEffect(() => {
-        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMDY4MjA3LCJpYXQiOjE3NDI5ODE4MDcsImp0aSI6IjY4YjhhYzg3MWNiOTRmM2JiMmJmNjEwZWY4NGEwNDM2IiwidXNlcl9pZCI6MX0.rFBgiIn3TkkB1jRmHuQHY6k63Rq1bGe4NViJ3k3h8_Y";
+        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMTM2MTA4LCJpYXQiOjE3NDMwNDk3MDgsImp0aSI6IjdjMjM2YzFjODU0NTQ3ODFiODQ5ZWYwNDY0OTkxYmI1IiwidXNlcl9pZCI6MX0.33e8qRp-yjrq5K2b_Gf3nCpa243A002_RWUw8eM_P4o";
 
         const urls = [
             "http://54.174.64.250:8000/money-data",
@@ -461,7 +467,7 @@ const Data = () => {
                                                 })()} */}
                                                 <h1 className="nba_odds my-5">Magic vs Hornets Total Points (Over/Under)
                                                     &nbsp; <a class="rd-text-button Alternate_btn" href="#">View Alternate Lines<i></i></a></h1>
-                                                {/* 
+
                                                 {allGames?.overUnder?.length === 0 ? (
                                                     <div className="col-12 text-center my-5">
                                                         <p>No over/under games available at the moment.</p>
@@ -521,59 +527,62 @@ const Data = () => {
                                                                     <div className="d-flex px-2 image_scorll col-9 drag_responsive">
                                                                         <DndProvider backend={HTML5Backend}>
                                                                             <div className="tab-bar mt-4">
-                                                                                {tabs.map((tab, index) => {
-                                                                                    let value = "0"; // Default value
-                                                                                    let isHomeTeam = false;
+                                                                                {allGames?.overUnder?.map((gameMatch, gameIndex) => {
+                                                                                    const teamKeys = Object.keys(gameMatch);
+                                                                                    if (teamKeys.length !== 2) return null;
 
-                                                                                    if (tab.title === "Bet365" && awayTeam["Away Bet365"]) {
-                                                                                        value = awayTeam["Away Bet365"];
-                                                                                    } else if (tab.title === "BetMGM" && awayTeam["Away Betmgm"]) {
-                                                                                        value = awayTeam["Away Betmgm"];
-                                                                                    } else if (tab.title === "BetRivers" && awayTeam["Away Betrivers"]) {
-                                                                                        value = awayTeam["Away Betrivers"];
-                                                                                    } else if (tab.title === "Caesars" && awayTeam["Away Caesars"]) {
-                                                                                        value = awayTeam["Away Caesars"];
-                                                                                    } else if (tab.title === "DraftKings" && awayTeam["Away Dk"]) {
-                                                                                        value = awayTeam["Away Dk"];
-                                                                                    } else if (tab.title === "FanDuel" && awayTeam["Away Fanduel"]) {
-                                                                                        value = awayTeam["Away Fanduel"];
-                                                                                    } else if (tab.title === "UnibetNJ" && awayTeam["Away Unibetnj"]) {
-                                                                                        value = awayTeam["Away Unibetnj"];
-                                                                                    }
-                                                                                    else if (tab.title === "Bet365" && homeTeam["Home Bet365"]) {
-                                                                                        value = homeTeam["Home Bet365"];
-                                                                                        isHomeTeam = true;
-                                                                                    } else if (tab.title === "BetMGM" && homeTeam["Home Betmgm"]) {
-                                                                                        value = homeTeam["Home Betmgm"];
-                                                                                        isHomeTeam = true;
-                                                                                    } else if (tab.title === "BetRivers" && homeTeam["Home Betrivers"]) {
-                                                                                        value = homeTeam["Home Betrivers"];
-                                                                                        isHomeTeam = true;
-                                                                                    } else if (tab.title === "Caesars" && homeTeam["Home Caesars"]) {
-                                                                                        value = homeTeam["Home Caesars"];
-                                                                                        isHomeTeam = true;
-                                                                                    } else if (tab.title === "DraftKings" && homeTeam["Home Dk"]) {
-                                                                                        value = homeTeam["Home Dk"];
-                                                                                        isHomeTeam = true;
-                                                                                    } else if (tab.title === "FanDuel" && homeTeam["Home Fanduel"]) {
-                                                                                        value = homeTeam["Home Fanduel"];
-                                                                                        isHomeTeam = true;
-                                                                                    } else if (tab.title === "UnibetNJ" && homeTeam["Home Unibetnj"]) {
-                                                                                        value = homeTeam["Home Unibetnj"];
-                                                                                        isHomeTeam = true;
-                                                                                    }
+                                                                                    const awayTeamKey = teamKeys.find(key => gameMatch[key]?.["Away Team"]);
+                                                                                    const homeTeamKey = teamKeys.find(key => gameMatch[key]?.["Home Team"]);
+
+                                                                                    if (!awayTeamKey || !homeTeamKey) return null;
+
+                                                                                    const awayTeam = gameMatch[awayTeamKey] || {};
+                                                                                    const homeTeam = gameMatch[homeTeamKey] || {};
+
+                                                                                    // Extract bookmaker keys dynamically
+                                                                                    const bookmakerKeys = Object.keys({ ...awayTeam, ...homeTeam }).filter(
+                                                                                        key => ["Betmgm", "Caesars", "Fanduel", "Dk", "Betrivers", "Unibetnj", "Bet365"].some(bm => key.includes(bm))
+                                                                                    );
+
+                                                                                    // Store teams in an array
+                                                                                    const teams = [awayTeam, homeTeam];
+
+                                                                                    // Group data array (ensuring correct image references)
+                                                                                    const groupData = [
+                                                                                        group, group1, group2, group3, group4, group5, group6, group7
+                                                                                    ];
+
+                                                                                    // Structure all extracted data into an array
+                                                                                    const formattedData = bookmakerKeys.map((bookmaker, index) => ({
+                                                                                        bookmaker,
+                                                                                        image: groupData[index % groupData.length], // Cycle images
+                                                                                        values: teams.map(team => team[bookmaker] && team[bookmaker].toString().trim() !== "" ? team[bookmaker] : "N/A")
+                                                                                    }));
 
                                                                                     return (
-                                                                                        <Tab
-                                                                                            key={tab.id}
-                                                                                            tab={{
-                                                                                                ...tab,
-                                                                                                value,
-                                                                                                isHomeTeam // Add this to help identify if it's a home team odd
-                                                                                            }}
-                                                                                            index={index}
-                                                                                            moveTab={moveTab}
-                                                                                        />
+                                                                                        <div key={gameIndex} className="game-card">
+                                                                                            {/* Image & Team Values Section */}
+                                                                                            <div className="d-flex pt-2 px-2">
+                                                                                                <div className="text-center px-2"></div>
+                                                                                                <div className="text-center px-2"></div>
+                                                                                            </div>
+
+                                                                                            {/* Bookmaker Section */}
+                                                                                            <div className="d-flex  justify-content-center pt-2">
+                                                                                                {formattedData.length > 0 ? (
+                                                                                                    formattedData.map((data, index) => (
+                                                                                                        <div key={index} className="text-center px-2">
+                                                                                                            <img src={data.image} alt="" className="bookmaker-image" />
+                                                                                                            {data.values.map((value, i) => (
+                                                                                                                <div key={i} className="open_number mt-2">{value}</div>
+                                                                                                            ))}
+                                                                                                        </div>
+                                                                                                    ))
+                                                                                                ) : (
+                                                                                                    <p className="text-center mt-2">No bookmaker data available</p>
+                                                                                                )}
+                                                                                            </div>
+                                                                                        </div>
                                                                                     );
                                                                                 })}
                                                                             </div>
@@ -583,7 +592,7 @@ const Data = () => {
                                                             </div>
                                                         );
                                                     })
-                                                )} */}
+                                                )}
                                             </div>
                                         </div>
 
