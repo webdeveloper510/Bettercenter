@@ -1,1 +1,1 @@
-import axios from "axios";
+export const API = 'http://54.174.64.250:8000/'

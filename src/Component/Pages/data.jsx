@@ -284,7 +284,36 @@ const Data = () => {
                                                                                         // Selecting images dynamically using modulo to cycle through the array
                                                                                         const selectedGroupImage = groupImages[gameIndex % groupImages.length];
                                                                                         const selectedGroup1Image = group1Images[gameIndex % group1Images.length];
-
+                                                                                        const convertGamesData = (allGames) => {
+                                                                                            if (!allGames || typeof allGames !== "object") return { gameNames: [], teams: [], teamData: [] };
+                                                                                        
+                                                                                            const gameNames = Object.keys(allGames);
+                                                                                            const teams = [];
+                                                                                            const teamData = [];
+                                                                                        
+                                                                                            gameNames.forEach((gameKey) => {
+                                                                                                const gameMatches = allGames[gameKey];
+                                                                                        
+                                                                                                gameMatches.forEach((gameMatch) => {
+                                                                                                    const teamKeys = Object.keys(gameMatch);
+                                                                                                    if (teamKeys.length !== 2) return;
+                                                                                        
+                                                                                                    teamKeys.forEach((teamKey) => {
+                                                                                                        const teamInfo = gameMatch[teamKey];
+                                                                                        
+                                                                                                        if (teamInfo["Away Team"]) {
+                                                                                                            teams.push(teamInfo["Away Team"]);
+                                                                                                        } else if (teamInfo["Home Team"]) {
+                                                                                                            teams.push(teamInfo["Home Team"]);
+                                                                                                        }
+                                                                                        
+                                                                                                        teamData.push(teamInfo);
+                                                                                                    });
+                                                                                                });
+                                                                                            });
+                                                                                        
+                                                                                            return { gameNames, teams, teamData };
+                                                                                        };
                                                                                         return (
                                                                                             <div key={gameIndex} className="game-card">
                                                                                                 <h3>{awayTeam[""]}  {homeTeam[""]}</h3>

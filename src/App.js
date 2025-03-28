@@ -16,6 +16,7 @@ import Checkout from "./Component/Pages/checkout";
 import Data from "./Component/Pages/data";
 import TeamDetails from "./Component/Pages/teamdetails"
 import GameList from "./Component/Pages/GameList"
+
 // import Footer from "./Component/footer";
 
 function Layout() {
