@@ -244,24 +244,7 @@ const Home = () => {
                                                                                 <div className="open_number_one">
                                                                                     {awayTeam["Away Best odds"]}
                                                                                 </div>
-                                                                                <div className="open_number_one mt-2">
-                                                                                    {homeTeam["Home Best odds"]}
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div className="text-center px-2">
-                                                                                <img src={vector} alt="Open" />
-                                                                                <h6 className="icon_heading">Open</h6>
-                                                                                <div className="open_number">
-                                                                                    {awayTeam["Away Open"]}
-                                                                                </div>
-                                                                                <div className="open_number mt-2">
-                                                                                    {homeTeam["Home Open"]}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="d-flex px-2 image_scorll col-9 drag_responsive">
+                                                                                <div className="d-flex px-2 image_scorll col-9 drag_responsive">
                                                                         <DndProvider backend={HTML5Backend}>
                                                                             <div className="tab-bar mt-4">
                                                                                 {loading ? (
@@ -270,60 +253,54 @@ const Home = () => {
                                                                                     <div className="col-12 text-center my-5">
                                                                                         <p>No upcoming games available at the moment.</p>
                                                                                     </div>
-                                                                                ) : (
-                                                                                    allGames?.money?.map((gameMatch, gameIndex) => {
-                                                                                        const teamKeys = Object.keys(gameMatch);
-                                                                                        // console.log('teamKeys',teamKeys)
-                                                                                        if (teamKeys.length !== 2) return null;
-
-                                                                                        const awayTeamKey = teamKeys.find(key => gameMatch[key]?.["Away Team"]);
-                                                                                        const homeTeamKey = teamKeys.find(key => gameMatch[key]?.["Home Team"]);
-
-                                                                                        if (!awayTeamKey || !homeTeamKey) return null;
-
-                                                                                        const awayTeam = gameMatch[awayTeamKey];
-                                                                                        const homeTeam = gameMatch[homeTeamKey];
-
-                                                                                        console.log(awayTeam)
-                                                                                        // Extracting bookmaker-related keys dynamically
-                                                                                        const bookmakerKeys = Object.keys(awayTeam).filter(key => key.startsWith("Away "));
-                                                                                        console.log('bookmakerKeys', bookmakerKeys)
-                                                                                        const groupImages = [
-                                                                                            { id: 0, image: "/images/group.png" },
-                                                                                            { id: 1, image: "/images/group1.png" },
-                                                                                            { id: 2, image: "/images/group2.png" },
-                                                                                            { id: 3, image: "/images/group3.png" },
-                                                                                            { id: 4, image: "/images/group4.png" },
-                                                                                            { id: 5, image: "/images/group5.png" },
-                                                                                            { id: 6, image: "/images/group6.png" },
-                                                                                            { id: 7, image: "/images/group7.png" }
-                                                                                        ];
-
-                                                                                        return (
-                                                                                            <div key={gameIndex} className="game-card">
-                                                                                                {/* Away Team Row */}
-                                                                                                <div className="d-flex justify-content-center pt-2">
-                                                                                                    {bookmakerKeys.length > 0 ? (
-                                                                                                        bookmakerKeys.map((bookmaker, index) => {
-                                                                                                            const imageObj = groupImages[index % groupImages.length];
-                                                                                                            return (
-                                                                                                                <div key={index} className="text-center px-2">
-                                                                                                                    {/* <div className="d-flex justify-content-center">
-                                                                                                                        <img src={imageObj.image} alt="Bookmaker Logo" width="30" height="30" />
-                                                                                                                    </div> */}
-                                                                                                                    <div className="open_number mt-2">
-                                                                                                                        {awayTeam[bookmaker] ?? "N/A"}
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            );
-                                                                                                        })
-                                                                                                    ) : (
-                                                                                                        <p className="text-center mt-2">No odds available</p>
-                                                                                                    )}
-                                                                                                </div>
-
-                                                                                                {/* Home Team Row */}
-                                                                                                <div className="d-flex justify-content-center pt-2">
+                                                                                ) : 
+                                                                                (() => {
+                                                                                    const teamKeys = Object.keys(gameMatch);
+                                                                                
+                                                                                    if (teamKeys.length !== 2) return null;
+                                                                                
+                                                                                    const awayTeamKey = teamKeys.find(key => gameMatch[key]?.["Away Team"]);
+                                                                                    const homeTeamKey = teamKeys.find(key => gameMatch[key]?.["Home Team"]);
+                                                                                
+                                                                                    if (!awayTeamKey || !homeTeamKey) return null;
+                                                                                
+                                                                                    const awayTeam = gameMatch[awayTeamKey];
+                                                                                    const homeTeam = gameMatch[homeTeamKey];
+                                                                                
+                                                                                    console.log(awayTeam);
+                                                                                
+                                                                                    // Extracting bookmaker-related keys dynamically
+                                                                                    const bookmakerKeys = Object.keys(awayTeam).filter(key => key.startsWith("Away "));
+                                                                                    console.log("bookmakerKeys", bookmakerKeys);
+                                                                                
+                                                                                    const groupImages = [
+                                                                                        { id: 0, image: "/images/group.png" },
+                                                                                        { id: 1, image: "/images/group1.png" },
+                                                                                        { id: 2, image: "/images/group2.png" },
+                                                                                        { id: 3, image: "/images/group3.png" },
+                                                                                        { id: 4, image: "/images/group4.png" },
+                                                                                        { id: 5, image: "/images/group5.png" },
+                                                                                        { id: 6, image: "/images/group6.png" },
+                                                                                        { id: 7, image: "/images/group7.png" },
+                                                                                    ];
+                                                                                
+                                                                                    return (
+                                                                                        <div key={gameIndex} className="game-card">
+                                                                                            {/* Away Team Row */}
+                                                                                            <div className="d-flex justify-content-center pt-2">
+                                                                                                {bookmakerKeys.length > 0 ? (
+                                                                                                    bookmakerKeys.map((bookmaker, index) => (
+                                                                                                        <div key={index} className="text-center px-2">
+                                                                                                            <div className="open_number mt-2">
+                                                                                                                {awayTeam[bookmaker] ?? "N/A"}
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    ))
+                                                                                                ) : (
+                                                                                                    <p className="text-center mt-2">No odds available</p>
+                                                                                                )}
+                                                                                            </div>
+                                                                                            <div className="d-flex justify-content-center pt-2">
                                                                                                     {bookmakerKeys.length > 0 ? (
                                                                                                         bookmakerKeys.map((bookmaker, index) => {
                                                                                                             const imageObj = groupImages[index % groupImages.length];
@@ -343,17 +320,34 @@ const Home = () => {
                                                                                                         <p className="text-center mt-2">No odds available</p>
                                                                                                     )}
                                                                                                 </div>
-                                                                                            </div>
-                                                                                        );
-                                                                                    })
-
-
-
-                                                                                )}
+                                                                                        </div>
+                                                                                        
+                                                                                    );
+                                                                                })()
+                                                                                
+                                                                                }
                                                                             </div>
                                                                         </DndProvider>
 
                                                                     </div>
+                                                                                <div className="open_number_one mt-2">
+                                                                                    {homeTeam["Home Best odds"]}
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div className="text-center px-2">
+                                                                                <img src={vector} alt="Open" />
+                                                                                <h6 className="icon_heading">Open</h6>
+                                                                                <div className="open_number">
+                                                                                    {awayTeam["Away Open"]}
+                                                                                </div>
+                                                                                <div className="open_number mt-2">
+                                                                                    {homeTeam["Home Open"]}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                  
                                                                 </div>
                                                             </div>
                                                         );
