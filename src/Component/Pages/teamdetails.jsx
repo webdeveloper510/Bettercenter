@@ -16,9 +16,8 @@ import group4 from "../../Assets/images/Group 1171276554.png";
 import group5 from "../../Assets/images/Group 1171276555.png";
 import group6 from "../../Assets/images/Group 1171276556.png";
 import group7 from "../../Assets/images/Group 1171276556.png";
-
 const Tab = ({ tab, index, moveTab }) => {
-    const [ref] = useDrag({
+    const [, ref] = useDrag({
         type: "TAB",
         item: { index },
     });
@@ -38,19 +37,77 @@ const Tab = ({ tab, index, moveTab }) => {
                 <path d="M128 136c0-22.1-17.9-40-40-40L40 96C17.9 96 0 113.9 0 136l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm0 192c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM288 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM448 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48z" />
             </svg>
 
-            
+            <div>
+                <img src={tab.image} alt={tab.title} className="tab-image mt-1" />
+                <div className="open_number mt-2">{tab.awayOdds}</div>
+                <div className="open_number_one mt-2">{tab.homeOdds}</div>
+            </div>
+        </div>
+    );
+};
+// DraggableItem component - Only makes its children draggable
+const DraggableItem = ({ id, children, index, data }) => {
+    const [{ isDragging }, drag] = useDrag({
+        type: 'ICON',
+        item: () => ({ id, index, data }),
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    });
+
+    return (
+        <div
+            ref={drag}
+            style={{
+                cursor: 'move',
+                opacity: isDragging ? 0.5 : 1,
+            }}
+        >
+            {children}
         </div>
     );
 };
 
+// DroppableArea component
+const DroppableArea = ({ onDrop, children }) => {
+    const [{ isOver }, drop] = useDrop({
+        accept: 'ICON',
+        drop: (item) => {
+            onDrop && onDrop(item.id, item.data);
+            return { dropped: true };
+        },
+        collect: (monitor) => ({
+            isOver: monitor.isOver(),
+        }),
+    });
+
+    return (
+        <div
+            ref={drop}
+            className={`droppable-area ${isOver ? 'droppable-over' : ''}`}
+        >
+            {children}
+        </div>
+    );
+};
+
+
 const Home = () => {
 
+    const handleDrop = (id, data) => {
+        console.log("Dropped", id, "with data", data);
+
+    };
 
     const [activeTab, setActiveTab] = useState(1);
     const [error, setError] = useState(null);
-    const [tabs, setTabs] = useState([]);
     const [allGames, setAllGames] = useState({ money: [], spread: [], overUnder: [] });
     const [loading, setLoading] = useState(true);
+    const [tabs, setTabs] = useState([
+        { name: "Tab 1" },
+        { name: "Tab 2" },
+        { name: "Tab 3" },
+    ]);
     const moveTab = (fromIndex, toIndex) => {
         const updatedTabs = [...tabs];
         const [movedTab] = updatedTabs.splice(fromIndex, 1);
@@ -62,7 +119,7 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMjI5Mzk3LCJpYXQiOjE3NDMxNDI5OTcsImp0aSI6IjM3YWI4MzkxZTg1MDQ2ODBiOWU1NDIxMjFhNGYwY2JlIiwidXNlcl9pZCI6MX0.wyhObqLH1Ro6mJckegd7pnJjgtNdyhHLwGOd1PjW5GE";
+        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNDc5NzE3LCJpYXQiOjE3NDMzOTMzMTcsImp0aSI6IjFlOTRhODk3MDNmMjQ5Y2FhYjEwMjcyNzYyMDQ2YzE4IiwidXNlcl9pZCI6MX0.ZxryHImeN_bkOw8e3jYr_kQnuvmVqWACCyv_0rJtT_o";
         const urls = [
             "http://54.174.64.250:8000/money-data",
             "http://54.174.64.250:8000/spread-data",
@@ -221,12 +278,13 @@ const Home = () => {
                                                         groupData.map((item) => (
                                                             <img key={item.id} src={item.image} alt={`Group ${item.id}`} />
                                                         ));
+
                                                         return (
                                                             <div key={gameIndex} className="col-12 nfl_games mt-3">
                                                                 <div className="d-flex px-2 tab_hover">
-                                                                    <div className="d-flex py-5 col-3 drag_responsive_one">
-                                                                        <div className="pt-2">
-                                                                            <div className="d-flex mt-5 gap-1">
+                                                                    <div className="d-flex pt-3 col-3 drag_responsive_one">
+                                                                        <div className="team_name">
+                                                                            <div className="d-flex gap-1">
                                                                                 <div className="image_icon">
                                                                                     <img src={vector5} alt="Team Icon" width={19} height={19} />
                                                                                 </div>
@@ -246,7 +304,7 @@ const Home = () => {
                                                                         </div>
 
                                                                         <div className="d-flex pt-2 px-2">
-                                                                            <div className="text-center px-2">
+                                                                            <div className="text-center px-2 pt-4">
                                                                                 <img src={vector1} alt="Best Odds" />
                                                                                 <h6 className="icon_heading">Best Odds</h6>
                                                                                 <div className="open_number_one">
@@ -256,7 +314,7 @@ const Home = () => {
                                                                                     {homeTeam["Home Best odds"]}
                                                                                 </div>
                                                                             </div>
-                                                                            <div className="text-center px-2">
+                                                                            <div className="text-center px-2 pt-4">
                                                                                 <img src={vector} alt="Open" />
                                                                                 <h6 className="icon_heading">Open</h6>
                                                                                 <div className="open_number">
@@ -268,70 +326,82 @@ const Home = () => {
                                                                             </div>
                                                                             <div className="d-flex px-2 image_scorll col-9 drag_responsive">
                                                                                 <DndProvider backend={HTML5Backend}>
-                                                                                    <div className="tab-bar mt-4">
+                                                                                    <div className="tab-bar pb-3">
                                                                                         {loading ? (
                                                                                             <p>Loading data...</p>
                                                                                         ) : allGames?.money?.length === 0 ? (
                                                                                             <div className="col-12 text-center my-5">
                                                                                                 <p>No upcoming games available at the moment.</p>
                                                                                             </div>
-                                                                                        ) :
-                                                                                            (() => {
-                                                                                                const teamKeys = Object.keys(gameMatch);
+                                                                                        ) : (() => {
+                                                                                            const teamKeys = Object.keys(gameMatch);
+                                                                                            if (teamKeys.length !== 2) return null;
 
-                                                                                                if (teamKeys.length !== 2) return null;
+                                                                                            const awayTeamKey = teamKeys.find(key => gameMatch[key]?.["Away Team"]);
+                                                                                            const homeTeamKey = teamKeys.find(key => gameMatch[key]?.["Home Team"]);
+                                                                                            if (!awayTeamKey || !homeTeamKey) return null;
+                                                                                            const awayTeam = gameMatch[awayTeamKey];
+                                                                                            const homeTeam = gameMatch[homeTeamKey];
+                                                                                            const bookmakerKeys = Object.keys(awayTeam).filter(key => key.startsWith("Away "));
+                                                                                            const groupData = [group, group1, group2, group3, group4, group5, group6, group7];
 
-                                                                                                const awayTeamKey = teamKeys.find(key => gameMatch[key]?.["Away Team"]);
-                                                                                                const homeTeamKey = teamKeys.find(key => gameMatch[key]?.["Home Team"]);
+                                                                                            const swapValues = (index) => {
+                                                                                                const bookmaker = bookmakerKeys[index];
+                                                                                                const homeKey = bookmaker.replace("Away", "Home");
+                                                                                                const newAwayOdds = homeTeam[homeKey];
+                                                                                                const newHomeOdds = awayTeam[bookmaker];
 
-                                                                                                if (!awayTeamKey || !homeTeamKey) return null;
+                                                                                                awayTeam[bookmaker] = newAwayOdds;
+                                                                                                homeTeam[homeKey] = newHomeOdds;
+                                                                                            };
 
-                                                                                                const awayTeam = gameMatch[awayTeamKey];
-                                                                                                const homeTeam = gameMatch[homeTeamKey];
-
-                                                                                              
-
-                                                                                                const bookmakerKeys = Object.keys(awayTeam).filter(key => key.startsWith("Away "));
-
-
-
-                                                                                                const groupData = [
-                                                                                                    group, group1, group2, group3, group4, group5, group6, group7
-                                                                                                ];
-                                                                                                
-                                                                                                return (
-                                                                                                    <div key={gameIndex} className="game-card">
-
-
-                                                                                                        <div className="d-flex justify-content-center pt-2">
-                                                                                                            {bookmakerKeys.length > 0 ? (
-                                                                                                                bookmakerKeys.map((bookmaker, index) => (
-                                                                                                                    <div key={index} className="text-center px-2">
-                                                                                                                        <img
-                                                                                                                            src={groupData[index % groupData.length]}
-                                                                                                                            alt=""
-                                                                                                                            className="bookmaker-image"
-                                                                                                                        />
-
-                                                                                                                        <div className="open_number mt-2">
-                                                                                                                            {awayTeam[bookmaker] ?? "N/A"}
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                ))
-                                                                                                            ) : (
-                                                                                                                <p className="text-center mt-2">No odds available</p>
-                                                                                                            )}
-                                                                                                        </div>
-
-                                                                                                        <div className="d-flex justify-content-center pt-2">
+                                                                                            return (
+                                                                                                <div key={gameIndex} className="game-card">
+                                                                                                    <DroppableArea onDrop={handleDrop}>
+                                                                                                        <div className="d-flex justify-content-center">
                                                                                                             {bookmakerKeys.length > 0 ? (
                                                                                                                 bookmakerKeys.map((bookmaker, index) => {
                                                                                                                     const homeKey = bookmaker.replace("Away", "Home");
+                                                                                                                    const itemData = {
+                                                                                                                        bookmaker,
+                                                                                                                        image: groupData[index % groupData.length],
+                                                                                                                        awayOdds: awayTeam[bookmaker],
+                                                                                                                        homeOdds: homeTeam[homeKey]
+                                                                                                                    };
+
                                                                                                                     return (
                                                                                                                         <div key={index} className="text-center px-2">
-                                                                                                                            <div className="open_number mt-2">
-                                                                                                                                {homeTeam[homeKey] ?? "N/A"}
-                                                                                                                            </div>
+                                                                                                                            <DraggableItem
+                                                                                                                                id={`icon-${index}`}
+                                                                                                                                index={index}
+                                                                                                                                data={itemData}
+                                                                                                                            >
+                                                                                                                                <div>
+                                                                                                                                    <svg
+                                                                                                                                        className="draw_icon"
+                                                                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                                                                        viewBox="0 0 448 512"
+                                                                                                                                        onClick={() => swapValues(index)}
+                                                                                                                                        style={{ cursor: 'pointer' }}
+                                                                                                                                    >
+                                                                                                                                        <path d="M128 136c0-22.1-17.9-40-40-40L40 96C17.9 96 0 113.9 0 136l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm0 192c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM288 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM448 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48z" />
+                                                                                                                                    </svg>
+                                                                                                                                </div>
+
+                                                                                                                                <img
+                                                                                                                                    src={groupData[index % groupData.length]}
+                                                                                                                                    alt=""
+                                                                                                                                    className="bookmaker-image"
+                                                                                                                                />
+
+                                                                                                                                <div className="open_number mt-1">
+                                                                                                                                    {awayTeam[bookmaker] ?? "N/A"}
+                                                                                                                                </div>
+
+                                                                                                                                <div className="open_number mt-2">
+                                                                                                                                    {homeTeam[homeKey] ?? "N/A"}
+                                                                                                                                </div>
+                                                                                                                            </DraggableItem>
                                                                                                                         </div>
                                                                                                                     );
                                                                                                                 })
@@ -339,13 +409,10 @@ const Home = () => {
                                                                                                                 <p className="text-center mt-2">No odds available</p>
                                                                                                             )}
                                                                                                         </div>
-                                                                                                    </div>
-
-
-                                                                                                );
-                                                                                            })()
-
-                                                                                        }
+                                                                                                    </DroppableArea>
+                                                                                                </div>
+                                                                                            );
+                                                                                        })()}
                                                                                     </div>
                                                                                 </DndProvider>
                                                                             </div>

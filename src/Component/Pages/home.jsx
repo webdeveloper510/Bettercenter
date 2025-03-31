@@ -60,13 +60,13 @@ const Home = () => {
     const [error, setError] = useState(null);
     const totalPages = 4;
     const [tabs, setTabs] = useState([
-        { id: 1, image: group,  },
-        { id: 2, image: group1,  },
+        { id: 1, image: group, },
+        { id: 2, image: group1, },
         { id: 3, image: group2, },
         { id: 4, image: group3, },
-        { id: 5, image: group4,  },
-        { id: 6, image: group5,  },
-        { id: 7, image: group6,  },
+        { id: 5, image: group4, },
+        { id: 6, image: group5, },
+        { id: 7, image: group6, },
         { id: 8, image: group7, },
     ]);
 
@@ -86,7 +86,7 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMjI5Mzk3LCJpYXQiOjE3NDMxNDI5OTcsImp0aSI6IjM3YWI4MzkxZTg1MDQ2ODBiOWU1NDIxMjFhNGYwY2JlIiwidXNlcl9pZCI6MX0.wyhObqLH1Ro6mJckegd7pnJjgtNdyhHLwGOd1PjW5GE";
+        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNDc5NzE3LCJpYXQiOjE3NDMzOTMzMTcsImp0aSI6IjFlOTRhODk3MDNmMjQ5Y2FhYjEwMjcyNzYyMDQ2YzE4IiwidXNlcl9pZCI6MX0.ZxryHImeN_bkOw8e3jYr_kQnuvmVqWACCyv_0rJtT_o";
 
         setLoading(true);
         fetch("http://54.174.64.250:8000/money-data", {
@@ -106,7 +106,7 @@ const Home = () => {
                 console.log("API Response:", data);
                 if (data && data.data) {
                     const extractedGames = Object.values(data.data).map((gameArray) => {
-                        const game = gameArray[0]; // Access the first object in each game array
+                        const game = gameArray[0];
                         const homeTeam = Object.keys(game).find((team) => game[team]["Home Team"]);
                         const awayTeam = Object.keys(game).find((team) => game[team]["Away Team"]);
 
@@ -209,7 +209,6 @@ const Home = () => {
                                                                 style={{ cursor: "pointer" }}
                                                             >
                                                                 <div className="py-2">
-                                                                    {/* Away Team */}
                                                                     <div className="d-flex gap-3">
                                                                         <div className="image_icon">
                                                                             <img src={vector5} alt="Away Team" width={19} height={19} />
@@ -217,7 +216,6 @@ const Home = () => {
                                                                         <h6 className="icon_heading pt-2">{game.awayTeam}</h6>
                                                                     </div>
 
-                                                                    {/* Home Team */}
                                                                     <div className="d-flex gap-3 mt-2">
                                                                         <div className="image_icon">
                                                                             <img src={vector5} alt="Home Team" width={19} height={19} />
@@ -233,7 +231,6 @@ const Home = () => {
                                         </div>
                                     )}
 
-                                    {/* Remaining tabs (2-6) with placeholder content */}
                                     {[2, 3, 4, 5, 6].map((tabId) => (
                                         activeTab === tabId && (
                                             <div key={tabId} className="container">
