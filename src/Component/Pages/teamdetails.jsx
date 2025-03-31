@@ -45,7 +45,6 @@ const Tab = ({ tab, index, moveTab }) => {
         </div>
     );
 };
-// DraggableItem component - Only makes its children draggable
 const DraggableItem = ({ id, children, index, data }) => {
     const [{ isDragging }, drag] = useDrag({
         type: 'ICON',
@@ -68,7 +67,6 @@ const DraggableItem = ({ id, children, index, data }) => {
     );
 };
 
-// DroppableArea component
 const DroppableArea = ({ onDrop, children }) => {
     const [{ isOver }, drop] = useDrop({
         accept: 'ICON',
@@ -93,12 +91,6 @@ const DroppableArea = ({ onDrop, children }) => {
 
 
 const Home = () => {
-
-    const handleDrop = (id, data) => {
-        console.log("Dropped", id, "with data", data);
-
-    };
-
     const [activeTab, setActiveTab] = useState(1);
     const [error, setError] = useState(null);
     const [allGames, setAllGames] = useState({ money: [], spread: [], overUnder: [] });
@@ -116,6 +108,10 @@ const Home = () => {
     };
     const toggleTab = (tabIndex) => {
         setActiveTab(tabIndex);
+    };
+    const handleDrop = (id, data) => {
+        console.log("Dropped", id, "with data", data);
+
     };
 
     useEffect(() => {
@@ -467,14 +463,13 @@ const Home = () => {
                                                         groupData.map((item) => (
                                                             <img key={item.id} src={item.image} alt={`Group ${item.id}`} />
                                                         ));
-
                                                         return (
                                                             <div key={gameIndex} className="col-12 nfl_games mt-3">
                                                                 <div className="d-flex px-2 tab_hover">
-                                                                    <div className="d-flex py-5 col-3 drag_responsive_one">
-                                                                        <div className="pt-2">
+                                                                    <div className="d-flex  col-3 drag_responsive_one">
+                                                                        <div className="team_name">
                                                                             {teams.map((team, index) => (
-                                                                                <div className="d-flex mt-5 gap-1" key={index}>
+                                                                                <div className="d-flex gap-1" key={index}>
                                                                                     <div className="image_icon">
                                                                                         <img src={vector5} alt="Team Icon" width={19} height={19} />
                                                                                     </div>
@@ -484,9 +479,7 @@ const Home = () => {
                                                                                 </div>
                                                                             ))}
                                                                         </div>
-
-
-                                                                        <div className="d-flex pt-2 px-2">
+                                                                        <div className="d-flex pt-5 px-2">
                                                                             <div className="text-center px-2">
                                                                                 <img src={vector1} alt="Best Odds" />
                                                                                 <h6 className="icon_heading">Best Odds</h6>
@@ -509,9 +502,9 @@ const Home = () => {
                                                                         </div>
                                                                     </div>
 
-                                                                    <div className="d-flex px-2 image_scorll col-9 drag_responsive">
+                                                                    <div className="d-flex px-2 image_scorll pb-3 col-9 drag_responsive">
                                                                         <DndProvider backend={HTML5Backend}>
-                                                                            <div className="tab-bar mt-4">
+                                                                            <div className="tab-bar pt-3">
                                                                                 {loading ? (
                                                                                     <p>Loading data...</p>
                                                                                 ) : allGames?.overUnder?.length === 0 ? (
@@ -543,17 +536,18 @@ const Home = () => {
 
                                                                                         return (
                                                                                             <div key={gameIndex} className="game-card">
-                                                                                                <div className="d-flex  justify-content-center pt-2">
+                                                                                                <div className="d-flex justify-content-center pt-2">
                                                                                                     {bookmakerKeys.length > 0 ? (
                                                                                                         bookmakerKeys.map((bookmaker, index) => (
-                                                                                                            <div key={index} className="text-center px-2">
-
+                                                                                                            <div key={index} className="text-center px-2 position-relative">
+                                                                                                                <svg className="draw_icon position-absolute top-0 start-50 translate-middle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16">
+                                                                                                                    <path d="M128 136c0-22.1-17.9-40-40-40L40 96C17.9 96 0 113.9 0 136l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm0 192c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM288 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM448 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48z" />
+                                                                                                                </svg>
                                                                                                                 <img
                                                                                                                     src={groupData[index % groupData.length]}
                                                                                                                     alt=""
-                                                                                                                    className="bookmaker-image"
+                                                                                                                    className="bookmaker-image mt-3"
                                                                                                                 />
-
                                                                                                                 {teams.map((team, i) => (
                                                                                                                     <div key={i} className="open_number mt-2">
                                                                                                                         {team[bookmaker] ?? "N/A"}
@@ -599,7 +593,7 @@ const Home = () => {
                                                         return (
                                                             <div key={gameIndex} className="col-12 nfl_games mt-3">
                                                                 <div className="d-flex px-2 tab_hover">
-                                                                    <div className="d-flex py-5 col-3 drag_responsive_one">
+                                                                    <div className="d-flex col-3 drag_responsive_one">
                                                                         <div className="pt-2">
                                                                             <div className="d-flex mt-5 gap-1">
                                                                                 <div className="image_icon">
@@ -620,25 +614,25 @@ const Home = () => {
                                                                             </div>
                                                                         </div>
 
-                                                                        <div className="d-flex pt-2 px-2">
+                                                                        <div className="d-flex pt-5 px-2">
                                                                             <div className="text-center px-2">
                                                                                 <img src={vector1} alt="Over" />
                                                                                 <h6 className="icon_heading">Over</h6>
                                                                                 <div className="open_number_one">
-                                                                                    {awayTeam[""] || "-"}
+                                                                                    {awayTeam["awayTeam"] || "-"}
                                                                                 </div>
                                                                             </div>
-                                                                            <div className="text-center px-2">
+                                                                            <div className="text-center  px-2">
                                                                                 <img src={vector} alt="Under" />
                                                                                 <h6 className="icon_heading">Under</h6>
                                                                                 <div className="open_number">
-                                                                                    {homeTeam[""] || "-"}
+                                                                                    {homeTeam["homeTeam"] || "-"}
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
 
-                                                                    <div className="d-flex px-2 image_scorll col-9 drag_responsive">
+                                                                    <div className="d-flex px-2 image_scorll pb-3 col-9 drag_responsive">
                                                                         <DndProvider backend={HTML5Backend}>
                                                                             <div className="tab-bar mt-4">
                                                                                 {allGames?.overUnder?.map((gameMatch, gameIndex) => {
@@ -659,7 +653,6 @@ const Home = () => {
 
                                                                                     const teams = [awayTeam, homeTeam];
 
-
                                                                                     const groupData = [
                                                                                         group, group1, group2, group3, group4, group5, group6, group7
                                                                                     ];
@@ -672,18 +665,18 @@ const Home = () => {
 
                                                                                     return (
                                                                                         <div key={gameIndex} className="game-card">
-
                                                                                             <div className="d-flex pt-2 px-2">
                                                                                                 <div className="text-center px-2"></div>
                                                                                                 <div className="text-center px-2"></div>
                                                                                             </div>
-
-
-                                                                                            <div className="d-flex  justify-content-center pt-2">
+                                                                                            <div className="d-flex justify-content-center pt-2">
                                                                                                 {formattedData.length > 0 ? (
                                                                                                     formattedData.map((data, index) => (
-                                                                                                        <div key={index} className="text-center px-2">
-                                                                                                            <img src={data.image} alt="" className="bookmaker-image" />
+                                                                                                        <div key={index} className="text-center px-2 position-relative">
+                                                                                                            <svg className="draw_icon position-absolute top-0 start-50 translate-middle-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16">
+                                                                                                                <path d="M128 136c0-22.1-17.9-40-40-40L40 96C17.9 96 0 113.9 0 136l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm0 192c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM288 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM448 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48z" />
+                                                                                                            </svg>
+                                                                                                            <img src={data.image} alt="" className="bookmaker-image mt-4" />
                                                                                                             {data.values.map((value, i) => (
                                                                                                                 <div key={i} className="open_number mt-2">{value}</div>
                                                                                                             ))}
@@ -698,6 +691,7 @@ const Home = () => {
                                                                                 })}
                                                                             </div>
                                                                         </DndProvider>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -706,7 +700,6 @@ const Home = () => {
                                                 )}
                                             </div>
                                         </div>
-
                                     )}
 
                                     {[2, 3, 4, 5, 6].map((tabId) => (
@@ -727,11 +720,7 @@ const Home = () => {
                                         )
                                     ))}
                                 </div>
-
                             </div>
-
-
-
                         </div>
                     </div>
                 </div>
