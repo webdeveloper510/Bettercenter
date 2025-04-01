@@ -1,7 +1,9 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "../src/Assets/style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Import components
 import Home from "./Component/Pages/home";
@@ -17,9 +19,27 @@ import Checkout from "./Component/Pages/checkout";
 import Newspage from "./Component/Pages/newspage"
 import News from "./Component/Pages/news";
 // import Footer from "./Component/footer";
+// Protected route component
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("accessToken");
+  
+  if (!token) {
+    // Redirect to signin if not authenticated
+    return <Navigate to="/signin" replace />;
+  }
+  
+  return children;
+};
 
 function Layout() {
-  const location = useLocation(); // Get the current route
+  const location = useLocation();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  // Check authentication on mount and when location changes
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    setIsAuthenticated(!!token);
+  }, [location]);
 
   // Hide header & footer on signup and signin pages
   const hideHeaderFooter = location.pathname === "/signup" || location.pathname === "/signin";
@@ -29,11 +49,36 @@ function Layout() {
       {!hideHeaderFooter && <Header />}
       <main>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Subscription />} />
-          <Route path="/ourteam" element={<Ourteam />} />
-          <Route path="/allpicks" element={<AllPicks />} />
-          <Route path="/pickdetail" element={<Pickdetail />} />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } />
+          <Route path="/subscription" element={
+            <ProtectedRoute>
+              <Subscription />
+            </ProtectedRoute>
+          } />
+          <Route path="/ourteam" element={
+            <ProtectedRoute>
+              <Ourteam />
+            </ProtectedRoute>
+          } />
+          <Route path="/allpicks" element={
+            <ProtectedRoute>
+              <AllPicks />
+            </ProtectedRoute>
+          } />
+          <Route path="/pickdetail" element={
+            <ProtectedRoute>
+              <Pickdetail />
+            </ProtectedRoute>
+          } />
+          <Route path="/checkout" element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          } />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/checkout" element={<Checkout />} />
@@ -42,10 +87,13 @@ function Layout() {
           <Route path="/news" element={<News />} />
 
           
+          
+          {/* Redirect to signin for any unmatched routes */}
+          <Route path="*" element={<Navigate to="/signin" replace />} />
         </Routes>
       </main>
-
-      {/* {!hideHeaderFooter && <Footer />} */}
+      {/* ToastContainer for notifications */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }

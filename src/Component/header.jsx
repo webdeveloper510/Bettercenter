@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../Component/header.css";
 import logo1 from "../better_logo.png";
 import { FaShoppingBag } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import { logout } from "../api"; 
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    setIsLoggedIn(!!token);
+  }, [location]);
+
+  const handleLogout = () => {
+    logout(); 
+  };
 
   return (
     <>
@@ -74,7 +86,7 @@ const Header = () => {
                 </a>
               </li>
             </ul>
-            {/* Right Section: Cart, Login, and CTA Button */}
+            {/* Right Section: Cart, Login/Logout, and CTA Button */}
             <div className="header-content">
               {/* Cart Icon with Badge */}
               <div className="cart-container">
@@ -82,10 +94,13 @@ const Header = () => {
                 <span className="cart-badge">2</span>
               </div>
 
-              {/* Login */}
-              {/* <span className="login-text">LOGIN</span> */}
+              {/* Login/Logout */}
               <span className="login-text">
-                <Link to="/signin" className="login-link">LOGIN</Link>
+                {isLoggedIn ? (
+                  <a href="#" className="login-link" onClick={handleLogout}>LOGOUT</a>
+                ) : (
+                  <Link to="/signin" className="login-link">LOGIN</Link>
+                )}
               </span>
 
               {/* Divider */}
