@@ -14,7 +14,8 @@ import Signin from "./Component/Pages/signin";
 import Header from "./Component/header";
 import Checkout from "./Component/Pages/checkout";
 
-
+import Newspage from "./Component/Pages/newspage"
+import News from "./Component/Pages/news";
 // import Footer from "./Component/footer";
 
 function Layout() {
@@ -36,7 +37,11 @@ function Layout() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/checkout" element={<Checkout />} />
+          
+          <Route path="/newspage" element={<Newspage />} />
+          <Route path="/news" element={<News />} />
 
+          
         </Routes>
       </main>
 

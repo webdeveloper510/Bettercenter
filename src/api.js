@@ -57,7 +57,7 @@ const api = {
         } catch (error) {
             throw error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
-    }
+    },
 };
 
 export default api;

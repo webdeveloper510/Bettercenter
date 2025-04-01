@@ -1,0 +1,169 @@
+.laptop_image {
+    background-image: url("../images/wordpress-923188_1280.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 520px;
+    padding-top: 30%;
+   
+}
+
+.news_page_heading {
+    color: #ffff;
+}
+
+.heading_news {
+    color: #ffff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.heading_news_one {
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #0F93EB;
+
+}
+
+.sub_heading {
+    color: #ffff;
+    font-size: 18px;
+    font-weight: 500;
+}
+.sub_heading_news {
+    color: #ffff;
+    font-size: 14px !important;
+    font-weight: 500;
+}
+:hover.sub_heading_news {
+    color: #ffff;
+    font-size: 14px !important;
+    font-weight: 500;
+}
+.sub_headingline {
+    padding-left: 20px;
+
+}
+
+.sub_heading_link {
+    font-size: 22px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #ffff;
+
+}
+
+:hover.sub_heading_link {
+    font-size: 22px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #0F93EB;
+
+}
+
+
+
+
+.see_btn {
+    background-color: #fff;
+    border: 1px solid #686767;
+    color: #242323;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+:hover.see_btn {
+    background-color: #0F93EB;
+    border: 1px solid #686767;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.sub_headingline_one {
+    padding-left: 0px;
+
+}
+
+.socal_media_icon {
+    width: 25px;
+    height: 25px;
+    fill: #fdfcfc;
+}
+
+:hover.socal_media_icon {
+    width: 25px;
+    height: 25px;
+    fill: #fff;
+}
+
+:hover.socal_media {
+    width: 45px;
+    height: 45px;
+    background-color: #0F93EB;
+    border: 1px solid #0F93EB;
+    border-radius: 50%;
+    text-align: center;
+
+}
+
+.socal_media {
+    width: 45px;
+    height: 45px;
+    background-color: transparent;
+    text-align: center;
+}
+
+.macbook {
+    display: flex;
+    justify-content: center;
+}
+
+.started_page {
+    font-size: 16px;
+    font-weight: 400;
+    color: #aaa6a6;
+    width: 85%;
+    margin: auto;
+}
+
+.started_page_one {
+    font-size: 50px;
+    font-weight: 600;
+    color: #aaa6a6;
+
+}
+
+.started_page_second {
+    padding-left: 40px;
+}
+
+.page_second {
+    padding-left: 90px;
+}
+
+.started_image {
+    padding-left: 70px;
+}
+.main_dot {
+    display: flex;
+    gap: 23px;
+    margin-top: 10px;
+}

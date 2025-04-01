@@ -65,6 +65,14 @@ const Header = () => {
                   BLOG
                 </a>
               </li>
+              <li className="nav-item">
+                <a
+                  className={`nav-link ${location.pathname === "/newspage" ? "active-link" : ""}`}
+                  href="#"
+                >
+                  NEWS PAGE
+                </a>
+              </li>
             </ul>
             {/* Right Section: Cart, Login, and CTA Button */}
             <div className="header-content">
