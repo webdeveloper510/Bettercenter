@@ -1,61 +1,40 @@
 import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
+import { setAuthToken } from '../../api';
 const signin = () => {
-    
-    const handleSubmit = async (values, { setSubmitting }) => {
-        try {
-          console.log("Submitting values:", values);
-    
-          const response = await axios.post("http://54.174.64.250:8000/login", values);
-          
-          console.log("Full API Response:", response);
-          console.log("Response Data:", response.data);
-    
-          console.log("Stringified Response Data:", JSON.stringify(response.data));
-    
-          let token;
-          if (typeof response.data === 'object') {
-            token = 
-              response.data.access_token || 
-              response.data.token || 
-              response.data.accessToken ||
-              (response.data.data && response.data.data.token);
-          } else if (typeof response.data === 'string') {
-            token = response.data;
-          }
-    
-          console.log("Extracted Token:", token);
-    
-          if (token) {
-            const tokenString = typeof token === 'object' 
-              ? JSON.stringify(token) 
-              : String(token);
-    
-            localStorage.setItem("access_token", tokenString);
-            
-            const storedToken = localStorage.getItem("access_token");
-            console.log("Stored Token:", storedToken);
-            
+const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+        console.log("Submitting values:", values);
+
+        const response = await axios.post("http://54.174.64.250:8000/login", values);
+        const token = response.data?.token?.access;
+
+        console.log("Extracted Token:", token);
+
+        if (token) {
+            setAuthToken(token);
+            console.log("Token stored successfully");
+
             alert("Login successful!");
-          } else {
+        } else {
             console.error("No token found in response");
-            console.error("Response data structure:", response.data);
             alert("Login failed: No access token received");
-          }
-        } catch (error) {
-          console.error("Login error details:", {
+        }
+    } catch (error) {
+        console.error("Login error details:", {
             message: error.message,
             response: error.response ? error.response.data : 'No response',
             request: error.request ? 'Request exists' : 'No request',
             config: error.config ? 'Config exists' : 'No config'
-          });
-    
-          alert(`Login failed: ${error.message}`);
-        } finally {
-          setSubmitting(false);
-        }
-      };
+        });
+
+        alert(`Login failed: ${error.message}`);
+    } finally {
+        setSubmitting(false);
+    }
+};
+
     
       const checkStoredToken = () => {
         const token = localStorage.getItem("access_token");

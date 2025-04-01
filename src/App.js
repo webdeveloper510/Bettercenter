@@ -13,9 +13,7 @@ import AllPicks from "./Component/Pages/allpicks";
 import Signin from "./Component/Pages/signin";
 import Header from "./Component/header";
 import Checkout from "./Component/Pages/checkout";
-import Data from "./Component/Pages/data";
-import TeamDetails from "./Component/Pages/teamdetails"
-import GameList from "./Component/Pages/GameList"
+
 
 // import Footer from "./Component/footer";
 
@@ -38,9 +36,6 @@ function Layout() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/data" element={<Data />} />
-          <Route path="/teamDetails" element={<TeamDetails />} />
-          <Route path="/gameList" element={<GameList />} />
 
         </Routes>
       </main>
