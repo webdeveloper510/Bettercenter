@@ -50,7 +50,7 @@ const Header = () => {
                   className={`nav-link ${location.pathname === "/" ? "active-link" : ""}`}
                   to="/"
                 >
-                  SUBSCRIPTIONS
+                 NBA ODDS
                 </Link>
               </li>
               <li className="nav-item">
@@ -69,22 +69,18 @@ const Header = () => {
                   FREE PICKS
                 </Link>
               </li>
-              <li className="nav-item">
-                <a
-                  className={`nav-link ${location.pathname === "/blog" ? "active-link" : ""}`}
-                  href="#"
+              <Link
+                  className={`nav-link ${location.pathname === "/allpicks" ? "active-link" : ""}`}
+                  to="/allpicks"
                 >
                   BLOG
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
+                </Link>
+                <Link
                   className={`nav-link ${location.pathname === "/newspage" ? "active-link" : ""}`}
-                  href="#"
+                  to="/allpicks"
                 >
-                  NEWS PAGE
-                </a>
-              </li>
+                  NEWS 
+                </Link>
             </ul>
             {/* Right Section: Cart, Login/Logout, and CTA Button */}
             <div className="header-content">
