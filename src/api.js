@@ -25,24 +25,15 @@ export const setAuthToken = (token) => {
 
 export const logout = () => {
     setAuthToken(null);
-    window.location.href = '/signin';
+    console.log("Logged out, but not redirecting");
 };
 
-apiClient.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response && error.response.status === 401) {
-            console.log("401 Unauthorized error - logging out");
-            logout();
-        }
-        return Promise.reject(error);
-    }
-);
 const token = getAccessToken();
 if (token) {
     apiClient.defaults.headers.Authorization = `Bearer ${token}`;
     console.log("Token loaded from localStorage on app init");
 }
+
 const api = {
     getMoneyData: async () => {
         try {

@@ -18,15 +18,14 @@ import Checkout from "./Component/Pages/checkout";
 
 import Newspage from "./Component/Pages/newspage"
 import News from "./Component/Pages/news";
-// import Footer from "./Component/footer";
-// Protected route component
-const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("accessToken");
-  
-  if (!token) {
 
-    return <Navigate to="/signin" replace />;
-  }
+// Modified ProtectedRoute to skip token check
+const ProtectedRoute = ({ children }) => {
+  // Comment out the token check to always render children
+  // const token = localStorage.getItem("accessToken");
+  // if (!token) {
+  //   return <Navigate to="/signin" replace />;
+  // }
   
   return children;
 };
@@ -39,6 +38,7 @@ function Layout() {
     const token = localStorage.getItem("accessToken");
     setIsAuthenticated(!!token);
   }, [location]);
+  
   const hideHeaderFooter = location.pathname === "/signup" || location.pathname === "/signin";
 
   return (
@@ -46,11 +46,9 @@ function Layout() {
       {!hideHeaderFooter && <Header />}
       <main>
         <Routes>
-          <Route path="/" element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          } />
+          {/* Home as default route */}
+          <Route path="/" element={<Home />} />
+          
           <Route path="/subscription" element={
             <ProtectedRoute>
               <Subscription />
@@ -83,10 +81,8 @@ function Layout() {
           <Route path="/newspage" element={<Newspage />} />
           <Route path="/news" element={<News />} />
 
-          
-          
-          {/* Redirect to signin for any unmatched routes */}
-          <Route path="*" element={<Navigate to="/signin" replace />} />
+          {/* Redirect to home for any unmatched routes */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
       {/* ToastContainer for notifications */}
