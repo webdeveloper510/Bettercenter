@@ -28,17 +28,22 @@ export const logout = () => {
     console.log("Logged out, but not redirecting");
 };
 
+// Load token on app startup
 const token = getAccessToken();
 if (token) {
     apiClient.defaults.headers.Authorization = `Bearer ${token}`;
     console.log("Token loaded from localStorage on app init");
 }
 
+// API Calls
 const api = {
+    // Requests without auth token
     getMoneyData: async () => {
         try {
-            console.log("Fetching money data, token present:", !!getAccessToken());
-            const response = await apiClient.get('/money-data');
+            console.log("Fetching money data without authentication");
+            const response = await axios.get(`${API_URL}/money-data`, {
+                headers: { 'Content-Type': 'application/json' } // No Authorization header
+            });
             return response.data;
         } catch (error) {
             console.error("Money data fetch error:", error);
@@ -47,7 +52,10 @@ const api = {
     },
     getSpreadData: async () => {
         try {
-            const response = await apiClient.get('/spread-data');
+            console.log("Fetching spread data without authentication");
+            const response = await axios.get(`${API_URL}/spread-data`, {
+                headers: { 'Content-Type': 'application/json' } // No Authorization header
+            });
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : { message: "Failed to fetch spread data" };
@@ -55,7 +63,10 @@ const api = {
     },
     getOverUnderData: async () => {
         try {
-            const response = await apiClient.get('/over-under-data');
+            console.log("Fetching over/under data without authentication");
+            const response = await axios.get(`${API_URL}/over-under-data`, {
+                headers: { 'Content-Type': 'application/json' } // No Authorization header
+            });
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : { message: "Failed to fetch over/under data" };
@@ -63,8 +74,10 @@ const api = {
     },
     getNewsData: async () => {
         try {
-            console.log("Fetching News data, token present:", !!getAccessToken());
-            const response = await apiClient.get('/news-data');
+            console.log("Fetching news data without authentication");
+            const response = await axios.get(`${API_URL}/news-data`, {
+                headers: { 'Content-Type': 'application/json' } // No Authorization header
+            });
             return response.data;
         } catch (error) {
             console.error("News data fetch error:", error);
