@@ -115,13 +115,13 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNDc5NzE3LCJpYXQiOjE3NDMzOTMzMTcsImp0aSI6IjFlOTRhODk3MDNmMjQ5Y2FhYjEwMjcyNzYyMDQ2YzE4IiwidXNlcl9pZCI6MX0.ZxryHImeN_bkOw8e3jYr_kQnuvmVqWACCyv_0rJtT_o";
+        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTY2Mjc4LCJpYXQiOjE3NDM0Nzk4NzgsImp0aSI6IjM1ZTg4MmQyN2EwYjQwMzM5ODUwYTMzZmZmZDU2OTgxIiwidXNlcl9pZCI6MX0.p5IWAfGHUQSx4ruhOBGW-Z49FK0kjbXq2eooH2DrwOE";
         const urls = [
             "http://54.174.64.250:8000/money-data",
             "http://54.174.64.250:8000/spread-data",
             "http://54.174.64.250:8000/over-under-data"
         ];
-
+        
         setLoading(true);
 
         const fetchData = async () => {
@@ -587,9 +587,17 @@ const Home = () => {
 
                                                         const awayTeam = gameMatch[teamKeys.find(key => gameMatch[key]["Away Team"])] || {};
                                                         const homeTeam = gameMatch[teamKeys.find(key => gameMatch[key]["Home Team"])] || {};
+                                                        const groupData = [group, group1, group2, group3, group4, group5, group6, group7];
 
                                                         if (!homeTeam || !awayTeam) return null;
-
+                                                        const formatOdds = (value) => {
+                                                            if (!value || value.toString().trim() === "") return "N/A";
+                                                            return new Intl.NumberFormat("en-US", {
+                                                                style: "decimal",
+                                                                minimumFractionDigits: 2,
+                                                                maximumFractionDigits: 2,
+                                                            }).format(parseFloat(value));
+                                                        };
                                                         return (
                                                             <div key={gameIndex} className="col-12 nfl_games mt-3">
                                                                 <div className="d-flex px-2 tab_hover">
@@ -629,8 +637,6 @@ const Home = () => {
                                                                                     {homeTeam["homeTeam"] || "-"}
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
 
                                                                     <div className="d-flex px-2 image_scorll pb-3 col-9 drag_responsive">
                                                                         <DndProvider backend={HTML5Backend}>
@@ -639,28 +645,28 @@ const Home = () => {
                                                                                     const teamKeys = Object.keys(gameMatch);
                                                                                     if (teamKeys.length !== 2) return null;
 
-                                                                                    const awayTeamKey = teamKeys.find(key => gameMatch[key]?.["Away Team"]);
-                                                                                    const homeTeamKey = teamKeys.find(key => gameMatch[key]?.["Home Team"]);
+                                                                                    const awayTeamKey = teamKeys.find((key) => gameMatch[key]?.["Away Team"]);
+                                                                                    const homeTeamKey = teamKeys.find((key) => gameMatch[key]?.["Home Team"]);
 
                                                                                     if (!awayTeamKey || !homeTeamKey) return null;
 
                                                                                     const awayTeam = gameMatch[awayTeamKey] || {};
                                                                                     const homeTeam = gameMatch[homeTeamKey] || {};
 
-                                                                                    const bookmakerKeys = Object.keys({ ...awayTeam, ...homeTeam }).filter(
-                                                                                        key => ["Betmgm", "Caesars", "Fanduel", "Dk", "Betrivers", "Unibetnj", "Bet365"].some(bm => key.includes(bm))
+                                                                                    // Extracting bookmaker keys
+                                                                                    const bookmakerKeys = Object.keys({ ...awayTeam, ...homeTeam }).filter((key) =>
+                                                                                        ["Betmgm", "Caesars", "Fanduel", "Dk", "Betrivers", "Unibetnj", "Bet365"].some((bm) =>
+                                                                                            key.includes(bm)
+                                                                                        )
                                                                                     );
 
                                                                                     const teams = [awayTeam, homeTeam];
 
-                                                                                    const groupData = [
-                                                                                        group, group1, group2, group3, group4, group5, group6, group7
-                                                                                    ];
-
+                                                                                    // Mapping bookmakers with their odds
                                                                                     const formattedData = bookmakerKeys.map((bookmaker, index) => ({
                                                                                         bookmaker,
                                                                                         image: groupData[index % groupData.length],
-                                                                                        values: teams.map(team => team[bookmaker] && team[bookmaker].toString().trim() !== "" ? team[bookmaker] : "N/A")
+                                                                                        values: teams.map((team) => formatOdds(team[bookmaker])),
                                                                                     }));
 
                                                                                     return (
@@ -673,7 +679,13 @@ const Home = () => {
                                                                                                 {formattedData.length > 0 ? (
                                                                                                     formattedData.map((data, index) => (
                                                                                                         <div key={index} className="text-center px-2 position-relative">
-                                                                                                            <svg className="draw_icon position-absolute top-0 start-50 translate-middle-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16">
+                                                                                                            <svg
+                                                                                                                className="draw_icon position-absolute top-0 start-50 translate-middle-x"
+                                                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                                                viewBox="0 0 448 512"
+                                                                                                                width="16"
+                                                                                                                height="16"
+                                                                                                            >
                                                                                                                 <path d="M128 136c0-22.1-17.9-40-40-40L40 96C17.9 96 0 113.9 0 136l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm0 192c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM288 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM448 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48z" />
                                                                                                             </svg>
                                                                                                             <img src={data.image} alt="" className="bookmaker-image mt-4" />
@@ -693,6 +705,9 @@ const Home = () => {
                                                                         </DndProvider>
 
                                                                     </div>
+                                                                        </div>
+                                                                    </div>
+
                                                                 </div>
                                                             </div>
                                                         );

@@ -86,7 +86,7 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNDc5NzE3LCJpYXQiOjE3NDMzOTMzMTcsImp0aSI6IjFlOTRhODk3MDNmMjQ5Y2FhYjEwMjcyNzYyMDQ2YzE4IiwidXNlcl9pZCI6MX0.ZxryHImeN_bkOw8e3jYr_kQnuvmVqWACCyv_0rJtT_o";
+        const API_Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTY2Mjc4LCJpYXQiOjE3NDM0Nzk4NzgsImp0aSI6IjM1ZTg4MmQyN2EwYjQwMzM5ODUwYTMzZmZmZDU2OTgxIiwidXNlcl9pZCI6MX0.p5IWAfGHUQSx4ruhOBGW-Z49FK0kjbXq2eooH2DrwOE";
 
         setLoading(true);
         fetch("http://54.174.64.250:8000/money-data", {
