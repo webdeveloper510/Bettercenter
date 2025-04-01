@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("accessToken");
   
   if (!token) {
-    // Redirect to signin if not authenticated
+
     return <Navigate to="/signin" replace />;
   }
   
@@ -35,13 +35,10 @@ function Layout() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
-  // Check authentication on mount and when location changes
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     setIsAuthenticated(!!token);
   }, [location]);
-
-  // Hide header & footer on signup and signin pages
   const hideHeaderFooter = location.pathname === "/signup" || location.pathname === "/signin";
 
   return (
