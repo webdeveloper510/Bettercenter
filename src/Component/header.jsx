@@ -4,7 +4,7 @@ import logo1 from "../better_logo.png";
 import { FaShoppingBag } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import { logout } from "../api"; 
+import { logout } from "../api";
 
 const Header = () => {
   const location = useLocation();
@@ -17,7 +17,7 @@ const Header = () => {
   }, [location]);
 
   const handleLogout = () => {
-    logout(); 
+    logout();
   };
 
   return (
@@ -50,7 +50,7 @@ const Header = () => {
                   className={`nav-link ${location.pathname === "/" ? "active-link" : ""}`}
                   to="/"
                 >
-                 NBA ODDS
+                  NBA ODDS
                 </Link>
               </li>
               <li className="nav-item">
@@ -67,20 +67,25 @@ const Header = () => {
                   to="/allpicks"
                 >
                   FREE PICKS
-                </Link>
+                </Link> 
               </li>
-              <Link
-                  className={`nav-link ${location.pathname === "/allpicks" ? "active-link" : ""}`}
-                  to="/allpicks"
+              <li className="nav-item">
+                <Link
+                  className={`nav-link ${location.pathname === "/blog" ? "active-link" : ""}`}
+                  to="/blog"
                 >
                   BLOG
                 </Link>
+              </li>
+              <li className="nav-item">
                 <Link
                   className={`nav-link ${location.pathname === "/newspage" ? "active-link" : ""}`}
-                  to="/allpicks"
+                  to="/newspage"
                 >
-                  NEWS 
+                  NEWS
                 </Link>
+              </li>
+
             </ul>
             {/* Right Section: Cart, Login/Logout, and CTA Button */}
             <div className="header-content">
