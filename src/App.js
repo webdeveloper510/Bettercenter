@@ -15,7 +15,6 @@ import AllPicks from "./Component/Pages/allpicks";
 import Signin from "./Component/Pages/signin";
 import Header from "./Component/header";
 import Checkout from "./Component/Pages/checkout";
-
 import Newspage from "./Component/Pages/newspage"
 import News from "./Component/Pages/news";
 
