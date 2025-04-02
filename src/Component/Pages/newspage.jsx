@@ -6,10 +6,12 @@ import vr from "../../Assets/images/augmented-reality-1853592_640.jpg";
 import game from "../../Assets/images/gaming-4061103_640.jpg";
 import axios from "axios";
 import api from "../../api";
+import { useNavigate } from "react-router-dom";
 
 
 const Newspage = () => {
     const [newsData, setNewsData] = useState([])
+    const navigate= useNavigate()
     console.log("🚀 ~ Newspage ~ newsData:", newsData)
     useEffect(() => {
         const fetchData = async () => {
@@ -17,7 +19,7 @@ const Newspage = () => {
 
                 const response = await api.getNewsData()
                 console.log("🚀 ~ fetchData ~ response:", response)
-           
+
                 setNewsData((response.data))
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -41,51 +43,7 @@ const Newspage = () => {
                             <h2 className="news_page_heading">The Future of Sustainable Living: Driving Eco-Friendly<br></br> Lifestyles</h2>
 
                         </div>
-                        {/* <div className="col-4">
-                            <div className="d-flex ">
-                                <img src={Laptop} alt="" width={200} height={100} />
-                                <div className="sub_headingline">
-                                    <div className="d-flex gap-2">
-                                        <a href="" className="heading_news_one">AI Powered
-                                        </a><p className="heading_news"> | 4m ago</p>
-                                    </div>
-                                    <h2 className="sub_heading"><a href="/news" className="sub_heading_link">The Future of Sustainable Living: Driving Eco-Friendly Lifestyles
-                                    </a></h2>
-                                </div>
-                            </div>
-                            <div className="d-flex pt-2">
-                                <img src={rocket} alt="" width={200} height={100} />
-                                <div className="sub_headingline">
-                                    <div className="d-flex gap-2">
-                                        <a href="" className="heading_news_one">Tech
-                                        </a><p className="heading_news"> | 5day ago</p>
-                                    </div>
-                                    <h2 className="sub_heading"><a href="/news" className="sub_heading_link">Business Agility the Digital Age: Leveraging AI and Automation</a></h2>
-                                </div>
-                            </div>
-                            <div className="d-flex pt-2">
-                                <img src={vr} alt="" width={200} height={100} />
-                                <div className="sub_headingline">
-                                    <div className="d-flex gap-2">
-                                        <a href="" className="heading_news_one">Network
-                                        </a><p className="heading_news"> | 2hour ago</p>
-                                    </div>
-                                    <h2 className="sub_heading"><a href="/news" className="sub_heading_link">The Art of Baking: From Classic Bread to Artisan Pastries</a></h2>
-                                </div>
-                            </div>
-                            <div className="d-flex pt-2">
-                                <img src={game} alt="" width={200} height={100} />
-                                <div className="sub_headingline">
-                                    <div className="d-flex gap-2">
-                                        <a href="" className="heading_news_one">Virual Realty
-                                        </a><p className="heading_news"> | 12week ago</p>
-                                    </div>
-                                    <h2 className="sub_heading"><a href="/news" className="sub_heading_link">AI and Marketing: Unlocking Customer Insights</a></h2>
-                                </div>
-                            </div>
 
-                            <a class=" see_btn mt-2" href="#">See all Tech<i></i></a>
-                        </div> */}
                     </div>
                 </div>
                 <div className="container">
@@ -98,11 +56,11 @@ const Newspage = () => {
                                 {newsData.length !== 0 &&
                                     newsData.map((res, key) => (
                                         <div className="main_dot" key={key}>
-                                            
-                                            <img src={res.image_url[0]} alt="" width={250} height={180} />
+
+                                            <img src={res.home_image_src} alt="" width={250} height={180} />
                                             <div className="sub_headingline_one">
-                                            <h2 className="sub_heading">
-                                                    <p href="" className="sub_heading_link">
+                                                <h2 className="sub_heading" onClick={()=>navigate('/news', { state:{newsIndex: key}})}>
+                                                    <p className="sub_heading_link">
                                                         {res.article_title}
                                                     </p>
                                                 </h2>
@@ -111,11 +69,11 @@ const Newspage = () => {
                                                         {res.article_subtitle}
                                                     </p>
                                                 </h6>
-                                                <span className="started_page">{res.timestamp}</span>
+                                                <span className="started_page ">{res.timestamp}</span>
 
                                             </div>
-                                            
-                                           
+
+
                                         </div>
                                     ))
                                 }

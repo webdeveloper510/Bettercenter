@@ -1,33 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../../Assets/css/newspage.css";
-import mabbook from "../../Assets/images/macbook-459196_1920.jpg";
-import rocket from "../../Assets/images/rockets-6847181_640.jpg";
 import api from "../../api";
-import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const News = () => {
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             console.log("Submitting values:");
-    //             const response = await axios.get("http://54.174.64.250:8000/news-data");
-    //             console.log("Extracted Token:", response.data);
-    //         } catch (error) {
-    //             console.error("Error fetching data:", error);
-    //         }
-    //     };
+    const [newsData, setNewsData] = useState([])
+    const location = useLocation();
+    const newsIndex = location.state?.newsIndex;
+    console.log("🚀 ~ Newspage ~ newsData:", newsIndex)
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
 
-    //     fetchData(); 
-    // }, []); 
+                const response = await api.getNewsData()
+                console.log("🚀 ~ fetchData ~ response:", response.data[newsIndex])
 
-   
+                setNewsData((response.data[newsIndex]))
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
     return (
         <>
             <section className="backgroung_image">
                 <div className="container">
                     <div className="row">
                         <div className="col-12">
-                            <h1 className="text-center py-5 our_team_head">The Rise of Gourmet Street Food: Trends and Top Picks</h1>
+                            <h1 className="text-center py-5 our_team_head">{newsData.article_title}</h1>
                             <div className="d-flex gap-4 py-5 justify-content-center">
                                 <div className="socal_media text-center">
                                     <a href="" className="">
@@ -57,69 +59,17 @@ const News = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-12">
-                            <div className="macbook">
-                                <img src={mabbook} alt="" srcset="" width={950} />
+                        
+                                    <div>
+                                        <img src={newsData.home_image_src} className="macbook my-3" alt="" srcset="" width={900} />
+                                        <p className="pt-5 started_page" dangerouslySetInnerHTML={{ __html: newsData.news_text }}></p>
 
-                            </div>
-
-                            <p className="pt-5 started_page">
-                                <span className="fs-5">s</span>  he started her blog exactly six months before I launched Camels & Chocolate, and she really set the bar high for my own blog birthday, Y’all this summer! I’ve already been brainstorming party ideas … who wants to come? It’s no coincidence that Buster Keaton and Charlot’s movies of the and award-winning chefs about what exactly makes their hometowns In fact, not being able to rely on spoken word made them better storytellers. They fully understood and used the power of showing without words. A range of amenities provides many things to do in Bellevue. About 40 percent of the city’s population are minorities, which contributes to an overall diverse range of lifestyles and ideas.
-
-                                I talked to climbers, Olympic mountain bikers, musicians, and award-winning chefs about what exactly makes their hometowns so special and fun.
-                            </p>
-                            <p className="py-3 started_page">
-                                I talked to climbers, Olympic mountain bikers, musicians, and award-winning chefs about what exactly makes their hometowns so special and fun.
-                            </p>
+                                    </div>
+                            
                         </div>
                     </div>
                 </div>
-                <div className="container">
-                    <div className="row ">
-                        <div className="col-7">
-                            <div className="started_page_second">
-                                <p className="started_page py-1">
-                                    Bike paths and sidewalks make getting to and from the city’s many festivals, museums, restaurants and music venues easy. A range of amenities provides many things to do in Bellevue. About 40 percent of the city’s population are minorities, which contributes to an overall diverse range of lifestyles and ideas.
-                                </p>
-                                <p className="started_page py-1">
-                                    While Denver sits at the base of the Rocky Mountains, it’s not considered a mountain town since it takes at least an hour to get to the Rockies for snowboarding and ski activities, a local expert explained. Olympic mountain bikers, musicians, and award-winning chefs about what exactly makes their hometowns so special and fun.
-                                </p>
-                                <p className="started_page py-1">
-                                    In fact, not being able to rely on spoken word made them better storytellers. They fully understood and used the power of showing without words. They fully understood and used the power of showing without words. They fully understood and used the power of showing without words.
 
-
-                                </p>
-                            </div>
-
-
-                        </div>
-                        <div className="col-3">
-                            <img src={mabbook} alt="" srcset="" width={350} height={350} />
-
-                        </div>
-                    </div>
-                </div>
-                <div className="container">
-                    <div className="row">
-                        <h2 className=" our_team_head my-4 page_second" >Capital of Texas</h2>
-
-                        <div className="col-10">
-                            <p className="py-1 started_page">
-                                Visual storytelling is simply the way most brands will decide to go in 2016 & beyond, as they try to tell their story to their customers the oldest and most important unwritten rule in film industry says that you shouldn’t rely much on words to tell your story. In fact, you should rely on them as less as possible. It’s no coincidence that Buster Keaton and Charlot’s movies remain among the biggest classic movies of all time. In fact, not being able to rely on spoken word made them better storytellers. They fully understood and used the power of showing without words.
-                            </p>
-                            <p className="py-1 started_page">While Denver sits at the base of the Rocky Mountains, it’s not considered a mountain town since it takes at least an hour to get to the Rockies for snowboarding and ski activities, a local expert explained sits at the base of the Rocky Mountains, it’s not considered a mountain town since it takes at least an hour to get to the Rockies for snowboarding and ski activities, a local expert explained.
-
-                            </p>
-                            <img src={rocket} alt="" width={950} height={500} className="started_image my-4" />
-                            <p className="py-3 started_page">
-                                While Denver sits at the base of the Rocky Mountains, it’s not considered a mountain town since it takes at least an hour to get to the Rockies for snowboarding and ski activities, a local expert explained. Olympic mountain bikers, musicians, and award-winning chefs about what exactly makes their hometowns so special and fun.
-                                In fact, not being able to rely on spoken word made them better storytellers. They fully understood and used the power of showing without words.
-                            </p>
-                            <p className="py-1 started_page">Probably the oldest and most important unwritten rule in film industry says that you shouldn’t rely much on words to tell your story. In fact, you should rely on them as less as possible is simply the way most brands will decide to go in 2016 & beyond, as they try to tell their story to their customers.
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
             </section>
         </>
     )
