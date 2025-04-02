@@ -402,7 +402,7 @@ const Home = () => {
   };
 
   const handleDrop = (id, data) => {
-    console.log("Dropped", id, "with data", data);
+   
   };
   const extractGames = (data) => {
     if (data && data.data) {

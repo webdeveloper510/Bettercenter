@@ -10,13 +10,15 @@ import api from "../../api";
 
 const Newspage = () => {
     const [newsData, setNewsData] = useState([])
+    console.log("🚀 ~ Newspage ~ newsData:", newsData)
     useEffect(() => {
         const fetchData = async () => {
             try {
 
                 const response = await api.getNewsData()
-                console.log("Extracted Token:", JSON.parse(response.data));
-                setNewsData(JSON.parse(response.data))
+                console.log("🚀 ~ fetchData ~ response:", response)
+           
+                setNewsData((response.data))
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -109,7 +111,7 @@ const Newspage = () => {
                                                         {res.article_subtitle}
                                                     </p>
                                                 </h6>
-                                                <span className="started_page">8 hour ago</span>
+                                                <span className="started_page">{res.timestamp}</span>
 
                                             </div>
                                             

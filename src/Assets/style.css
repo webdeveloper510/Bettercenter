@@ -216,7 +216,6 @@ a.sign_in_link.forgot_pass {
     justify-content: center;
     background: url('../Assets/images/Sign\ up.png') no-repeat center center/cover;
     background-size: cover;
-    height: 100vh;
   }
   
   /* Heading Styles */
