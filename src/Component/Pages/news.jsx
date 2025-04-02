@@ -4,25 +4,40 @@ import api from "../../api";
 import { useLocation } from "react-router-dom";
 
 const News = () => {
-    const [newsData, setNewsData] = useState([])
-    const location = useLocation();
-    const newsIndex = location.state?.newsIndex;
-    console.log("🚀 ~ Newspage ~ newsData:", newsIndex)
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
+    const [loading, setLoading] = useState(true);
+const [newsData, setNewsData] = useState(null);
+const location = useLocation();
+const newsIndex = location.state?.newsIndex;
 
-                const response = await api.getNewsData()
-                console.log("🚀 ~ fetchData ~ response:", response.data[newsIndex])
+useEffect(() => {
+const fetchData = async () => {
+try {
+const response = await api.getNewsData();
+setNewsData(response.data[newsIndex]);
+} catch (error) {
+console.error("Error fetching data:", error);
+} finally {
+setLoading(false);
+}
+};
 
-                setNewsData((response.data[newsIndex]))
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
+fetchData();
+}, []);
 
-        fetchData();
-    }, []);
+if (loading) {
+return (
+<div className="loader-container my-5">
+<div className="loader spinner-border text-primary text-center"></div>
+<p className="text-center mt-5 ">Loading Latest news...</p>
+</div>
+);
+}
+
+if (!newsData) {
+return <p className="text-center py-5">No news available.</p>;
+}
+
+
     return (
         <>
             <section className="backgroung_image">

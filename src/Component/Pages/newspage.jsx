@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 
 
 const Newspage = () => {
+    const [loading, setLoading] = useState(true);
+
     const [newsData, setNewsData] = useState([])
     const navigate= useNavigate()
     console.log("🚀 ~ Newspage ~ newsData:", newsData)
@@ -23,11 +25,26 @@ const Newspage = () => {
                 setNewsData((response.data))
             } catch (error) {
                 console.error("Error fetching data:", error);
+            }finally {
+                setLoading(false);
             }
         };
 
         fetchData();
     }, []);
+    if (loading) {
+        return (
+            <div className="loader-container">
+                <div className="loader"></div>
+                <p>Loading news...</p>
+            </div>
+        );
+    }
+
+    if (!newsData) {
+        return <p className="text-center py-5">No news available.</p>;
+    }
+
     return (
         <>
             <section className="backgroung_image">
