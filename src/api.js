@@ -48,7 +48,7 @@ const api = {
     getMoneyData: async () => {
         try {
             console.log("Fetching money data without authentication");
-            const response = await axios.get(`${API_URL}/money-data`, {
+            const response = await axios.get(`${API_URL}/nba-money-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -60,7 +60,7 @@ const api = {
     getSpreadData: async () => {
         try {
             console.log("Fetching spread data without authentication");
-            const response = await axios.get(`${API_URL}/spread-data`, {
+            const response = await axios.get(`${API_URL}/nba-spread-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -71,7 +71,7 @@ const api = {
     getOverUnderData: async () => {
         try {
             console.log("Fetching over/under data without authentication");
-            const response = await axios.get(`${API_URL}/over-under-data`, {
+            const response = await axios.get(`${API_URL}/nba-over-under-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
