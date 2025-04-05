@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import "../../Assets/css/home.css";
 import api from "../../api";
 import Faq from "./faq";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import vector from "../../Assets/images/Vector.png";
 import vector1 from "../../Assets/images/Vector (1).png";
 import vector2 from "../../Assets/images/Vector (2).png";
@@ -65,6 +63,7 @@ const getBookmakerLogo = (bookmakerKey, index) => {
   }
   return FALLBACK_LOGOS[index % FALLBACK_LOGOS.length];
 };
+
 const getUpdateColor = (updateTimestamp) => {
   if (!updateTimestamp) {
     return ""; // No update, no color
@@ -91,74 +90,66 @@ const BookmakerOdds = ({
 }) => {
   const homeKey = bookmakerKey.replace("Away", "Home");
   const bookmakerName = getBookmakerName(bookmakerKey);
-  const logoImage = getBookmakerLogo(bookmakerKey, index)
+  const logoImage = getBookmakerLogo(bookmakerKey, index);
   const awayUpdateTimestamp = oddsUpdates?.[bookmakerKey]?.timestamp;
   const awayUpdateColor = useUpdateColor(awayUpdateTimestamp);
   const homeUpdateTimestamp = oddsUpdates?.[homeKey]?.timestamp;
   const homeUpdateColor = useUpdateColor(homeUpdateTimestamp);
-  const itemData = {
-    bookmaker: bookmakerKey,
-    bookmakerName,
-    image: logoImage,
-    awayOdds: awayTeam[bookmakerKey],
-    homeOdds: homeTeam[homeKey],
-  };
 
   return (
     <div className="text-center px-2">
-      {/* <DraggableItem id={`icon-${index}`} index={index} data={itemData}> */}
-        <div>
-          <svg
-            className="draw_icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            onClick={() => onSwap(index)}
-            style={{ cursor: "pointer" }}
-          >
-            <path d="M128 136c0-22.1-17.9-40-40-40L40 96C17.9 96 0 113.9 0 136l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm0 192c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM288 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM448 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48z" />
-          </svg>
-        </div>
+      <div>
+        <svg
+          className="draw_icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
+          onClick={() => onSwap(index)}
+          style={{ cursor: "pointer" }}
+        >
+          <path d="M128 136c0-22.1-17.9-40-40-40L40 96C17.9 96 0 113.9 0 136l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm0 192c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM288 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48zm32-192l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40zM448 328c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48z" />
+        </svg>
+      </div>
 
-        <div
-          className="bookmaker-logo-container"
+      <div
+        className="bookmaker-logo-container"
+        style={{
+          height: "40px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img
+          src={logoImage}
+          alt={bookmakerName}
+          className="bookmaker-image"
+          title={bookmakerName}
           style={{
-            height: "40px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            maxHeight: "40px",
+            maxWidth: "100%",
+            objectFit: "contain",
           }}
-        >
-          <img
-            src={logoImage}
-            alt={bookmakerName}
-            className="bookmaker-image"
-            title={bookmakerName}
-            style={{
-              maxHeight: "40px",
-              maxWidth: "100%",
-              objectFit: "contain",
-            }}
-          />
-        </div>
+        />
+      </div>
 
-        <div
-          className={`open_number mt-1 ${awayUpdateColor || ""}`}
-          style={{ transition: "background-color 0.5s ease" }}
-        >
-          {awayTeam[bookmakerKey] ?? "N/A"}
-        </div>
+      <div
+        className={`open_number mt-1 ${awayUpdateColor || ""}`}
+        style={{ transition: "background-color 0.5s ease" }}
+      >
+        {awayTeam[bookmakerKey] ?? "N/A"}
+      </div>
 
-        <div
-          className={`open_number mt-2 ${homeUpdateColor || ""}`}
-          style={{ transition: "background-color 0.5s ease" }}
-        >
-          {homeTeam[homeKey] ?? "N/A"}
-        </div>
-      {/* </DraggableItem> */}
+      <div
+        className={`open_number mt-2 ${homeUpdateColor || ""}`}
+        style={{ transition: "background-color 0.5s ease" }}
+      >
+        {homeTeam[homeKey] ?? "N/A"}
+      </div>
     </div>
   );
 };
-const GameCard = ({ gameMatch, type, onDrop, oddsUpdates }) => {
+
+const GameCard = ({ gameMatch, type, oddsUpdates }) => {
   const teamKeys = Object.keys(gameMatch);
   if (teamKeys.length !== 2) return null;
 
@@ -287,29 +278,25 @@ const GameCard = ({ gameMatch, type, onDrop, oddsUpdates }) => {
             </div>
 
             <div className="d-flex px-2 image_scorll col-9 drag_responsive">
-              <DndProvider backend={HTML5Backend}>
-                <div className="tab-bar pb-3">
-                  {/* <DroppableArea onDrop={onDrop}> */}
-                    <div className="d-flex justify-content-center">
-                      {bookmakerKeys.length > 0 ? (
-                        bookmakerKeys.map((bookmakerKey, index) => (
-                          <BookmakerOdds
-                            key={index}
-                            index={index}
-                            bookmakerKey={bookmakerKey}
-                            awayTeam={awayTeam}
-                            homeTeam={homeTeam}
-                            onSwap={swapValues}
-                            oddsUpdates={oddsUpdates}
-                          />
-                        ))
-                      ) : (
-                        <p className="text-center mt-2">No odds available</p>
-                      )}
-                    </div>
-                  {/* </DroppableArea> */}
+              <div className="tab-bar pb-3">
+                <div className="d-flex justify-content-center">
+                  {bookmakerKeys.length > 0 ? (
+                    bookmakerKeys.map((bookmakerKey, index) => (
+                      <BookmakerOdds
+                        key={index}
+                        index={index}
+                        bookmakerKey={bookmakerKey}
+                        awayTeam={awayTeam}
+                        homeTeam={homeTeam}
+                        onSwap={swapValues}
+                        oddsUpdates={oddsUpdates}
+                      />
+                    ))
+                  ) : (
+                    <p className="text-center mt-2">No odds available</p>
+                  )}
                 </div>
-              </DndProvider>
+              </div>
             </div>
           </div>
         </div>
@@ -318,7 +305,7 @@ const GameCard = ({ gameMatch, type, onDrop, oddsUpdates }) => {
   );
 };
 
-const GameSection = ({ games, title, type, onDrop, oddsUpdates }) => {
+const GameSection = ({ games, title, type, oddsUpdates }) => {
   const altButton =
     type !== "money" ? (
       <a className="rd-text-button Alternate_btn" href="#">
@@ -342,7 +329,6 @@ const GameSection = ({ games, title, type, onDrop, oddsUpdates }) => {
             key={gameIndex}
             gameMatch={gameMatch}
             type={type}
-            onDrop={onDrop}
             oddsUpdates={oddsUpdates?.[`game_${gameIndex}`]}
           />
         ))
@@ -408,18 +394,6 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const totalPages = 4;
-  const [tabs, setTabs] = useState([
-    { name: "Tab 1" },
-    { name: "Tab 2" },
-    { name: "Tab 3" },
-  ]);
-
-  const moveTab = (fromIndex, toIndex) => {
-    const updatedTabs = [...tabs];
-    const [movedTab] = updatedTabs.splice(fromIndex, 1);
-    updatedTabs.splice(toIndex, 0, movedTab);
-    setTabs(updatedTabs);
-  };
 
   const toggleTab = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -429,10 +403,6 @@ const Home = () => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
-  };
-
-  const handleDrop = (id, data) => {
-    // Handle drop functionality
   };
 
   const extractGames = (data) => {
@@ -502,6 +472,7 @@ const Home = () => {
 
     return updates;
   };
+  
   const fetchAllData = async () => {
     try {
       setLoading(true);
@@ -698,21 +669,18 @@ const Home = () => {
                           games={allGames.money}
                           title="Timberwolves vs Pacers Moneyline"
                           type="money"
-                          onDrop={handleDrop}
                           oddsUpdates={oddsUpdates.money}
                         />
                         <GameSection
                           games={allGames.spread}
                           title="Spurs vs Pistons Point Spread"
                           type="spread"
-                          onDrop={handleDrop}
                           oddsUpdates={oddsUpdates.spread}
                         />
                         <GameSection
                           games={allGames.overUnder}
                           title="Magic vs Hornets Total Points (Over/Under)"
                           type="overUnder"
-                          onDrop={handleDrop}
                           oddsUpdates={oddsUpdates.overUnder}
                         />
                       </div>
