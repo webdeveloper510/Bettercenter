@@ -27,9 +27,9 @@ const NFLGames = () => {
   const [marketType, setMarketType] = useState('SPREAD');
   const [selectedDate, setSelectedDate] = useState(new Date('2025-04-04'));
   const [activeTab, setActiveTab] = useState('OVERVIEW');
-   const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const tabs = ['OVERVIEW', 'GAMES', 'FUTURES', 'TEAMS', 'SCHEDULE', 'INJURIES'];
-  
+
   const totalPages = 4;
 
   const toggleTab = (tabIndex) => {
@@ -141,72 +141,72 @@ const NFLGames = () => {
                 </div>
               )}
               {
-                activeTab ==='GAMES' && (
-                    <div><Faq/></div>
+                activeTab === 'GAMES' && (
+                  <div><Faq /></div>
                 )
               }
+             
             </div>
           </div>
         </div>
-        
-              {/* Pagination */}
-              <div className="home_pagination d-flex justify-content-center align-items-center my-5">
-                <button
-                  className="btn me-2"
-                  style={{
-                    backgroundColor: currentPage === 1 ? "#ccc" : "#0F93EB",
-                    color: "white",
-                    padding: "7px 15px",
-                    borderRadius: "15px",
-                    cursor: currentPage === 1 ? "not-allowed" : "pointer",
-                  }}
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
 
-                {[...Array(totalPages)].map((_, index) => {
-                  const page = index + 1;
-                  return (
-                    <button
-                      key={page}
-                      className={`btn me-2 ${
-                        currentPage === page ? "fw-bold text-white" : ""
-                      }`}
-                      style={{
-                        backgroundColor:
-                          currentPage === page ? "#0F93EB" : "transparent",
-                        border: "1px solid #0F93EB",
-                        padding: "7px 15px",
-                        borderRadius: "15px",
-                        cursor: "pointer",
-                        color: currentPage === page ? "#ffffff" : "#0F93EB",
-                      }}
-                      onClick={() => goToPage(page)}
-                    >
-                      {page}
-                    </button>
-                  );
-                })}
+        {/* Pagination */}
+        <div className="home_pagination d-flex justify-content-center align-items-center my-5">
+          <button
+            className="btn me-2"
+            style={{
+              backgroundColor: currentPage === 1 ? "#ccc" : "#0F93EB",
+              color: "white",
+              padding: "7px 15px",
+              borderRadius: "15px",
+              cursor: currentPage === 1 ? "not-allowed" : "pointer",
+            }}
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
 
-                <button
-                  className="btn_next"
-                  style={{
-                    backgroundColor:
-                      currentPage === totalPages ? "#ccc" : "#0F93EB",
-                    color: "white",
-                    padding: "7px 15px",
-                    borderRadius: "15px",
-                    cursor:
-                      currentPage === totalPages ? "not-allowed" : "pointer",
-                  }}
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-              </div>
+          {[...Array(totalPages)].map((_, index) => {
+            const page = index + 1;
+            return (
+              <button
+                key={page}
+                className={`btn me-2 ${currentPage === page ? "fw-bold text-white" : ""
+                  }`}
+                style={{
+                  backgroundColor:
+                    currentPage === page ? "#0F93EB" : "transparent",
+                  border: "1px solid #0F93EB",
+                  padding: "7px 15px",
+                  borderRadius: "15px",
+                  cursor: "pointer",
+                  color: currentPage === page ? "#ffffff" : "#0F93EB",
+                }}
+                onClick={() => goToPage(page)}
+              >
+                {page}
+              </button>
+            );
+          })}
+
+          <button
+            className="btn_next"
+            style={{
+              backgroundColor:
+                currentPage === totalPages ? "#ccc" : "#0F93EB",
+              color: "white",
+              padding: "7px 15px",
+              borderRadius: "15px",
+              cursor:
+                currentPage === totalPages ? "not-allowed" : "pointer",
+            }}
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
         <Faq />
       </div>
     </section>

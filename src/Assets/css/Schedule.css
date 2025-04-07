@@ -1,0 +1,43 @@
+.schedule_checkout {
+    background-color: #1B1E3D;
+    border: 1px solid #1B1E3D;
+    border-radius: 15px;
+    padding: 0px;
+    margin: auto;
+}
+.schedule_heading {
+    background-color: #23274A;
+    padding: 15px 15px;
+    padding-left: 10px;
+    border-radius: 15px 15px 0px 0px;
+    border: 1px solid #23274A;
+    color: #0F93EB;
+}
+.vs_heading{
+    color: #0F93EB;
+    font-weight: 500;
+    font-size: 20px;
+}
+.heading_team{
+    color: #f2f4f5;
+    font-weight: 600;
+    font-size: 16px;
+}
+.heading_date{
+    color: #f2f4f5;
+    font-weight: 500;
+    font-size: 22px;
+    padding-left: 25px;
+}
+.team_border{
+color: #f2f4f5;
+width: 95%;
+margin: auto;
+
+}
+.heading_pra{
+    color: #f2f4f5;
+    font-weight: 400;
+    font-size: 12px;
+    padding-right: 10px;
+}

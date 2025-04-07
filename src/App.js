@@ -18,7 +18,7 @@ import Checkout from "./Component/Pages/checkout";
 import Newspage from "./Component/Pages/newspage"
 import News from "./Component/Pages/news";
 import NFLGames from "./Component/Pages/newhome";
-
+import Schedule from "./Component/Pages/Schedule"
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
   // Comment out the token check to always render children
@@ -82,6 +82,7 @@ function Layout() {
           
           <Route path="/newspage" element={<Newspage />} />
           <Route path="/news" element={<News />} />
+          <Route path="/schedule" element={<Schedule />} />
 
           {/* Redirect to home for any unmatched routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
