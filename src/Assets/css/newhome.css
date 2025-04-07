@@ -304,7 +304,7 @@ h1, h2, h3, .nba_odds {
   
   .betting-table th {
     background-color: #1a1a2e;
-    font-size: 12px;
+    font-size: 15px;
     text-transform: uppercase;
   }
   
@@ -383,3 +383,29 @@ h1, h2, h3, .nba_odds {
   .date-picker-wrapper input {
     font-family: var(--body-font);
   }
+
+
+  .table_flow tbody {
+    min-height: 550px;
+    height: 550px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+/* Scrollbar track (background) */
+.table_flow tbody::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+}
+
+/* Scrollbar handle (thumb) */
+.table_flow tbody::-webkit-scrollbar-thumb {
+    background: #28A9DF; 
+    border-radius: 10px;
+}
+.table_flow tbody:hover::-webkit-scrollbar-thumb {
+    background: #28A9DF; 
+}
+.table_flow tbody::-webkit-scrollbar {
+    height: 6px; /* Decrease height for horizontal scrollbar */
+    width: 6px; /* Keep width slim for vertical scrollbar */
+}

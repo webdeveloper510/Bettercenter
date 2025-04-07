@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Faq from "./faq";
+import TabsWithMatchups from './gametab';
 import DatePicker from 'react-datepicker';
 import '../../Assets/css/newhome.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -11,6 +12,7 @@ import caesarsLogo from "../../Assets/images/caesors.png";
 import betriversLogo from "../../Assets/images/betrivers.png";
 import bet365Logo from "../../Assets/images/bet365.webp";
 import unibetLogo from "../../Assets/images/unibet.png";
+import Schedule from './Schedule';
 
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
@@ -91,7 +93,7 @@ const NFLGames = () => {
 
               {/* Table: Only show when active tab is OVERVIEW */}
               {activeTab === 'OVERVIEW' && (
-                <div className="betting-table-wrapper">
+                <div className="betting-table-wrapper table_flow">
                   <table className="betting-table">
                     <thead>
                       <tr>
@@ -145,7 +147,17 @@ const NFLGames = () => {
                   <div><Faq /></div>
                 )
               }
-             
+             {
+                activeTab ==='TEAMS' && (
+                    <div><TabsWithMatchups/></div>
+                )
+              }
+              {
+                activeTab ==='SCHEDULE' && (
+                    <div><Schedule/></div>
+                )
+              }
+              
             </div>
           </div>
         </div>
