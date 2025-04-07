@@ -17,6 +17,7 @@ import Header from "./Component/header";
 import Checkout from "./Component/Pages/checkout";
 import Newspage from "./Component/Pages/newspage"
 import News from "./Component/Pages/news";
+import NFLGames from "./Component/Pages/newhome";
 
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
@@ -73,9 +74,11 @@ function Layout() {
               <Checkout />
             </ProtectedRoute>
           } />
+          
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/newhome" element={<NFLGames />} />
           
           <Route path="/newspage" element={<Newspage />} />
           <Route path="/news" element={<News />} />

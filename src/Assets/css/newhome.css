@@ -1,0 +1,385 @@
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+
+:root {
+    --body-font: 'Gilroy-Bold', sans-serif;
+    --heading-font: 'Zuume', sans-serif;
+}
+
+h1, h2, h3, .nba_odds {
+    font-family: var(--heading-font);
+  }
+  body {
+    font-family: var(--body-font);
+  }
+.nfl-games-container {
+    color: white;
+    padding: 2rem;
+  }
+.backgroung_image {
+    background-image: url("../images/page-bg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+}
+
+  .selectors {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .selectors select,
+  .date-selector {
+    background: #1c1d3f;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+  }
+  
+  .date-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .date-selector button {
+    background: #007bff;
+    border: none;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .tabs button {
+    background: #292b55;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .tabs button.active {
+    background: #007bff;
+  }
+  
+  .date-picker-wrapper .calendar-input {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    width: 140px;
+    text-align: center;
+  }
+  
+  .betting-table-section {
+    background-color: #101426;
+    padding: 1rem;
+    margin-top: 2rem;
+    border-radius: 10px;
+    overflow-x: auto;
+  }
+  
+  /* Sticky header */
+  .sticky-header {
+    position: sticky;
+    top: 0; /* Adjust if there's a nav */
+    background-color: #0a0a0a;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 2px solid #1c1c2b;
+  }
+  
+  .betting-header {
+    display: flex;
+    align-items: center;
+    background-color: #1d2c5b;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  /* Rows */
+  .betting-row {
+    display: flex;
+    background-color: #181e36;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+  }
+  
+  /* Shared Cell Style */
+  .betting-cell {
+    padding: 10px;
+    text-align: center;
+    border-right: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+    min-width: 70px;
+  }
+  
+  /* Special Cells */
+  .team-cell {
+    min-width: 160px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+    padding-left: 1rem;
+  }
+  
+  .stat-cell {
+    min-width: 70px;
+    font-size: 12px;
+    color: #ccc;
+  }
+  
+  /* Bookmaker Logo */
+  .logo-cell {
+    width: 80px;
+  }
+  
+  .logo-cell .logo-img {
+    max-width: 30px;
+    max-height: 30px;
+    margin-bottom: 4px;
+  }
+  
+  .logo-label {
+    font-size: 11px;
+    color: #ccc;
+  }
+  
+  /* Odds */
+  .odds-cell {
+    min-width: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+  }
+  
+  .odd {
+    padding: 4px;
+    border-radius: 4px;
+    background-color: #1e1e1e;
+    color: white;
+
+  }
+  
+  .positive {
+    background-color: #0F93EB;
+}
+  .negative {
+    background-color: #f44336;
+  }
+  .odd {
+    padding: 0px 6px;
+    width: 50px;
+    border-radius: 4px;
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 5px;
+  }
+  .odd_y {
+    padding: 0px 6px;
+    width: 50px;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    margin: 0 auto;
+    background-color: #71BA0B;
+    margin-bottom: 5px;
+  }
+  .odd_g {
+    padding: 0px 6px;
+    width: 50px;
+    border-radius: 4px;
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    background-color: #FFBB00;
+    width: 50px;
+    margin-bottom: 5px;
+  }
+  
+  .best-odd {
+    background-color: #4caf50; /* Green */
+  }
+  
+  .open-odd {
+    background-color: #ffc107; /* Yellow */
+    color: #000;
+  }
+  
+  .negative-odd {
+    background-color: #f44336; /* Red */
+  }
+  
+  .default-odd {
+    background-color: #2196f3; /* Blue */
+  }
+  
+  .game-time {
+    font-size: 12px;
+    color: #ebd10f9e;
+    margin-bottom: 4px;
+    background: #23274A;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 2px 10px;
+    border-radius: 30px;
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+}
+  
+  .selectors {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .tabs button {
+    background-color: #2c2c4e;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid rgb(15, 147, 235);
+    padding: 7px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    white-space: nowrap;
+    color: rgb(15, 147, 235);
+}
+  
+  .tabs button.active {
+    background-color: #1e90ff;
+    color: #fff;
+  }
+  
+  .betting-table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .betting-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1B1E3D;
+  }
+  
+  .betting-table th {
+    padding: 10px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .betting-table td {
+    border: 1px solid #36395c75;
+    padding: 10px;
+    text-align: center;
+    white-space: nowrap;
+    position: relative;
+  }
+  
+  .betting-table th {
+    background-color: #1a1a2e;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+  
+  .team-name {
+    font-size: 14px;
+    line-height: 18px;
+}
+  
+  .date-picker-wrapper .calendar-input {
+    padding: 6px 10px;
+  }
+  .logo-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+  
+  .bookmaker-logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    margin-bottom: 4px;
+  }    
+  table.betting-table thead tr th {
+    background: #1e90ff !important;
+}
+.odd_n {
+    background: #23274A;
+    color: white;
+    padding: 0px 6px;
+    width: 50px;
+    border-radius: 4px;
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+.date-picker-wrapper {
+    background: #1c1d3fa3;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    padding: 10px 26px;
+    min-height: 54px;
+    border-radius: 30px;
+    min-width: 200px;
+}
+.selectors select, .date-selector {
+    background: #1c1d3fa3;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    padding: 10px 26px;
+    min-height: 54px;
+    border-radius: 30px;
+    min-width: 200px;
+}
+.betting-table tr:hover {
+    background: #3d4375 !important;
+}
+
+.nba_odds {
+    font-family: var(--heading-font);
+    color: #fff;
+    font-size: 40px;
+    font-weight: 600;
+  }
+  .tabs button {
+    font-family: var(--body-font);
+  }
+  .selectors select,
+  .date-picker-wrapper input {
+    font-family: var(--body-font);
+  }
