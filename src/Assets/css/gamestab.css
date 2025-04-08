@@ -42,7 +42,35 @@
   width: 42px;
   height: 42px;
 }
-.team-name {
+/* .team-name {
   font-size: 18px !important;
   line-height: 22px !important;
+} */
+.teams-container {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #1B1E3D;
+  border: 1px solid #1B1E3D;
+  margin-bottom: 20px;
+}
+.matchup-card {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #383b58;
+  border: 1px solid #1B1E3D;
+  margin-bottom: 20px;
+}
+.matchup-row {
+  display: flex
+;
+  width: 100%;
+  gap: 30px;
+}
+.team-column {
+  min-width: 170px;
+}
+.matchup-card:hover {
+  opacity: .8;
 }
