@@ -34,7 +34,7 @@ if (token) {
 const api = {
     register: async (userData) => {
         try {
-            console.log("Registering new user");
+
             const response = await apiClient.post('/register', userData);
             if (response.data && response.data.token) {
                 setAuthToken(response.data.token);
@@ -47,7 +47,6 @@ const api = {
     },
     getMoneyData: async () => {
         try {
-            console.log("Fetching money data without authentication");
             const response = await axios.get(`${API_URL}/nba-money-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
@@ -59,7 +58,6 @@ const api = {
     },
     getSpreadData: async () => {
         try {
-            console.log("Fetching spread data without authentication");
             const response = await axios.get(`${API_URL}/nba-spread-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
@@ -70,8 +68,69 @@ const api = {
     },
     getOverUnderData: async () => {
         try {
-            console.log("Fetching over/under data without authentication");
             const response = await axios.get(`${API_URL}/nba-over-under-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            throw error.response ? error.response.data : { message: "Failed to fetch over/under data" };
+        }
+    },
+    getMlbMoneyData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/mlb-money-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Money data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch money data" };
+        }
+    },
+    getMlbSpreadData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/mlb-spread-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            throw error.response ? error.response.data : { message: "Failed to fetch spread data" };
+        }
+    },
+    getMlbOverUnderData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/mlb-over-under-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            throw error.response ? error.response.data : { message: "Failed to fetch over/under data" };
+        }
+    },
+    getNhlMoneyData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/nhl-money-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Money data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch money data" };
+        }
+    },
+    getNhlSpreadData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/nhl-spread-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            throw error.response ? error.response.data : { message: "Failed to fetch spread data" };
+        }
+    },
+    getNhlOverUnderData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/nhl-over-under-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -81,8 +140,43 @@ const api = {
     },
     getNewsData: async () => {
         try {
-            console.log("Fetching news data without authentication");
             const response = await axios.get(`${API_URL}/news-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            console.error("News data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+        }
+    },
+    getNbaTeamsData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/nba-teams`, {
+                headers: { 'Content-Type': 'application/json' } 
+        
+            });
+            console.log("🚀 ~ getNbaTeamsData: ~ response:", response)
+            return response.data;
+          
+        } catch (error) {
+            console.error("News data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+        }
+    },
+    getNhlTeamsData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/nhl-teams`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            console.error("News data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+        }
+    },
+    getMlbteamsData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/mlb-teams`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;

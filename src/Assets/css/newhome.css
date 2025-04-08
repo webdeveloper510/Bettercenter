@@ -173,17 +173,17 @@ h1, h2, h3, .nba_odds {
   .odd {
     padding: 4px;
     border-radius: 4px;
-    background-color: #1e1e1e;
+    /* background-color: #1e1e1e; */
     color: white;
 
   }
   
-  .positive {
+  /* .positive {
     background-color: #0F93EB;
-}
-  .negative {
+} */
+  /* .negative {
     background-color: #f44336;
-  }
+  } */
   .odd {
     padding: 0px 6px;
     width: 50px;
@@ -200,8 +200,22 @@ h1, h2, h3, .nba_odds {
     color: #fff;
     text-align: center;
     margin: 0 auto;
-    background-color: #71BA0B;
+    /* background-color: #71BA0B; */
     margin-bottom: 5px;
+  }
+  .changed-green {
+    background-color: #71BA0B !important;
+    transition: background-color 0.5s ease;
+  }
+  
+  .changed-yellow {
+    background-color: #FFBB00 !important;
+    transition: background-color 0.5s ease;
+  }
+  
+  .changed-red {
+    background-color:#E32528 !important;
+    transition: background-color 0.5s ease;
   }
   .odd_g {
     padding: 0px 6px;
@@ -210,7 +224,7 @@ h1, h2, h3, .nba_odds {
     color: white;
     text-align: center;
     margin: 0 auto;
-    background-color: #FFBB00;
+    /* background-color: #FFBB00; */
     width: 50px;
     margin-bottom: 5px;
   }
@@ -334,7 +348,7 @@ h1, h2, h3, .nba_odds {
     background: #1e90ff !important;
 }
 .odd_n {
-    background: #23274A;
+    /* background: #23274A; */
     color: white;
     padding: 0px 6px;
     width: 50px;
