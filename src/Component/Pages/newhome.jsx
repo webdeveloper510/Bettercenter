@@ -221,7 +221,9 @@ const updateChangeTimestamps = (newData) => {
         updateChangeTimestamps(processedData);
       }
       
-      setGamesData(processedData)
+      setGamesData(processedData);
+      
+      // After setting the games data, update the first load flag
       if (isFirstLoadRef.current) {
         // On first load, just update the previous data reference
         previousDataRef.current = JSON.parse(JSON.stringify(processedData));
