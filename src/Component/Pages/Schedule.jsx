@@ -6,10 +6,11 @@ import vect from "../../Assets/images/Vector (4).png"
 const Schedule = () => {
     return (
         <>
+           <h2 className="injury-title">NBA Schedule</h2>
             <section className='backgroung_image'>
                 <div className='contanier'>
                     <div className='row'>
-                        <div className='col-10 my-5 schedule_checkout' >
+                        <div className='col-11 my-5 schedule_checkout' >
                             <h1 className="schedule_heading text-uppercase fs-6 fw-bold">Monday, April 07 2025</h1>
                             <div className='d-flex py-2 gap-5'>
                                 <h3 className='heading_date pt-3'>San Francisco tour of California, U.S., 2025</h3>
@@ -36,7 +37,7 @@ const Schedule = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-10  schedule_checkout' >
+                        <div className='col-11  schedule_checkout' >
                             <h1 className="schedule_heading text-uppercase fs-6 fw-bold">Monday, April 07 2025</h1>
                             <div className='d-flex py-2 gap-5 '>
                                 <h3 className='heading_date pt-3'>San Francisco tour of California, U.S., 2025</h3>
@@ -118,7 +119,7 @@ const Schedule = () => {
                             <hr className='team_border py-1' />
 
                         </div>
-                        <div className='col-10 my-5 schedule_checkout' >
+                        <div className='col-11 my-5 schedule_checkout' >
                             <h1 className="schedule_heading text-uppercase fs-6 fw-bold">Monday, April 07 2025</h1>
                             <div className='d-flex py-2 gap-5'>
                                 <h3 className='heading_date pt-3'>San Francisco tour of California, U.S., 2025</h3>

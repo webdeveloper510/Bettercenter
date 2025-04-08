@@ -13,6 +13,8 @@ import betriversLogo from "../../Assets/images/betrivers.png";
 import bet365Logo from "../../Assets/images/bet365.webp";
 import unibetLogo from "../../Assets/images/unibet.png";
 import Schedule from './Schedule';
+import NBAInjuryTable from './injury';
+
 
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
@@ -155,6 +157,11 @@ const NFLGames = () => {
               {
                 activeTab ==='SCHEDULE' && (
                     <div><Schedule/></div>
+                )
+              }
+               {
+                activeTab ==='INJURIES' && (
+                    <div><NBAInjuryTable/></div>
                 )
               }
               

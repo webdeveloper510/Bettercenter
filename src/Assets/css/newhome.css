@@ -256,7 +256,7 @@ h1, h2, h3, .nba_odds {
   .tabs {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
   
   .tabs button {

@@ -1,0 +1,82 @@
+.injury-container {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #1B1E3D;
+    border: 1px solid #1B1E3D;
+    margin-bottom: 20px;
+}
+  
+.injury-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+  
+  .team-header {
+    display: flex;
+    align-items: self-start;
+    margin-top: 10px;
+    gap: 10px;
+    background-color: #23274A;
+    padding: 15px 15px;
+    padding-left: 10px;
+    border-radius: 15px 15px 0px 0px;
+    border: 1px solid #23274A;
+    color: #0F93EB;
+  }
+
+  
+  .injury-button {
+    margin-left: auto;
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .injury-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .injury-table th,
+  .injury-table td {
+    border-bottom: 1px solid #eee;
+    padding: 15px 8px;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .name {
+    font-weight: bold;
+    color: #fff;
+}
+  
+  .status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    border-radius: 50%;
+  }
+  
+  .status-dot.red {
+    background-color: red;
+  }
+  
+  .status-dot.yellow {
+    background-color: gold;
+  }
+  
+  .comment {
+    color: #fff;
+    line-height: 1.4;
+}
+th.name_th {
+    min-width: 170px;
+}
+  
