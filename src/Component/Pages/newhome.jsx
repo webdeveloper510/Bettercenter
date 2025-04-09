@@ -67,10 +67,11 @@ const Games = () => {
   
   const formatOdds = (odds) => {
     if (odds === null || odds === undefined) return "-";
-    
+    if (parseFloat(odds) === 0) return "0";
+
     if (typeof odds === 'string') {
       odds = odds.trim();
-      if (odds === "0") return "-";
+      
       if (odds === "-" || odds.startsWith("+") || odds.startsWith("-")) {
         return odds;
       }
