@@ -21,6 +21,7 @@ import NFLGames from "./Component/Pages/newhome";
 import Schedule from "./Component/Pages/Schedule"
 import Games from "./Component/Pages/newhome";
 import Futures from "./Component/Pages/futures";
+import MatchesPage from "./Component/Pages/gameteamtab";
 
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
@@ -87,6 +88,7 @@ function Layout() {
           <Route path="/news" element={<News />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/futures" element={<Futures />} />
+          <Route path="/gameteamtab" element={<MatchesPage />} />
 
           {/* Redirect to home for any unmatched routes */}
           <Route path="*" element={<Navigate to="/" replace />} />

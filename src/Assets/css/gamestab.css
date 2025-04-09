@@ -1,3 +1,18 @@
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+
+:root {
+    --body-font: 'Gilroy-Bold', sans-serif;
+    --heading-font: 'Zuume', sans-serif;
+}
+
+h1, h2, h3, .nba_odds {
+    font-family: var(--heading-font);
+  }
+  body {
+    font-family: var(--body-font);
+  }
+
 .teams-wrapper {
   margin: 0 auto;
   padding: 20px;
@@ -55,22 +70,36 @@
   margin-bottom: 20px;
 }
 .matchup-card {
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #383b58;
-  border: 1px solid #1B1E3D;
-  margin-bottom: 20px;
+  padding: 10px 20px;
+  margin-bottom: -20px;
 }
 .matchup-row {
-  display: flex
-;
+  display: block;
   width: 100%;
   gap: 30px;
 }
-.team-column {
-  min-width: 170px;
+.matchup-row .divider {
+  display: none;
 }
 .matchup-card:hover {
   opacity: .8;
+}
+.team span {
+    color: #f2f4f5;
+    font-size: 18px;
+    font-family: var(--body-font);
+    font-family: var(--heading-font);
+    letter-spacing: 1px;
+}
+.team_title {
+  display: flex;
+      align-items: self-start;
+      margin-top: 10px;
+      gap: 10px;
+      background-color: #23274A;
+      padding: 15px 15px;
+      padding-left: 10px;
+      border-radius: 15px 15px 0px 0px;
+      border: 1px solid #23274A;
+      color: #0F93EB;
 }

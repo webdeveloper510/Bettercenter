@@ -15,6 +15,7 @@ import unibetLogo from "../../Assets/images/unibet.png";
 import Schedule from './Schedule';
 import NBAInjuryTable from './injury';
 import Futures from './futures';
+import MatchesPage from './gameteamtab';
 
 
 const BOOKMAKER_LOGOS = {
@@ -473,30 +474,34 @@ useEffect(() => {
             <div className="nfl-games-container">
               <h1 className="nba_odds">Upcoming {sport} Games</h1>
 
-              {/* Selectors */}
               <div className="selectors">
-                <select value={sport} onChange={handleSportChange}>
-                  <option value="NHL">NHL</option>
-                  <option value="NBA">NBA</option>
-                  <option value="MLB">MLB</option>
-                </select>
+                  <select value={sport} onChange={handleSportChange}>
+                    <option value="NHL">NHL</option>
+                    <option value="NBA">NBA</option>
+                    <option value="MLB">MLB</option>
+                  </select>
 
-                <select value={marketType} onChange={handleMarketTypeChange}>
-                  <option value="SPREAD">SPREAD</option>
-                  <option value="MONEYLINE">MONEYLINE</option>
-                  <option value="TOTAL">TOTAL</option>
-                </select>
+                    {activeTab !== 'INJURIES' && activeTab !== 'SCHEDULE' && activeTab !== 'TEAMS' && activeTab !== 'FUTURES' && activeTab !== 'GAMES' && (
+                      <select value={marketType} onChange={handleMarketTypeChange}>
+                        <option value="SPREAD">SPREAD</option>
+                        <option value="MONEYLINE">MONEYLINE</option>
+                        <option value="TOTAL">TOTAL</option>
+                      </select>
+                    )}
 
-                <div className="date-picker-wrapper">
-                  <DatePicker
-                    selected={selectedDate}
-                    onChange={(date) => setSelectedDate(date)}
-                    dateFormat="EEE MMM dd"
-                    className="calendar-input"
-                    popperPlacement="bottom"
-                  />
+                  {activeTab !== 'TEAMS' && activeTab !== 'FUTURES' && activeTab !== 'INJURIES' && (
+                    <div className="date-picker-wrapper">
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                        dateFormat="EEE MMM dd"
+                        className="calendar-input"
+                        popperPlacement="bottom"
+                      />
+                    </div>
+                  )}
                 </div>
-              </div>
+
 
               {/* Tabs */}
               <div className="tabs">
@@ -623,7 +628,7 @@ useEffect(() => {
               )}
               {
                 activeTab === 'GAMES' && (
-                  <div><Faq /></div>
+                  <div><MatchesPage /></div>
                 )
               }
               {
@@ -653,7 +658,7 @@ useEffect(() => {
         </div>
 
         {/* Pagination */}
-        <div className="home_pagination d-flex justify-content-center align-items-center my-5">
+        {/* <div className="home_pagination d-flex justify-content-center align-items-center my-5">
           <button
             className="btn me-2"
             style={{
@@ -704,7 +709,7 @@ useEffect(() => {
           >
             Next
           </button>
-        </div>
+        </div> */}
         <Faq />
       </div>
     </section>

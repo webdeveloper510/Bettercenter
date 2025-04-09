@@ -38,12 +38,20 @@ p.text-center.team-subtitle {
     padding-top: 25px;
 }
 .buy_pick {
-    background: #534E68;
-    border-radius: 30px;
-    color: #fff !important;
-    font-size: 15px;
-    font-family: 'Gilroy-Regular', sans-serif;
-    font-size: 13px;
+  background: #534E68;
+  border-radius: 30px;
+  color: #fff !important;
+  font-size: 15px;
+  font-family: 'Gilroy-Regular', sans-serif;
+  font-size: 14px;
+  background: #007bff;
+  border: 1px solid #007bff;
+  padding: 10px 20px;
+}
+.buy_pick:hover {
+  color: #fff;
+  background: #0f4b8d;
+  border: 1px solid #0f4b8d;
 }
 .accordion-item {
     background: linear-gradient(90deg, #0A0228 0%, #221B3D 43.5%, #221B3D 57%, #0A0228 100%);

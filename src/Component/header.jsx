@@ -25,10 +25,12 @@ const Header = () => {
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container-fluid">
           {/* Logo */}
-          <a className="navbar-brand" href="#">
+          {/* <a className="navbar-brand" href="#">
             <img src={logo1} alt="Logo" width={150} height={50} />
-          </a>
-
+          </a> */}
+          <Link className="navbar-brand" to="/">
+          <img src={logo1} alt="Logo" width={150} height={50} />
+        </Link>
           {/* Mobile Menu Toggle Button */}
           <button
             className="navbar-toggler"

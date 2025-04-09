@@ -1,6 +1,7 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Add this
 import "../../Assets/ourteam.css";
-import { Container, Row, Col, Card, Button, Accordion } from "react-bootstrap";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import team1 from "../../Assets/images/team1.png";
 import team2 from "../../Assets/images/team2.png";
 import team3 from "../../Assets/images/team3.png";
@@ -8,6 +9,12 @@ import team4 from "../../Assets/images/team4.png";
 import Faq from "./faq";
 
 const Ourteam = () => {
+  const navigate = useNavigate(); // ✅ Initialize navigation
+
+  const handleBuyClick = () => {
+    navigate("/pickdetail"); // ✅ Navigate to the desired page
+  };
+
   const teamMembers = [
     {
       name: "DAVID SMITH",
@@ -41,26 +48,28 @@ const Ourteam = () => {
         <h2 className="text-center our_team_head">OUR TEAM</h2>
         <p className="text-center team-subtitle">
           From winning huge capping contests to features on HBO Sports & ESPN among other networks and publications, our cappers have over 100 years of combined experience backed by a proprietary database.
-          <br></br>
+          <br />
           Whether you need free picks, parlays, teasers, or our most confident picks, we’re here to help you build a winning strategy.
         </p>
 
         <Row className="justify-content-center tem_menber">
           {teamMembers.map((member, index) => (
             <Col md={3} sm={6} key={index}>
-              <Card className="team-card" style={{ backgroundColor: member.bgColor }}>
+              <Card className="team-card">
                 <Card.Img variant="top" src={member.image} className="team-img" />
                 <Card.Body className="text-center team_details">
                   <Card.Title className="team-name">{member.name}</Card.Title>
                   <Card.Text className="team-description">{member.description}</Card.Text>
-                  <Button variant="outline-light buy_pick">BUY PICKS</Button>
+                  <Button variant="outline-light buy_pick" onClick={handleBuyClick}>
+                    BUY PICKS
+                  </Button>
                 </Card.Body>
               </Card>
             </Col>
           ))}
         </Row>
 
-        <Faq/>
+        <Faq />
       </Container>
     </section>
   );

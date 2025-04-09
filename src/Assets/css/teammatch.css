@@ -1,0 +1,90 @@
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+
+:root {
+    --body-font: 'Gilroy-Bold', sans-serif;
+    --heading-font: 'Zuume', sans-serif;
+}
+
+h1, h2, h3, .nba_odds, table th. .match-venue {
+    font-family: var(--heading-font);
+  }
+  .match-result {
+    font-family: var(--body-font);
+  }
+  body {
+    font-family: var(--body-font);
+  }
+.matches-container {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #1B1E3D;
+    border: 1px solid #1B1E3D;
+    margin-bottom: 20px;
+  }
+  
+  .matches-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .matches-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 12px;
+    border: 1px solid #ccc;
+  }
+  table.matches-table tr th {
+    gap: 10px;
+    background-color: #23274A;
+    padding: 15px 15px;
+    padding-left: 10px;
+    border-radius: 15px 15px 0px 0px;
+    border: 1px solid #23274A;
+    color: #0F93EB;
+}
+  .matches-table td {
+    border-bottom: 1px solid #eeeeee69;
+    padding: 12px;
+    vertical-align: top;
+  }
+  
+  .match-date {
+    font-weight: bold;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .match-details .match-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 17px;
+    font-family: var(--heading-font);
+}
+  
+  .match-venue {
+    font-size: 15px;
+    color: #a9a2a2;
+    margin-bottom: 4px;
+    font-weight: 400 !important;
+    font-family: var(--body-font);
+}
+  
+  .match-result {
+    color: #007bff;
+    font-size: 14px;
+  }
+  
+  .match-time {
+    font-size: 14px;
+  }
+  
+  .local-time {
+    font-size: 13px;
+    color: #666;
+    font-family: var(--body-font);
+  }
+  
