@@ -325,6 +325,7 @@ h1, h2, h3, .nba_odds {
   .team-name {
     font-size: 14px;
     line-height: 18px;
+    color: #fff;
 }
   
   .date-picker-wrapper .calendar-input {
@@ -346,6 +347,7 @@ h1, h2, h3, .nba_odds {
   }    
   table.betting-table thead tr th {
     background: #1e90ff !important;
+    color: #fff;
 }
 .odd_n {
     /* background: #23274A; */

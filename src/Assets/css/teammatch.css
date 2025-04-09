@@ -50,6 +50,7 @@ h1, h2, h3, .nba_odds, table th. .match-venue {
     border-bottom: 1px solid #eeeeee69;
     padding: 12px;
     vertical-align: top;
+    color: #fff;
   }
   
   .match-date {
@@ -63,6 +64,7 @@ h1, h2, h3, .nba_odds, table th. .match-venue {
     margin-bottom: 4px;
     font-size: 17px;
     font-family: var(--heading-font);
+    color: #fff;
 }
   
   .match-venue {
