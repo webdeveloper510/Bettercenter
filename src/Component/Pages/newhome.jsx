@@ -14,6 +14,7 @@ import bet365Logo from "../../Assets/images/bet365.webp";
 import unibetLogo from "../../Assets/images/unibet.png";
 import Schedule from './Schedule';
 import NBAInjuryTable from './injury';
+import Futures from './futures';
 
 
 const BOOKMAKER_LOGOS = {
@@ -625,6 +626,12 @@ useEffect(() => {
                   <div><Faq /></div>
                 )
               }
+              {
+                activeTab === 'FUTURES' && (
+                  <div><Futures /></div>
+                )
+              }
+              
               {
                 activeTab === 'TEAMS' && (
                   <div><TabsWithMatchups currentSport={sport} /></div>
