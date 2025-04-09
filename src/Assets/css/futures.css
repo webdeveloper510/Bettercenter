@@ -1,0 +1,120 @@
+.futures_checkout {
+    background-color: #0F93EB;
+    border: 1px solid #0F93EB;
+    border-radius: 15px 15px 0px 0px;
+    padding: 0px;
+    margin: auto;
+}
+
+.future_heading {
+    padding: 15px 12px;
+    padding-left: 10px;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.futures_header {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+}
+
+.image_head {
+    background-color: #23274A;
+    border-color: #23274A 1px solid;
+    border-radius: 8px;
+    padding: 5px;
+    margin-left: 15px;
+}
+
+.team_data {
+    background-color: #23274A;
+    border-color: #23274A 1px solid;
+    /* border-bottom: 1px solid #686666; */
+
+}
+
+.team_data_all {
+    background-color: #23274A;
+    border-color: #23274A 1px solid;
+    border-radius: 15px;
+    padding: 0px !important;
+    color: #fff;
+}
+
+.team_box {
+    border: 1px solid #838181;
+    padding: 15px;
+}
+
+.image_tab {
+    padding-left: 24px;
+}
+
+.tean_tab {
+    border: 1px solid #838181;
+    padding: 7px 10px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #23274A;
+    border-radius: 8px;
+    height: 42px;
+    padding-top: 10px !important;
+}
+
+:hover.tean_tab {
+    border: 1px solid #838181;
+    padding: 7px 10px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0px 0px 5px #23274A;
+    background-color: #3d4375;
+    border: 1px solid #23274A;
+    border-radius: 8px;
+    height: 42px;
+    padding-top: 10px !important;
+}
+
+.tean_tab_yes {
+    border: 1px solid #838181;
+    padding: 5px 5px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #23274A;
+    border-radius: 8px;
+    height: 42px;
+}
+
+:hover.tean_tab_yes {
+    border: 1px solid #838181;
+    padding: 5px 5px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0px 0px 5px #23274A;
+    background-color: #3d4375;
+    border: 1px solid #23274A;
+    border-radius: 8px;
+    height: 42px;
+}
+.image_scorll {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    white-space: nowrap;
+    position: relative;
+    top: 0px;
+    height: 560px;
+}
+
+.image_scorll::-webkit-scrollbar {
+    height: 10px;
+}
+
+.image_scorll::-webkit-scrollbar-thumb {
+    background-color: #0F93EB;
+    border-radius: 5px;
+}
+
+.image_scorll::-webkit-scrollbar-track {
+    background: #23274A;
+}

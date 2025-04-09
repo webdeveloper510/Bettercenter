@@ -181,9 +181,9 @@ h1, h2, h3, .nba_odds {
   /* .positive {
     background-color: #0F93EB;
 } */
-  /* .negative {
+  .negative {
     background-color: #f44336;
-  } */
+  }
   .odd {
     padding: 0px 6px;
     width: 50px;
@@ -224,7 +224,7 @@ h1, h2, h3, .nba_odds {
     color: white;
     text-align: center;
     margin: 0 auto;
-    /* background-color: #FFBB00; */
+    background-color: #FFBB00;
     width: 50px;
     margin-bottom: 5px;
   }
@@ -424,4 +424,120 @@ h1, h2, h3, .nba_odds {
 .table_flow tbody::-webkit-scrollbar {
     height: 6px; /* Decrease height for horizontal scrollbar */
     width: 6px; /* Keep width slim for vertical scrollbar */
+}
+.betting-table tr:nth-child(2) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(1) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(3) .odd_n {
+  background: #1b1e3d !important;
+}
+
+.betting-table tr:nth-child(4) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(5) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(6) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(7) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(8) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(9) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(11) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(12) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(13) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(14) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(15) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(16) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(17) .odd_n {
+  background: #1b1e3d !important;
+}
+.betting-table tr:nth-child(18) .odd_n {
+  background: #1b1e3d !important;
+}
+/* .betting-table tr:nth-child(2) .odd_n {
+  background: #71BA0B !important;
+} */
+/* .betting-table tr:nth-child(6) .odd_n {
+  background: #71BA0B !important;
+} */
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
+.negative {
+  background-color: #f44336;
+}
+
+@keyframes gblink {
+  0% { opacity: 1; }
+  50% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+.changed-green { 
+  background-color: #71BA0B !important;
+}
+
+.betting-table tr:nth-child(1) td:nth-child(6) .odd_n {
+  background: #f44336 !important;
+  animation: blink 1s infinite;
+}
+.betting-table tr:nth-child(1) td:nth-child(9) .odd_n {
+  background: #f44336 !important;
+  animation: blink 1s infinite;
+}
+.betting-table tr:nth-child(2) td:nth-child(7) .odd_n {
+  background: #71BA0B !important;
+  animation: blink 1s infinite;
+}
+.betting-table tr:nth-child(2) td:nth-child(4) .odd_n {
+  background: #71BA0B !important;
+}
+.betting-table tr:nth-child(8) td:nth-child(8) .odd_n {
+  background: #f44336 !important;
+  animation: blink 1s infinite;
+}
+.betting-table tr:nth-child(9) td:nth-child(6) .odd_n {
+  background: #f44336 !important;
+  animation: blink 1s infinite;
+}
+.betting-table tr:nth-child(5) td:nth-child(3) .odd_n {
+  background: #71BA0B !important;
+  animation: blink 1s infinite;
+}
+.betting-table tr:nth-child(6) td:nth-child(4) .odd_n {
+  background: #71BA0B !important;
+  animation: blink 1s infinite;
+}
+.betting-table tr:nth-child(3) td:nth-child(9) .odd_n {
+  background: #f44336 !important;
+  animation: blink 1s infinite;
+}
+.betting-table tr:nth-child(4) td:nth-child(10) .odd_n {
+  background: #f44336 !important;
+  animation: blink 1s infinite;
 }

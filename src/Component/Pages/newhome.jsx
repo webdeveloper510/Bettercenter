@@ -49,7 +49,7 @@ const isValueChanged = (oldVal, newVal) => {
 };
 
 const Games = () => {
-  const [sport, setSport] = useState('NHL');
+  const [sport, setSport] = useState('NBA');
   const [marketType, setMarketType] = useState('SPREAD');
   const [selectedDate, setSelectedDate] = useState(new Date('2025-04-04'));
   const [activeTab, setActiveTab] = useState('OVERVIEW');
@@ -477,8 +477,8 @@ useEffect(() => {
 
               <div className="selectors">
                   <select value={sport} onChange={handleSportChange}>
+                  <option value="NBA">NBA</option>
                     <option value="NHL">NHL</option>
-                    <option value="NBA">NBA</option>
                     <option value="MLB">MLB</option>
                   </select>
 

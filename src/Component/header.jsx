@@ -52,7 +52,7 @@ const Header = () => {
                   className={`nav-link ${location.pathname === "/" ? "active-link" : ""}`}
                   to="/"
                 >
-                  NBA ODDS
+                  ODDS
                 </Link>
               </li>
               <li className="nav-item">
@@ -99,11 +99,9 @@ const Header = () => {
 
               {/* Login/Logout */}
               <span className="login-text">
-                {isLoggedIn ? (
-                  <a href="#" className="login-link" onClick={handleLogout}>LOGOUT</a>
-                ) : (
+             
                   <Link to="/signin" className="login-link">LOGIN</Link>
-                )}
+            
               </span>
 
               {/* Divider */}
