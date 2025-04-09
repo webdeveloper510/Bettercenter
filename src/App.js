@@ -19,6 +19,7 @@ import Newspage from "./Component/Pages/newspage"
 import News from "./Component/Pages/news";
 import NFLGames from "./Component/Pages/newhome";
 import Schedule from "./Component/Pages/Schedule"
+import Games from "./Component/Pages/newhome";
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
   // Comment out the token check to always render children
@@ -47,7 +48,7 @@ function Layout() {
       <main>
         <Routes>
           {/* Home as default route */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Games/>} />
           
           <Route path="/subscription" element={
             <ProtectedRoute>
