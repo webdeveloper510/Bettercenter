@@ -286,10 +286,10 @@ useEffect(() => {
             awayOpen: formatOdds(awayTeamData["Away Open"]),
             homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
             awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
-            date: "TODAY",
-            time: "7:30PM",
+            date: homeTeamData?.Date || awayTeamData?.Date || "TODAY",
+            // time: "7:30PM",
           };
-          
+
           Object.keys(BOOKMAKER_MAP).forEach(apiBookmaker => {
             const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
             const homeOddsKey = `Home ${apiBookmaker}`;
@@ -306,6 +306,7 @@ useEffect(() => {
         }
       }
     });
+           
          
     return processedGames;
   };
@@ -337,8 +338,8 @@ useEffect(() => {
             awayOpen: formatOdds(awayTeamData["Away Open"]),
             homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
             awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
-            date: "TODAY",
-            time: "7:30PM",
+            date: homeTeamData?.Date || awayTeamData?.Date || "TODAY",
+            // time: "7:30PM",
           };
           
           Object.keys(BOOKMAKER_MAP).forEach(apiBookmaker => {
@@ -403,13 +404,13 @@ useEffect(() => {
                 homeTeam: homeTeam,
                 awayTeam: awayTeam,
                 overValue: totalValue,
-                homeOpen: formatOdds(homeTeamData["Home Open"]),
-                awayOpen: formatOdds(awayTeamData["Away Open"]),
-                homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
-                awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
+                 homeOpen: formatOdds(homeTeamData["Home Open"]),
+            awayOpen: formatOdds(awayTeamData["Away Open"]),
+            homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
+            awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
                 underValue: totalValue,
-                date: "TODAY",
-                time: "7:30PM",
+                date: homeTeamData?.Date || awayTeamData?.Date || "TODAY",
+                // time: "7:30PM",
               };
             }
             
@@ -480,8 +481,13 @@ useEffect(() => {
                     <option value="NBA">NBA</option>
                     <option value="MLB">MLB</option>
                   </select>
+                  <select value={sport} onChange={handleSportChange}>
+                    <option value="NHL">NHL</option>
+                    <option value="NBA">NBA</option>
+                    <option value="MLB">MLB</option>
+                  </select>
 
-                    {activeTab !== 'INJURIES' && activeTab !== 'SCHEDULE' && activeTab !== 'TEAMS' && activeTab !== 'FUTURES' && activeTab !== 'GAMES' && (
+                    {activeTab !== 'INJURIES' && activeTab !== 'SCHEDULE' && activeTab !== 'TEAMS' && activeTab !== 'FUTURES' && (
                       <select value={marketType} onChange={handleMarketTypeChange}>
                         <option value="SPREAD">SPREAD</option>
                         <option value="MONEYLINE">MONEYLINE</option>
@@ -489,6 +495,18 @@ useEffect(() => {
                       </select>
                     )}
 
+                  {activeTab !== 'TEAMS' && activeTab !== 'FUTURES' && activeTab !== 'INJURIES' && (
+                    <div className="date-picker-wrapper">
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                        dateFormat="EEE MMM dd"
+                        className="calendar-input"
+                        popperPlacement="bottom"
+                      />
+                    </div>
+                  )}
+                </div>
                   {activeTab !== 'TEAMS' && activeTab !== 'FUTURES' && activeTab !== 'INJURIES' && (
                     <div className="date-picker-wrapper">
                       <DatePicker
@@ -711,7 +729,7 @@ useEffect(() => {
           </button>
         </div> */}
         <Faq />
-      </div>
+    
     </section>
   );
 };
