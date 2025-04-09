@@ -1,100 +1,123 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../Assets/css/injury.css';
+import api from '../../api'; // Assuming this is where your API functions are defined
 
-const injuryData1 = [
-  {
-    name: 'Jacob Toppin',
-    pos: 'F',
-    returnDate: 'Apr 10',
-    status: 'Out',
-    statusColor: 'red',
-    comment:
-      'Apr 7: Toppin is out for Tuesday\'s game against the Magic with a left calf strain.',
-  },
-  {
-    name: 'Trae Young',
-    pos: 'PG',
-    returnDate: 'Apr 8',
-    status: 'Day-To-Day',
-    statusColor: 'yellow',
-    comment:
-      'Apr 7: Young is probable for Tuesday\'s game against the Magic with right Achilles tendinitis...',
-  },
-];
+const InjuryTable = ({ teamName, data }) => {
+  // Check if we have valid data for this team
+  if (!data || !data.name || data.name.length === 0) {
+    return null;
+  }
 
-const injuryData2 = [
-  {
-    name: 'Larry Nance Jr.',
-    pos: 'PF',
-    returnDate: 'May 1',
-    status: 'Out',
-    statusColor: 'red',
-    comment:
-      'Mar 26: The Hawks announced Wednesday that Nance (knee) will miss the rest of the season...',
-  },
-  {
-    name: 'Clint Capela',
-    pos: 'C',
-    returnDate: 'Apr 15',
-    status: 'Out',
-    statusColor: 'red',
-    comment:
-      'Mar 21: Capela underwent an MRI on Monday that revealed a ligament injury...',
-  },
-];
-
-const InjuryTable = ({ teamName, teamLogo, data }) => (
-  <div className="injury-container">
-    <div className="team-header">
-      <img src={teamLogo} alt={teamName} className="team-logo" />
-      <h3>{teamName}</h3>
-    </div>
-    <table className="injury-table">
-      <thead>
-        <tr>
-          <th className='name_th'>NAME</th>
-          <th>POS</th>
-          <th className='name_th'>EST. RETURN DATE</th>
-          <th className='name_th'>STATUS</th>
-          <th>COMMENT</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((player, index) => (
-          <tr key={index}>
-            <td className="name">{player.name}</td>
-            <td>{player.pos}</td>
-            <td>{player.returnDate}</td>
-            <td>
-              <span className={`status-dot ${player.statusColor}`}></span>{' '}
-              {player.status}
-            </td>
-            <td className="comment">{player.comment}</td>
+  return (
+    <div className="injury-container">
+      <div className="team-header">
+        <h3>{teamName}</h3>
+      </div>
+      <table className="injury-table">
+        <thead>
+          <tr>
+            <th className='name_th'>NAME</th>
+            <th>POS</th>
+            <th className='name_th'>EST. RETURN DATE</th>
+            <th className='name_th'>STATUS</th>
+            <th>COMMENT</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
+        </thead>
+        <tbody>
+          {data.name.map((playerName, index) => {
+            // Map status to status color
+            let statusColor = 'green';
+            if (data.state[index] === 'Out' || data.state[index] === 'Injured Reserve') {
+              statusColor = 'red';
+            } else if (data.state[index] === 'Day-To-Day') {
+              statusColor = 'yellow';
+            }
 
-const NBAInjuryTable = () => {
+            return (
+              <tr key={index}>
+                <td className="name">{playerName}</td>
+                <td>{data.pos_text[index]}</td>
+                <td>{data.date[index] || 'N/A'}</td>
+                <td>
+                  <span className={`status-dot ${statusColor}`}></span>{' '}
+                  {data.state[index]}
+                </td>
+                <td className="comment">{data.description[index] || 'No additional information'}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const SportsInjuryTable = ({ currentSport = 'nba' }) => {
+  const [injuryData, setInjuryData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchInjuryData = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        let data;
+        
+        // Fetch data based on the selected sport
+        switch (currentSport.toLowerCase()) {
+          case 'NBA':
+            data = await api.getNbaInjuriesData();
+            break;
+          case 'MLB':
+            data = await api.getMlbInjuriesData();
+            break;
+          case 'NHL':
+            data = await api.getNhlInjuriesData();
+            break;
+          default:
+            data = await api.getNbaInjuriesData(); // Default to NBA
+        }
+        
+        setInjuryData(data);
+      } catch (err) {
+        console.error(`Error fetching ${currentSport} injury data:`, err);
+        setError(`Failed to load ${currentSport.toUpperCase()} injury data. Please try again later.`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInjuryData();
+  }, [currentSport]);
+
+  if (loading) {
+    return <div className="loading">Loading injury data...</div>;
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
+
+  // Handle case when data is empty
+  if (!injuryData || injuryData.length === 0) {
+    return <div className="no-data">No injury data available for {currentSport.toUpperCase()}.</div>;
+  }
+
   return (
     <>
-      <h2 className="injury-title">NBA Injuries</h2>
-
-      <InjuryTable
-        teamName="Atlanta Hawks"
-        teamLogo="https://loodibee.com/wp-content/uploads/nba-atlanta-hawks-logo.png"
-        data={injuryData1}
-      />
-
-      <InjuryTable
-        teamName="New Orleans Pelicans"
-        teamLogo="https://loodibee.com/wp-content/uploads/nba-new-orleans-pelicans-logo.png"
-        data={injuryData2}
-      />
+      <h2 className="injury-title">{currentSport.toUpperCase()} Injuries</h2>
+      
+      {injuryData.map((teamData, index) => (
+        <InjuryTable
+          key={index}
+          teamName={teamData.teams_name}
+          data={teamData}
+        />
+      ))}
     </>
   );
 };
 
-export default NBAInjuryTable;
+export default SportsInjuryTable;

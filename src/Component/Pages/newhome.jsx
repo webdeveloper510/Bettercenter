@@ -4,8 +4,7 @@ import TabsWithMatchups from './gametab';
 import DatePicker from 'react-datepicker';
 import '../../Assets/css/newhome.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import api from '../../api'; // Import your API
-
+import api from '../../api'; 
 import betmgmLogo from "../../Assets/images/betmgm.png";
 import draftkingsLogo from "../../Assets/images/draftking.png";
 import fanduelLogo from "../../Assets/images/fanduel.webp";
@@ -27,7 +26,6 @@ const BOOKMAKER_LOGOS = {
   Unibet: { logo: unibetLogo },
 };
 
-// Map API bookmaker names to our component's bookmaker keys
 const BOOKMAKER_MAP = {
   'Betmgm': 'BetMGM',
   'Caesars': 'Caesars',
@@ -38,7 +36,6 @@ const BOOKMAKER_MAP = {
   'Bet365': 'Bet365'
 };
 
-// Helper function to compare two values (handles strings and numbers)
 const isValueChanged = (oldVal, newVal) => {
   if (oldVal === undefined || newVal === undefined) return false;
   if (oldVal === null || newVal === null) return oldVal !== newVal;
@@ -222,10 +219,7 @@ const updateChangeTimestamps = (newData) => {
       }
       
       setGamesData(processedData);
-      
-      // After setting the games data, update the first load flag
       if (isFirstLoadRef.current) {
-        // On first load, just update the previous data reference
         previousDataRef.current = JSON.parse(JSON.stringify(processedData));
         isFirstLoadRef.current = false;
       }
@@ -237,7 +231,6 @@ const updateChangeTimestamps = (newData) => {
       setLoading(false);
     }
   };
-// Set up API fetch with 1-minute interval
 useEffect(() => {
   const fetchAndUpdateData = async () => {
     setLoading(true);
@@ -248,9 +241,7 @@ useEffect(() => {
     }
   };
 
-  fetchAndUpdateData(); // Initial fetch when component mounts
-  
-  // Set interval to fetch data every 60000 milliseconds (1 minute)
+  fetchAndUpdateData(); 
   const interval = setInterval(fetchAndUpdateData, 60000);
   
   return () => clearInterval(interval);
@@ -289,6 +280,10 @@ useEffect(() => {
             awayTeam: awayTeamData["Away Team"],
             homeSpread: homeSpread,
             awaySpread: awaySpread,
+            homeOpen: formatOdds(homeTeamData["Home Open"]),
+            awayOpen: formatOdds(awayTeamData["Away Open"]),
+            homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
+            awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
             date: "TODAY",
             time: "7:30PM",
           };
@@ -406,6 +401,10 @@ useEffect(() => {
                 homeTeam: homeTeam,
                 awayTeam: awayTeam,
                 overValue: totalValue,
+                homeOpen: formatOdds(homeTeamData["Home Open"]),
+                awayOpen: formatOdds(awayTeamData["Away Open"]),
+                homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
+                awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
                 underValue: totalValue,
                 date: "TODAY",
                 time: "7:30PM",
@@ -638,7 +637,7 @@ useEffect(() => {
               }
                {
                 activeTab ==='INJURIES' && (
-                    <div><NBAInjuryTable/></div>
+                    <div><NBAInjuryTable currentSport={sport}/></div>
                 )
               }
               

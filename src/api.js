@@ -185,6 +185,39 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch news data" };
         }
     },
+    getNbaInjuriesData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/nba-injuries-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data.data;
+        } catch (error) {
+            console.error("News data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+        }
+    },
+    getMlbInjuriesData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/mlb-injuries-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data.data;
+        } catch (error) {
+            console.error("News data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+        }
+    },
+    getNhlInjuriesData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/nhl-injuries-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data.data;
+        } catch (error) {
+            console.error("News data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+        }
+    },
 };
 
 export default api;
