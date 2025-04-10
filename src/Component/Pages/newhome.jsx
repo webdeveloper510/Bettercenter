@@ -502,14 +502,15 @@ useEffect(() => {
 
                   {activeTab !== 'TEAMS' && activeTab !== 'FUTURES' && activeTab !== 'INJURIES' && (
                     <div className="date-picker-wrapper">
-                      <DatePicker
-                        selected={selectedDate}
-                        onChange={(date) => setSelectedDate(date)}
-                        dateFormat="EEE MMM dd"
-                        className="calendar-input"
-                        popperPlacement="bottom"
-                      />
-                    </div>
+                    <DatePicker
+                      selected={selectedDate}
+                      onChange={(date) => setSelectedDate(date)}
+                      dateFormat="EEE MMM dd"
+                      className="calendar-input"
+                      popperPlacement="bottom"
+                      maxDate={new Date()} 
+                    />
+                  </div>
                   )}
                 </div>
                 </div>
