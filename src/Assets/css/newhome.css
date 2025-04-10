@@ -541,3 +541,7 @@ h1, h2, h3, .nba_odds {
   background: #f44336 !important;
   animation: blink 1s infinite;
 }
+.bookmarked-row {
+  background-color: #3d4375 ;
+  border-left: 3px solid #0F93EB;
+}

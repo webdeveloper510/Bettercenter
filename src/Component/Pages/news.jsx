@@ -54,7 +54,7 @@ return <p className="text-center py-5">No news available.</p>;
                         <div className="col-12">
                         
                                     <div>
-                                        <img src={newsData.home_image_src} className="macbook my-3" alt="" srcset="" width={900} />
+                                        <img src={newsData.image_url} className="macbook my-3" alt="" srcset="" width={900} />
                                         <p className="pt-5 started_page" dangerouslySetInnerHTML={{ __html: newsData.news_text }}></p>
 
                                     </div>

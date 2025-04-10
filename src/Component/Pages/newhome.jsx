@@ -61,10 +61,19 @@ const Games = () => {
   const previousDataRef = useRef([]);
   const changeTimestampsRef = useRef({});
   const isFirstLoadRef = useRef(true);
+  const [bookmarkedGames, setBookmarkedGames] = useState([]);
   const currentSportMarketRef = useRef('');
 
   const totalPages = 4;
-  
+  const toggleBookmark = (gameIndex) => {
+    setBookmarkedGames(prev => {
+      if (prev.includes(gameIndex)) {
+        return prev.filter(index => index !== gameIndex);
+      } else {
+        return [...prev, gameIndex];
+      }
+    });
+  };
   const formatOdds = (odds) => {
     if (odds === null || odds === undefined) return "-";
     if (parseFloat(odds) === 0) return "0";
@@ -546,7 +555,10 @@ useEffect(() => {
                       <tbody>
                         {gamesData.length > 0 ? (
                           gamesData.map((game, index) => (
-                            <tr key={index}>
+                            <tr key={index}
+                            className={bookmarkedGames.includes(index) ? 'bookmarked-row' : ''}
+                            onClick={() => toggleBookmark(index)}
+                            style={{ cursor: 'pointer' }}>
                               <td>
                                 <div className="game-time">{game.date} · {game.time} · {sport}</div>
                                 <div className="team-name">{game.homeTeam}</div>
