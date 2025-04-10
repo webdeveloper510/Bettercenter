@@ -500,18 +500,18 @@ useEffect(() => {
                       </select>
                     )}
 
-                  {activeTab !== 'TEAMS' && activeTab !== 'FUTURES' && activeTab !== 'INJURIES' && (
-                    <div className="date-picker-wrapper">
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={(date) => setSelectedDate(date)}
-                      dateFormat="EEE MMM dd"
-                      className="calendar-input"
-                      popperPlacement="bottom"
-                      maxDate={new Date()} 
-                    />
-                  </div>
-                  )}
+{activeTab !== 'TEAMS' && activeTab !== 'FUTURES' && activeTab !== 'INJURIES' && (
+  <div className="date-picker-wrapper">
+    <DatePicker
+      selected={selectedDate}
+      onChange={(date) => setSelectedDate(date)}
+      dateFormat="EEE MMM dd"
+      className="calendar-input"
+      popperPlacement="bottom"
+      maxDate={activeTab === 'OVERVIEW' ? new Date() : null} 
+    />
+  </div>
+)}
                 </div>
                 </div>
 
@@ -660,7 +660,7 @@ useEffect(() => {
               }
               {
                 activeTab === 'SCHEDULE' && (
-                  <div><Schedule /></div>
+                  <div><Schedule  currentSport={sport} selectedDate={selectedDate}/></div>
                 )
               }
                {

@@ -5,6 +5,20 @@
     padding: 0px;
     margin: auto;
 }
+.schedule-header {
+   
+    color: #fff !important;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #eee;
+    background-color: #0F93EB !important;
+    width: 100%;
+    margin: auto;
+    padding: 0px;
+        display: flex;
+        padding: 15px 15px;
+        font-weight: 600;
+  
+}
 .schedule_heading {
     background-color: #23274A;
     padding: 15px 15px;
@@ -41,3 +55,83 @@ margin: auto;
     font-size: 12px;
     padding-right: 10px;
 }
+ .schedule-section {
+                    background-color: #f8f9fa;
+                    padding: 20px 0;
+                }
+                
+                .schedule-date-heading {
+                    font-size: 1.2rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    color: #333;
+                }
+                
+                .schedule-table {
+                    border-radius: 8px;
+                    overflow: hidden;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                    background-color: white;
+                }
+                
+               
+                
+                .schedule-row {
+                    display: flex;
+                    padding: 15px;
+                    border-bottom: 1px solid #eee;
+                    align-items: center;
+                }
+                
+                .schedule-row:last-child {
+                    border-bottom: none;
+                }
+                
+                .schedule-col-matchup {
+                    flex: 2;
+                }
+                
+                .schedule-col-result,
+                .schedule-col-winner,
+                .schedule-col-loser {
+                    flex: 1;
+                }
+                
+                .schedule-col-time {
+                    flex: 1.5;
+                    text-align: right;
+                }
+                
+                .team-name {
+                    font-weight: 500;
+                }
+                
+                .vs-text {
+                    color: #777;
+                    font-style: italic;
+                }
+                
+                .time-display {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 5px;
+                }
+                
+                .clock-icon {
+                    width: 16px;
+                    height: 16px;
+                }
+                
+                .venue-text {
+                    font-size: 0.85rem;
+                    color: #777;
+                    margin-top: 3px;
+                }
+                
+                .date-picker-container {
+                    display: flex;
+                    justify-content: center;
+                }
+
+               
