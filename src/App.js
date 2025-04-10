@@ -22,6 +22,7 @@ import Schedule from "./Component/Pages/Schedule"
 import Games from "./Component/Pages/newhome";
 import Futures from "./Component/Pages/futures";
 import MatchesPage from "./Component/Pages/gameteamtab";
+import BlogList from "./Component/Pages/blog";
 
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
@@ -89,6 +90,7 @@ function Layout() {
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/futures" element={<Futures />} />
           <Route path="/gameteamtab" element={<MatchesPage />} />
+          <Route path="/blog" element={<BlogList />} />
 
           {/* Redirect to home for any unmatched routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
