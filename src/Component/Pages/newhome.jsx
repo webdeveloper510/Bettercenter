@@ -601,7 +601,10 @@ const Games = () => {
             {activeTab === "OVERVIEW" && (
               <div className="betting-table-wrapper table_flow">
                 {loading ? (
-                  <div className="text-center py-4">Loading data...</div>
+                 <div className="loader-container my-5">
+                 <div className="loader spinner-border text-primary text-center"></div>
+                 <p className="text-center mt-5 "></p>
+               </div>
                 ) : error ? (
                   <div className="text-center py-4 text-danger">{error}</div>
                 ) : (

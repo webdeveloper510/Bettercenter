@@ -75,11 +75,12 @@ const BlogList = () => {
                     : blog.description}
                 </p>
                 <span
-                  className="read-more"
-                  onClick={() => navigate(`/blog/${blog.id}`)}
-                >
-                  Read More
-                </span>
+  className="read-more"
+  onClick={() => navigate(`/blog/${blog.id}`)}
+>
+  Read More
+</span>
+
               </div>
             </div>
           ))}

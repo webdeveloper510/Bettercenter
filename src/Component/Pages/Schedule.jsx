@@ -140,7 +140,10 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
                 <div className='contanier'>
                     <div className='row'>
                         {loading ? (
-                            <div className="col-12 text-center py-5">Loading schedule data...</div>
+                           <div className="loader-container my-5">
+                           <div className="loader spinner-border text-primary text-center"></div>
+                           <p className="text-center mt-5 "></p>
+                         </div>
                         ) : error ? (
                             <div className="col-12 text-center py-5 text-danger">{error}</div>
                         ) : Object.keys(scheduleData).length > 0 ? (

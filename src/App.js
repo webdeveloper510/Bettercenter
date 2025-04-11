@@ -92,7 +92,8 @@ function Layout() {
           <Route path="/futures" element={<Futures />} />
           <Route path="/gameteamtab" element={<MatchesPage />} />
           <Route path="/blog" element={<BlogList />} />
-          <Route path="/blogdetail" element={<BlogDetail />} />
+          <Route path="/blog/:id" element={<BlogDetail />} />
+
 
           {/* Redirect to home for any unmatched routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
