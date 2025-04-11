@@ -92,14 +92,9 @@ h1, h2, h3, .nba_odds {
     letter-spacing: 1px;
 }
 .team_title {
-  display: flex;
-      align-items: self-start;
-      margin-top: 10px;
-      gap: 10px;
-      background-color: #23274A;
-      padding: 15px 15px;
-      padding-left: 10px;
-      border-radius: 15px 15px 0px 0px;
-      border: 1px solid #23274A;
-      color: #0F93EB;
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #fff;
+  font-family: var(--heading-font);
 }

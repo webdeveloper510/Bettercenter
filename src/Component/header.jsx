@@ -63,14 +63,14 @@ const Header = () => {
                   TEAM
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link
                   className={`nav-link ${location.pathname === "/allpicks" ? "active-link" : ""}`}
                   to="/allpicks"
                 >
                   FREE PICKS
                 </Link> 
-              </li>
+              </li> */}
               <li className="nav-item">
                 <Link
                   className={`nav-link ${location.pathname === "/blog" ? "active-link" : ""}`}

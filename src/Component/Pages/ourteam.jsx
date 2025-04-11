@@ -12,7 +12,7 @@ const Ourteam = () => {
   const navigate = useNavigate(); // ✅ Initialize navigation
 
   const handleBuyClick = () => {
-    navigate("/pickdetail"); // ✅ Navigate to the desired page
+    navigate("/allpicks"); // ✅ Navigate to the desired page
   };
 
   const teamMembers = [

@@ -66,41 +66,40 @@ const TabsWithMatchups = ({ currentSport }) => {
     return matchups;
   };
 
-
   return (
-    <div className="teams-container">
+    <div>
       <h2 className="tab-title team_title">{currentSport} Teams</h2>
-
-      {loading ? (
-        <div className="loading-message">Loading games data...</div>
-      ) : error ? (
-        <div className="error-message">{error}</div>
-      ) : matchupsData.length === 0 ? (
-        <div className="no-data-message">No matchups found for {currentSport}.</div>
-      ) : (
-        <div className="matchup-grid">
-          {matchupsData.map((matchup, index) => (
-            <div className="matchup-card" key={index}>
-              {/* <div className="game-id">{String(matchup.gameId).replace('_', ' ').toUpperCase()}</div> */}
-              <div className="matchup-content">
-                <div className="matchup-row">
-                  <div className="team-column">
-                    <div className="team">
-                      <span>{matchup.teams[0]}</span>
+      <div className="teams-container">
+        {loading ? (
+          <div className="loading-message">Loading games data...</div>
+        ) : error ? (
+          <div className="error-message">{error}</div>
+        ) : matchupsData.length === 0 ? (
+          <div className="no-data-message">No matchups found for {currentSport}.</div>
+        ) : (
+          <div className="matchup-grid">
+            {matchupsData.map((matchup, index) => (
+              <div className="matchup-card" key={index}>
+                <div className="matchup-content">
+                  <div className="matchup-row">
+                    <div className="team-column">
+                      <div className="team">
+                        <span>{matchup.teams[0]}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="divider" />
-                  <div className="team-column">
-                    <div className="team">
-                      <span>{matchup.teams[1]}</span>
+                    <div className="divider" />
+                    <div className="team-column">
+                      <div className="team">
+                        <span>{matchup.teams[1]}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

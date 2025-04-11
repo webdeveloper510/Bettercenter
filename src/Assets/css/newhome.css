@@ -15,6 +15,7 @@ h1, h2, h3, .nba_odds {
 .nfl-games-container {
     color: white;
     padding: 2rem;
+    padding-left: 0px;
   }
 .backgroung_image {
     background-image: url("../images/page-bg.png");
@@ -545,4 +546,11 @@ h1, h2, h3, .nba_odds {
 .bookmarked-row {
   background-color: #3d4375 ;
   border-left: 3px solid #0F93EB;
+}
+.selectors select option {
+  background-color: #1c1d3f; /* Dark background like your select box */
+  color: white;              /* White text */
+  padding: 10px 20px;        /* Padding inside each option */
+  font-size: 16px;           /* Match font size */
+  border: none;              /* No border */
 }
