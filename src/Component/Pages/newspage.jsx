@@ -47,17 +47,6 @@ const Newspage = () => {
             <section className="backgroung_image">
                 <div className="container">
                     <div className="row py-5 gap-3">
-                        <h2 className="text-center our_team_head pb-4" >NEWS</h2>
-
-                        <div className="col-12 laptop_image">
-                            <div className="d-flex gap-2">
-                                <a href="" className="heading_news_one">AI Powered
-                                </a><p className="heading_news"> | 2mo ago</p>
-                            </div>
-                            <h2 className="news_page_heading">The Future of Sustainable Living: Driving Eco-Friendly<br></br> Lifestyles</h2>
-
-                        </div>
-
                     </div>
                 </div>
                 <div className="container">

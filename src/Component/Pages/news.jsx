@@ -28,7 +28,7 @@ const News = () => {
     return (
       <div className="loader-container my-5">
         <div className="loader spinner-border text-primary text-center"></div>
-        <p className="text-center mt-5 ">Loading Latest news...</p>
+        <p className="text-center mt-5 "></p>
       </div>
     );
   }
