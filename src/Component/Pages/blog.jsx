@@ -45,35 +45,47 @@ const BlogList = () => {
   ]
 
   return (
-    <div className="blog-page">
-      {blogs.map((blog) => (
-        <div key={blog.id} className="blog-card">
-          <div className="blog-image">
-            {blog.file_url ? (
-              blog.file_url.endsWith('.mp4') ? (
-                <video width="100%" controls>
-                  <source src={blog.file_url} type="video/mp4" />
-                </video>
-              ) : (
-                <img src={blog.file_url} alt={blog.title} />
-              )
-            ) : (
-              <div className="no-image">No Media</div>
-            )}
-          </div>
-          <div className="blog-content">
-            <p className="blog-meta">MLB • {new Date(blog.uploaded_at).toLocaleDateString()}</p>
-            <h2 className="blog-title">{blog.title}</h2>
-            <p className="blog-description">
-              {blog.description.length > 160
-                ? blog.description.substring(0, 160) + '...'
-                : blog.description}
-            </p>
-            <span className="read-more" onClick={() => navigate(`/blog/${blog.id}`)}>Read More</span>
-          </div>
+    <section className="backgroung_image">
+      <h2 class="text-center our_team_head pb-4 py-5 gap-3">Blog</h2>
+      <div className="container">
+        <div className="blog-page">
+          {blogs.map((blog) => (
+            <div key={blog.id} className="blog-card">
+              <div className="blog-image">
+                {blog.file_url ? (
+                  blog.file_url.endsWith('.mp4') ? (
+                    <video width="100%" controls>
+                      <source src={blog.file_url} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <img src={blog.file_url} alt={blog.title} />
+                  )
+                ) : (
+                  <div className="no-image">No Media</div>
+                )}
+              </div>
+              <div className="blog-content">
+                <p className="blog-meta">
+                  MLB • {new Date(blog.uploaded_at).toLocaleDateString()}
+                </p>
+                <h2 className="blog-title">{blog.title}</h2>
+                <p className="blog-description">
+                  {blog.description.length > 160
+                    ? blog.description.substring(0, 160) + '...'
+                    : blog.description}
+                </p>
+                <span
+                  className="read-more"
+                  onClick={() => navigate(`/blog/${blog.id}`)}
+                >
+                  Read More
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </div>
+    </section>
   )
 }
 

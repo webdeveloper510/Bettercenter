@@ -2,14 +2,15 @@
     display: grid;
     gap: 40px;
     padding: 40px;
-    background: #111;
+    background-color: #1b1e3d;
+    border: 1px solid #1b1e3d;
     color: #fff;
     font-family: 'Poppins', sans-serif;
   }
   
   .blog-card {
     display: flex;
-    background: #000;
+    background: #1a1d3b;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0,0,0,0.4);
