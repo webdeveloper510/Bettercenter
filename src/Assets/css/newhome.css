@@ -383,6 +383,12 @@ h1, h2, h3, .nba_odds {
     min-height: 54px;
     border-radius: 30px;
     min-width: 200px;
+    border: 1px solid #171538;
+}
+.selectors select:focus-visible {
+  border: none !important;
+  outline: none;
+  background: #1c1d3fab;
 }
 .betting-table tr:hover {
     background: #3d4375 !important;
