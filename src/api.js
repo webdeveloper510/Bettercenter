@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { format } from 'date-fns';
 
 export const API_URL = 'http://54.174.64.250:8000';
 
@@ -45,9 +46,10 @@ const api = {
             throw error.response ? error.response.data : { message: "Registration failed" };
         }
     },
-    getMoneyData: async () => {
+    getMoneyData: async (date) => {
         try {
-            const response = await axios.get(`${API_URL}/nba-money-data`, {
+            const formattedDate = date || ''; 
+            const response = await axios.get(`${API_URL}/nba-money-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -56,9 +58,10 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
-    getSpreadData: async () => {
+    getSpreadData: async (date) => {
         try {
-            const response = await axios.get(`${API_URL}/nba-spread-data`, {
+            const formattedDate = date || ''; 
+            const response = await axios.get(`${API_URL}/nba-spread-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -66,9 +69,10 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
-    getOverUnderData: async () => {
+    getOverUnderData: async (date) => {
         try {
-            const response = await axios.get(`${API_URL}/nba-over-under-data`, {
+            const formattedDate = date || ''; 
+            const response = await axios.get(`${API_URL}/nba-over-under-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -76,9 +80,10 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
     },
-    getMlbMoneyData: async () => {
+    getMlbMoneyData: async (date) => {
         try {
-            const response = await axios.get(`${API_URL}/mlb-money-data`, {
+            const formattedDate = date || '';
+            const response = await axios.get(`${API_URL}/mlb-money-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -87,9 +92,11 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
-    getMlbSpreadData: async () => {
+    getMlbSpreadData: async (date
+    ) => {
         try {
-            const response = await axios.get(`${API_URL}/mlb-spread-data`, {
+            const formattedDate = date || '';
+            const response = await axios.get(`${API_URL}/mlb-spread-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -97,9 +104,10 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
-    getMlbOverUnderData: async () => {
+    getMlbOverUnderData: async (date) => {
         try {
-            const response = await axios.get(`${API_URL}/mlb-over-under-data`, {
+            const formattedDate = date || '';
+            const response = await axios.get(`${API_URL}/mlb-over-under-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -107,9 +115,10 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
     },
-    getNhlMoneyData: async () => {
+    getNhlMoneyData: async (date) => {
         try {
-            const response = await axios.get(`${API_URL}/nhl-money-data`, {
+            const formattedDate = date || '';
+            const response = await axios.get(`${API_URL}/nhl-money-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -118,9 +127,10 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
-    getNhlSpreadData: async () => {
+    getNhlSpreadData: async (date) => {
         try {
-            const response = await axios.get(`${API_URL}/nhl-spread-data`, {
+            const formattedDate = date || '';
+            const response = await axios.get(`${API_URL}/nhl-spread-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -128,9 +138,10 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
-    getNhlOverUnderData: async () => {
+    getNhlOverUnderData: async (date) => {
         try {
-            const response = await axios.get(`${API_URL}/nhl-over-under-data`, {
+            const formattedDate = date || '';
+            const response = await axios.get(`${API_URL}/nhl-over-under-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;

@@ -26,7 +26,6 @@ const TabsWithMatchups = ({ currentSport }) => {
             apiData = await api.getMlbteamsData();
             break;
           default:
-            console.warn("Unknown sport selected:", currentSport);
             return;
         }
 

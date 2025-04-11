@@ -8,32 +8,22 @@ import { useNavigate } from 'react-router-dom';
 
 const Signin = () => {
     const navigate = useNavigate();
-
-    // Check if user is already logged in
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
         if (token) {
-            // Redirect to home page if already logged in
+          
             navigate('/');
         }
     }, [navigate]);
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            console.log("Submitting values:", values);
-
             const response = await axios.post("http://54.174.64.250:8000/login", values);
             const token = response.data?.token?.access;
-
-            console.log("Extracted Token:", token);
-
             if (token) {
                 setAuthToken(token);
-                console.log("Token stored successfully");
-                
                 toast.success("Login successful!");
-                
-                // Redirect to home page after successful login
+
                 navigate('/');
             } else {
                 console.error("No token found in response");

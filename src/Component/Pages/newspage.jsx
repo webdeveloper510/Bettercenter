@@ -14,14 +14,11 @@ const Newspage = () => {
 
     const [newsData, setNewsData] = useState([])
     const navigate= useNavigate()
-    console.log("🚀 ~ Newspage ~ newsData:", newsData)
     useEffect(() => {
         const fetchData = async () => {
             try {
 
                 const response = await api.getNewsData()
-                console.log("🚀 ~ fetchData ~ response:", response)
-
                 setNewsData((response.data))
             } catch (error) {
                 console.error("Error fetching data:", error);

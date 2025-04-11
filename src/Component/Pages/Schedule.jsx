@@ -19,8 +19,7 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
             setLoading(true);
             setError(null);
 
-            const formattedDate = format(selectedDate, 'yyyy-MM-dd');
-            console.log("Fetching NBA schedule for date:", formattedDate);       
+            const formattedDate = format(selectedDate, 'yyyy-MM-dd');     
             const data = await api.getNbaScheduleData(formattedDate);
         const groupedGames = {};
             if (Array.isArray(data)) {
@@ -58,7 +57,6 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
     };
 
     const handleDateChange = (date) => {
-        console.log("Date selected in Schedule component:", date);
         if (setSelectedDate) {
             setSelectedDate(date);
         }
@@ -77,9 +75,8 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
             looserHigh: false,
             time: false,
             tv: false,
-            team1:false,
-            team2:false
-
+            team1: false,
+            team2: false
         };
     
         games.forEach(game => {
@@ -98,13 +95,41 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
                 columns.time = true;
             }
             
-            // Check TV column
             if (!isEmpty(game.tv)) {
                 columns.tv = true;
             }
         });
         
         return columns;
+    };
+
+    const renderMatchup = (game) => {
+        const team1 = game.team1 || game.home_team;
+        const team2 = game.team2 || game.away_team
+        const hasTeam1 = !isEmpty(team1);
+        const hasTeam2 = !isEmpty(team2);
+        
+        if (hasTeam1 && hasTeam2) {
+            return (
+                <span className='heading_team'>
+                    {team1} vs {team2}
+                </span>
+            );
+        } else if (hasTeam1) {
+            return (
+                <span className='heading_team'>
+                    {team1}
+                </span>
+            );
+        } else if (hasTeam2) {
+            return (
+                <span className='heading_team'>
+                    {team2}
+                </span>
+            );
+        } else {
+            return <span className='heading_team'>TBD</span>;
+        }
     };
 
     return (
@@ -120,13 +145,10 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
                             <div className="col-12 text-center py-5 text-danger">{error}</div>
                         ) : Object.keys(scheduleData).length > 0 ? (
                             Object.keys(scheduleData).map((dateKey) => {
-                                // Determine which columns to display for this date's games
+                            
                                 const visibleColumns = getVisibleColumns(scheduleData[dateKey]);
-                                
-                                // Calculate column widths based on visible columns
-                                const matchupWidth = 3; // Base width for matchup
-                                
-                                // Count visible columns (excluding matchup)
+                            
+                                const matchupWidth = 3; 
                                 const visibleCount = [
                                     visibleColumns.result,
                                     visibleColumns.winnerHigh,
@@ -135,7 +157,6 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
                                     visibleColumns.tv
                                 ].filter(Boolean).length;
                                 
-                                // Calculate widths for other columns
                                 const otherColumnWidth = visibleCount > 0 ? Math.floor(9 / visibleCount) : 0;
                                 
                                 return (
@@ -173,9 +194,7 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
                                                 {gameIndex > 0 && <hr className='team_border py-1' />}
                                                 <div className='row py-2 align-items-center'>
                                                     <div className={`col-${matchupWidth}`}>
-                                                        <span className='heading_team'>
-                                                            {game.team1 || game.home_team} vs {game.team2 || game.away_team}
-                                                        </span>
+                                                        {renderMatchup(game)}
                                                     </div>
                                                     
                                                     {visibleColumns.result && !isEmpty(game.result) && (
@@ -224,9 +243,6 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
                     </div>
                 </div>
             </section>
-
-            {/* Add some minimal styling to support the new layout */}
-           
         </>
     );
 };
