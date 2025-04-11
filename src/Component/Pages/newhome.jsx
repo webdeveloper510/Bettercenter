@@ -542,7 +542,6 @@ const Games = () => {
         <div className="row">
           <div className="col-12 mt-5">
             <div className="nfl-games-container">
-              <h1 className="nba_odds">Upcoming {sport} Games</h1>
 
               <div className="selectors">
                 <select value={sport} onChange={handleSportChange}>
@@ -599,7 +598,9 @@ const Games = () => {
 
             {/* Table: Only show when active tab is OVERVIEW */}
             {activeTab === "OVERVIEW" && (
+              
               <div className="betting-table-wrapper table_flow">
+                   <h1 className="nba_odds">Upcoming {sport} Games</h1>
                 {loading ? (
                  <div className="loader-container my-5">
                  <div className="loader spinner-border text-primary text-center"></div>
