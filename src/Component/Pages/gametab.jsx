@@ -69,9 +69,11 @@ const TabsWithMatchups = ({ currentSport }) => {
 
 
   return (
+    <>
+   
+    <h2 className="tab-title team_title">{currentSport} Teams</h2>
     <div className="teams-container">
-      <h2 className="tab-title team_title">{currentSport} Teams</h2>
-
+     
       {loading ? (
      <div className="loader-container my-5">
      <div className="loader spinner-border text-primary text-center"></div>
@@ -106,6 +108,7 @@ const TabsWithMatchups = ({ currentSport }) => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

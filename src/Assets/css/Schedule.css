@@ -45,7 +45,7 @@
 }
 .team_border{
 color: #f2f4f5;
-width: 95%;
+width: 96%;
 margin: auto;
 
 }
@@ -134,4 +134,6 @@ margin: auto;
                     justify-content: center;
                 }
 
-               
+                .schedule_checkout span.heading_team {
+                    padding-left: 25px;
+                }
