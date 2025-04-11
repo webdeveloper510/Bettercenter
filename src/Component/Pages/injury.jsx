@@ -52,7 +52,7 @@ const InjuryTable = ({ teamName, data }) => {
   );
 };
 
-const SportsInjuryTable = ({ currentSport = 'nba' }) => {
+const SportsInjuryTable = ({ currentSport }) => {
   const [injuryData, setInjuryData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -64,9 +64,8 @@ const SportsInjuryTable = ({ currentSport = 'nba' }) => {
       
       try {
         let data;
-        
-        // Fetch data based on the selected sport
-        switch (currentSport.toLowerCase()) {
+
+        switch (currentSport) {
           case 'NBA':
             data = await api.getNbaInjuriesData();
             break;
@@ -100,7 +99,6 @@ const SportsInjuryTable = ({ currentSport = 'nba' }) => {
     return <div className="error">{error}</div>;
   }
 
-  // Handle case when data is empty
   if (!injuryData || injuryData.length === 0) {
     return <div className="no-data">No injury data available for {currentSport.toUpperCase()}.</div>;
   }
