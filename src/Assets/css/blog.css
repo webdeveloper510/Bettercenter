@@ -69,3 +69,8 @@
     text-decoration: underline;
   }
   
+  @media screen and (max-width: 480px) {
+    .blog-card {
+        display: block;
+    }
+    }

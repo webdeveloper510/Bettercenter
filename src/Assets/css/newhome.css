@@ -554,9 +554,48 @@ h1, h2, h3, .nba_odds {
   border-left: 3px solid #0F93EB;
 }
 .selectors select option {
-  background-color: #1c1d3f; /* Dark background like your select box */
-  color: white;              /* White text */
-  padding: 10px 20px;        /* Padding inside each option */
-  font-size: 16px;           /* Match font size */
-  border: none;              /* No border */
+  background-color: #1c1d3f; 
+  color: white;            
+  padding: 10px 20px;        
+  font-size: 16px;           
+  border: none;            
 }
+
+
+
+
+
+@media screen and (max-width: 992px) {
+  .nfl-games-container .selectors {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-direction: column;
+  }
+  .tabs {
+      margin-bottom: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+  }
+  .tabs button {
+      width: 33.3%;
+  }
+  }
+
+  @media screen and (max-width: 480px) {
+    .nfl-games-container .selectors {
+        width: 80%;
+        margin: 0 auto;
+    }
+    .main_dot {
+      display: block;
+  }
+      .schedule_checkout .col-3 {
+          width: 100% !important;
+      }
+      .main_dot img {
+          margin-bottom: 20px;
+      }
+  }
