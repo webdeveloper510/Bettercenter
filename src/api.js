@@ -242,6 +242,32 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
+    getNhlScheduleData: async (date) => {
+        try {
+            const formattedDate = date || ''; 
+            const response = await axios.get(`${API_URL}/nhl-schedule-data/?date=${formattedDate}`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            console.log("Schedule data fetched:", response.data);
+            return response.data.data;
+        } catch (error) {
+            console.error("Schedule data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch schedule data" };
+        }
+    },
+    getMlbScheduleData: async (date) => {
+        try {
+            const formattedDate = date || ''; 
+            const response = await axios.get(`${API_URL}/mlb-schedule-data/?date=${formattedDate}`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            console.log("Schedule data fetched:", response.data);
+            return response.data.data;
+        } catch (error) {
+            console.error("Schedule data fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch schedule data" };
+        }
+    },
 };
 
 export default api;

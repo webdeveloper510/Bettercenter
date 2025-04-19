@@ -98,7 +98,7 @@ const Games = () => {
     setSelectedDate(today);
   }, []);
   const formatOdds = (odds) => {
-    if (odds === null || odds === undefined) return "-";
+    if (odds === null || odds === undefined) return "";
     if (parseFloat(odds) === 0) return "0";
 
     if (typeof odds === "string") {
@@ -273,6 +273,10 @@ const Games = () => {
     }
   };
   useEffect(() => {
+    isFirstLoadRef.current = true;
+    changeTimestampsRef.current = {};
+    previousDataRef.current = [];
+    
     const fetchAndUpdateData = async () => {
       setLoading(true);
       try {
@@ -281,12 +285,12 @@ const Games = () => {
         setLoading(false);
       }
     };
-
+  
     fetchAndUpdateData();
     const interval = setInterval(fetchAndUpdateData, 60000);
-
+  
     return () => clearInterval(interval);
-  }, [sport, marketType, selectedDate]);
+  }, [sport, marketType, selectedDate]); 
   const processSpreadData = (apiData) => {
     if (!apiData || !apiData.data) return [];
 
@@ -814,7 +818,7 @@ const Games = () => {
                           >
                             {loading
                               ? "Loading..."
-                              : "No data is available on this date."}
+                              : "No games available. Try another sport or day."}
                           </td>
                         </tr>
                       )}

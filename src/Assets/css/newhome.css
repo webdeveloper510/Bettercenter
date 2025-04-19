@@ -182,9 +182,9 @@ h1, h2, h3, .nba_odds {
   /* .positive {
     background-color: #0F93EB;
 } */
-  .negative {
+  /* .negative {
     background-color: #f44336;
-  }
+  } */
   .odd {
     padding: 0px 6px;
     width: 50px;
@@ -206,17 +206,24 @@ h1, h2, h3, .nba_odds {
   }
   .changed-green {
     background-color: #71BA0B !important;
+    animation: blinkGreen 1s infinite;
     transition: background-color 0.5s ease;
+    width: 100%;
   }
+  
   
   .changed-yellow {
     background-color: #FFBB00 !important;
+    animation: blinkYellow 1s infinite;
     transition: background-color 0.5s ease;
+    width: 100%;
   }
   
   .changed-red {
-    background-color:#E32528 !important;
+    background-color: #E32528 !important;
+    animation: blinkRed 1s infinite;
     transition: background-color 0.5s ease;
+    width: 100%;
   }
   .odd_g {
     padding: 0px 6px;
@@ -225,7 +232,7 @@ h1, h2, h3, .nba_odds {
     color: white;
     text-align: center;
     margin: 0 auto;
-    background-color: #FFBB00;
+    /* background-color: #FFBB00; */
     width: 50px;
     margin-bottom: 5px;
   }
@@ -433,7 +440,7 @@ h1, h2, h3, .nba_odds {
     height: 6px; /* Decrease height for horizontal scrollbar */
     width: 6px; /* Keep width slim for vertical scrollbar */
 }
-.betting-table tr:nth-child(2) .odd_n {
+/* .betting-table tr:nth-child(2) .odd_n {
   background: #1b1e3d !important;
 }
 .betting-table tr:nth-child(1) .odd_n {
@@ -484,33 +491,30 @@ h1, h2, h3, .nba_odds {
 }
 .betting-table tr:nth-child(18) .odd_n {
   background: #1b1e3d !important;
-}
+} */
 /* .betting-table tr:nth-child(2) .odd_n {
   background: #71BA0B !important;
 } */
 /* .betting-table tr:nth-child(6) .odd_n {
   background: #71BA0B !important;
 } */
-@keyframes blink {
+/* @keyframes blink {
   0% { opacity: 1; }
   50% { opacity: 0.2; }
   100% { opacity: 1; }
-}
+} */
 
-.negative {
+/* .negative {
   background-color: #f44336;
-}
+} */
 
-@keyframes gblink {
+/* @keyframes gblink {
   0% { opacity: 1; }
   50% { opacity: 0.2; }
   100% { opacity: 1; }
-}
-.changed-green { 
-  background-color: #71BA0B !important;
-}
+} */
 
-.betting-table tr:nth-child(1) td:nth-child(6) .odd_n {
+/* .betting-table tr:nth-child(1) td:nth-child(6) .odd_n {
   background: #f44336 !important;
   animation: blink 1s infinite;
 }
@@ -548,54 +552,28 @@ h1, h2, h3, .nba_odds {
 .betting-table tr:nth-child(4) td:nth-child(10) .odd_n {
   background: #f44336 !important;
   animation: blink 1s infinite;
-}
+} */
 .bookmarked-row {
   background-color: #3d4375 ;
   border-left: 3px solid #0F93EB;
 }
 .selectors select option {
-  background-color: #1c1d3f; 
-  color: white;            
-  padding: 10px 20px;        
-  font-size: 16px;           
-  border: none;            
+  background-color: #1c1d3f; /* Dark background like your select box */
+  color: white;              /* White text */
+  padding: 10px 20px;        /* Padding inside each option */
+  font-size: 16px;           /* Match font size */
+  border: none;              /* No border */
+}
+@keyframes blinkGreen {
+  0%, 100% { background-color: #71BA0B; }
+  50% { background-color: rgba(113, 186, 11, 0.5); }
+}
+@keyframes blinkYellow {
+  0%, 100% { background-color: #FFBB00 !important; }
+  50% { background-color: rgba(255, 187, 0, 0.5) !important; }
 }
 
-
-
-
-
-@media screen and (max-width: 992px) {
-  .nfl-games-container .selectors {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-      flex-direction: column;
-  }
-  .tabs {
-      margin-bottom: 40px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-  }
-  .tabs button {
-      width: 33.3%;
-  }
-  }
-
-  @media screen and (max-width: 480px) {
-    .nfl-games-container .selectors {
-        width: 80%;
-        margin: 0 auto;
-    }
-    .main_dot {
-      display: block;
-  }
-      .schedule_checkout .col-3 {
-          width: 100% !important;
-      }
-      .main_dot img {
-          margin-bottom: 20px;
-      }
-  }
+@keyframes blinkRed {
+  0%, 100% { background-color: #E32528 !important; }
+  50% { background-color: rgba(227, 37, 40, 0.5) !important; }
+}

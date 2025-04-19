@@ -12,16 +12,26 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
     const [scheduleData, setScheduleData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
     const fetchScheduleData = useCallback(async () => {
-        if (currentSport !== 'NBA') return;
-        
         try {
             setLoading(true);
             setError(null);
 
-            const formattedDate = format(selectedDate, 'yyyy-MM-dd');     
-            const data = await api.getNbaScheduleData(formattedDate);
-        const groupedGames = {};
+            const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+            let data;
+            if (currentSport === 'NBA') {
+                data = await api.getNbaScheduleData(formattedDate);
+            } else if (currentSport === 'NHL') {
+                data = await api.getNhlScheduleData(formattedDate);
+            } else if (currentSport === 'MLB') {
+                data = await api.getMlbScheduleData(formattedDate);
+            } else {
+                setLoading(false);
+                return; 
+            }
+            
+            const groupedGames = {};
             if (Array.isArray(data)) {
                 data.forEach(game => {
                     const dateKey = game.date; 
@@ -37,12 +47,13 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
             
             setScheduleData(groupedGames);
         } catch (err) {
-            console.error("Error fetching schedule data:", err);
-            setError("Failed to load schedule data. Please try again later.");
+            console.error(`Error fetching ${currentSport} schedule data:`, err);
+            setError(`Failed to load ${currentSport} schedule data. Please try again later.`);
         } finally {
             setLoading(false);
         }
     }, [selectedDate, currentSport]);
+    
     useEffect(() => {
         fetchScheduleData();
     }, [fetchScheduleData]);
@@ -61,6 +72,7 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
             setSelectedDate(date);
         }
     };
+    
     const isEmpty = (value) => {
         return value === null || 
                value === undefined || 
@@ -68,6 +80,7 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
                value === "" || 
                value === "-";
     };
+    
     const getVisibleColumns = (games) => {
         const columns = {
             result: false,
@@ -134,7 +147,7 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
 
     return (
         <>
-            <h2 className="injury-title">NBA Schedule</h2>
+            <h2 className="injury-title">{currentSport} Schedule</h2>
             
             <section className='backgroung_image'>
                 <div className='contanier'>
@@ -240,7 +253,7 @@ const Schedule = ({ currentSport, selectedDate, setSelectedDate }) => {
                             })
                         ) : (
                             <div className="col-12 text-center py-5">
-                                <p>No games scheduled for {format(selectedDate, 'MMMM dd, yyyy')}.</p>
+                                <p>No {currentSport} games scheduled for {format(selectedDate, 'MMMM dd, yyyy')}.</p>
                             </div>
                         )}
                     </div>
