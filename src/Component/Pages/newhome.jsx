@@ -748,7 +748,7 @@ const Games = () => {
                                   game.awayOpen
                                 )}`}
                               >
-                                {game.awayOpen || "-"}
+                                {game.awayOpen || "0"}
                               </div>
                             </td>
                             <td>
@@ -760,7 +760,7 @@ const Games = () => {
                                   game.homeBestOdds
                                 )}`}
                               >
-                                {game.homeBestOdds || "-"}
+                                {game.homeBestOdds || "0"}
                               </div>
                               <div
                                 className={`odd_${
@@ -770,7 +770,7 @@ const Games = () => {
                                   game.awayBestOdds
                                 )}`}
                               >
-                                {game.awayBestOdds || "-"}
+                                {game.awayBestOdds || "0"}
                               </div>
                             </td>
                             {Object.keys(BOOKMAKER_LOGOS).map(
@@ -790,7 +790,7 @@ const Games = () => {
                                         game[awayOddsKey]
                                       )}`}
                                     >
-                                      {game[awayOddsKey] || "-"}
+                                      {game[awayOddsKey] || "0"}
                                     </div>
                                     <div
                                       className={`odd ${
@@ -802,7 +802,7 @@ const Games = () => {
                                         game[homeOddsKey]
                                       )}`}
                                     >
-                                      {game[homeOddsKey] || "-"}
+                                      {game[homeOddsKey] || "0"}
                                     </div>
                                   </td>
                                 );
