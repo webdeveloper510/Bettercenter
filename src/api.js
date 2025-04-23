@@ -268,6 +268,19 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
+     getadmindata : async (accessToken) => {
+        try {
+          const response = await axios.get(`${API_URL}/get-admin-data`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          return response.data;
+        } catch (error) {
+          console.error("Error fetching websites:", error);
+          return { status: "error", data: [] };
+        }
+      },
 };
 
 export default api;
