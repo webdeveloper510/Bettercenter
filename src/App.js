@@ -65,12 +65,24 @@ function Layout() {
               <Ourteam />
             </ProtectedRoute>
           } />
+          
+          {/* Updated routes with parameters */}
           <Route path="/allpicks" element={
             <ProtectedRoute>
               <AllPicks />
             </ProtectedRoute>
           } />
+          <Route path="/allpicks/:adminId" element={
+            <ProtectedRoute>
+              <AllPicks />
+            </ProtectedRoute>
+          } />
           <Route path="/pickdetail" element={
+            <ProtectedRoute>
+              <Pickdetail />
+            </ProtectedRoute>
+          } />
+          <Route path="/pickdetail/:adminId/:pickId" element={
             <ProtectedRoute>
               <Pickdetail />
             </ProtectedRoute>
@@ -81,19 +93,6 @@ function Layout() {
             </ProtectedRoute>
           } />
           
-          <Route path="/signin" element={
-            <ProtectedRoute>
-              <Signin />
-            </ProtectedRoute>
-          } />
-
-            <Route path="/signup" element={
-            <ProtectedRoute>
-              <Signup />
-            </ProtectedRoute>
-          } />
-          
-
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/checkout" element={<Checkout />} />
@@ -106,7 +105,6 @@ function Layout() {
           <Route path="/gameteamtab" element={<MatchesPage />} />
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
-
 
           {/* Redirect to home for any unmatched routes */}
           <Route path="*" element={<Navigate to="/" replace />} />

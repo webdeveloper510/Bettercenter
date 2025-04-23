@@ -268,12 +268,9 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
-     getadmindata : async (accessToken) => {
+     getadmindata : async () => {
         try {
-          const response = await axios.get(`${API_URL}/get-admin-data`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
+          const response = await axios.get(`${API_URL}/admin-user`, {
           })
           return response.data;
         } catch (error) {
@@ -281,6 +278,26 @@ const api = {
           return { status: "error", data: [] };
         }
       },
+      getAdminPicks: async (adminId) => {
+        try {
+
+            const formData = new FormData();
+            formData.append('id', adminId);
+        
+            const response = await apiClient.post('/admin-user-picks/', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Admin picks fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch admin picks" };
+        }
+    },
+
+
 };
 
 export default api;

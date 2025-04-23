@@ -5,19 +5,30 @@ import { FaShoppingBag } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { logout } from "../api";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    setIsLoggedIn(!!token);
+    const checkLoginStatus = () => {
+      const token = localStorage.getItem("accessToken");
+      setIsLoggedIn(!!token);
+    }; 
+    checkLoginStatus();
+    window.addEventListener('storage', checkLoginStatus);  
+    return () => {
+      window.removeEventListener('storage', checkLoginStatus);
+    };
   }, [location]);
 
   const handleLogout = () => {
     logout();
+    localStorage.removeItem("accessToken"); 
+    setIsLoggedIn(false);
+    toast.success("Logged out successfully!");
+    navigate("/"); 
   };
 
   return (
@@ -25,12 +36,10 @@ const Header = () => {
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container-fluid">
           {/* Logo */}
-          {/* <a className="navbar-brand" href="#">
-            <img src={logo1} alt="Logo" width={150} height={50} />
-          </a> */}
           <Link className="navbar-brand" to="/">
-          <img src={logo1} alt="Logo" width={150} height={50} />
-        </Link>
+            <img src={logo1} alt="Logo" width={150} height={50} />
+          </Link>
+          
           {/* Mobile Menu Toggle Button */}
           <button
             className="navbar-toggler"
@@ -63,14 +72,6 @@ const Header = () => {
                   TEAM
                 </Link>
               </li>
-              {/* <li className="nav-item">
-                <Link
-                  className={`nav-link ${location.pathname === "/allpicks" ? "active-link" : ""}`}
-                  to="/allpicks"
-                >
-                  FREE PICKS
-                </Link> 
-              </li> */}
               <li className="nav-item">
                 <Link
                   className={`nav-link ${location.pathname === "/blog" ? "active-link" : ""}`}
@@ -87,8 +88,8 @@ const Header = () => {
                   NEWS
                 </Link>
               </li>
-
             </ul>
+            
             {/* Right Section: Cart, Login/Logout, and CTA Button */}
             <div className="header-content">
               {/* Cart Icon with Badge */}
@@ -97,11 +98,13 @@ const Header = () => {
                 <span className="cart-badge">2</span>
               </div>
 
-              {/* Login/Logout */}
+              {/* Login/Logout Toggle */}
               <span className="login-text">
-             
+                {isLoggedIn ? (
+                  <a href="#" onClick={handleLogout} className="login-link">LOGOUT</a>
+                ) : (
                   <Link to="/signin" className="login-link">LOGIN</Link>
-            
+                )}
               </span>
 
               {/* Divider */}
