@@ -81,6 +81,19 @@ function Layout() {
             </ProtectedRoute>
           } />
           
+          <Route path="/signin" element={
+            <ProtectedRoute>
+              <Signin />
+            </ProtectedRoute>
+          } />
+
+            <Route path="/signup" element={
+            <ProtectedRoute>
+              <Signup />
+            </ProtectedRoute>
+          } />
+          
+
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/checkout" element={<Checkout />} />

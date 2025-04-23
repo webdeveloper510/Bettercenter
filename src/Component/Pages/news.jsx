@@ -52,7 +52,7 @@ const News = () => {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div>
+            <div className="outer_top_img">
                 <img
                   src={newsData.image_url}
                   className="macbook my-3"
@@ -60,6 +60,8 @@ const News = () => {
                   srcset=""
                   width={900}
                 />
+                </div>
+                <div className="outer_content">
                 <p
                   className="pt-5 started_page"
                   dangerouslySetInnerHTML={{ __html: newsData.news_text }}

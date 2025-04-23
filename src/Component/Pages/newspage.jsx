@@ -59,8 +59,10 @@ const Newspage = () => {
                                 {newsData.length !== 0 &&
                                     newsData.map((res, key) => (
                                         <div className="main_dot" key={key}>
-
-                                            <img src={res.image_url} alt="" width={250} height={180} />
+                                                           
+                                           <div className="out_newdetail">              
+                                                 <img src={res.image_url} alt="" width={250} height={180} />
+                                            </div>     
                                             <div className="sub_headingline_one">
                                                 <h2 className="sub_heading" onClick={()=>navigate('/news', { state:{newsIndex: key}})}>
                                                     <p className="sub_heading_link">

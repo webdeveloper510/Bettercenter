@@ -197,3 +197,37 @@ span.started_page {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+
+@media screen and (max-width: 991px) {
+.outer_top_img img.macbook.my-3 {
+    width: 100% !important;
+    margin-left: 0px;
+}}
+@media screen and (max-width: 767px) {
+.main_dot {
+    display: block;
+    gap: 23px;
+    margin-top: 30px;
+}
+.out_newdetail {
+    width: 100%;
+    float: left;
+    margin-bottom: 10px;
+}
+.out_newdetail img {
+    width: auto;
+}
+.sub_headingline_one {
+    padding-left: 0px;
+    padding-top: 10px !important;
+    float: left;
+}
+.started_page {
+    width: 100%;
+    margin: auto;
+}
+.started_page ul {
+    padding-left: 0px;
+}
+}
