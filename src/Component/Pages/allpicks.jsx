@@ -59,7 +59,8 @@ const AllPicks = () => {
             {membershipPlans.map((plan) => (
               <Col key={plan.id} md={4} sm={6}>
                 <Card className="membership-card">
-                  <Link to={`/pickdetail/$/${plan.id}`}>
+                <Link to="/pickdetail" state={{ pickId: plan.id }}>
+
                     <Card.Img
                       variant="top"
                       src={plan.file_url || "/path-to-default-image.png"}

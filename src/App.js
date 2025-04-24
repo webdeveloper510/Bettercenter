@@ -14,7 +14,7 @@ import Pickdetail from "./Component/Pages/pickdetail";
 import AllPicks from "./Component/Pages/allpicks";
 import Signin from "./Component/Pages/signin";
 import Header from "./Component/header";
-import Checkout from "./Component/Pages/checkout";
+import CheckoutNew from "./Component/Pages/Checkout";
 import Newspage from "./Component/Pages/newspage"
 import News from "./Component/Pages/news";
 import NFLGames from "./Component/Pages/newhome";
@@ -24,6 +24,7 @@ import Futures from "./Component/Pages/futures";
 import MatchesPage from "./Component/Pages/gameteamtab";
 import BlogList from "./Component/Pages/blog";
 import BlogDetail from "./Component/Pages/blogdetail";
+import Cart from "./Component/Pages/cart";
 
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
@@ -82,22 +83,22 @@ function Layout() {
               <Pickdetail />
             </ProtectedRoute>
           } />
-          <Route path="/pickdetail/:adminId/:pickId" element={
+          <Route path="/pickdetail" element={
             <ProtectedRoute>
               <Pickdetail />
             </ProtectedRoute>
           } />
-          <Route path="/checkout" element={
+          {/* <Route path="/checkout" element={
             <ProtectedRoute>
               <Checkout />
             </ProtectedRoute>
-          } />
-          
+          } /> */}
+              <Route path="/cart" element={<Cart />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
-          <Route path="/checkout" element={<Checkout />} />
+          {/* <Route path="/checkout" element={<Checkout />} /> */}
           <Route path="/newhome" element={<NFLGames />} />
-          
+       <Route path= "/Checkout" element={<CheckoutNew />} />
           <Route path="/newspage" element={<Newspage />} />
           <Route path="/news" element={<News />} />
           <Route path="/schedule" element={<Schedule />} />

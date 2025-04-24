@@ -6,11 +6,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { logout } from "../api";
 import { toast } from "react-toastify";
-
+import { useSelector } from "react-redux";
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const cartQuantity = useSelector(state => state.cart.totalQuantity);
+  console.log("🚀 ~ Header ~ cartQuantity:", cartQuantity)
   useEffect(() => {
     const checkLoginStatus = () => {
       const token = localStorage.getItem("accessToken");
@@ -22,7 +24,10 @@ const Header = () => {
       window.removeEventListener('storage', checkLoginStatus);
     };
   }, [location]);
-
+  const handleCartClick = () => {
+    navigate('/cart');
+  };
+  
   const handleLogout = () => {
     logout();
     localStorage.removeItem("accessToken"); 
@@ -93,10 +98,10 @@ const Header = () => {
             {/* Right Section: Cart, Login/Logout, and CTA Button */}
             <div className="header-content">
               {/* Cart Icon with Badge */}
-              <div className="cart-container">
-                <FaShoppingBag className="cart-icon" />
-                <span className="cart-badge">2</span>
-              </div>
+              <div className="cart-container" onClick={handleCartClick} style={{ cursor: 'pointer' }}>
+          <FaShoppingBag className="cart-icon" />
+          <span className="cart-badge">{cartQuantity > 0 ? cartQuantity : ''}</span>
+        </div>
 
               {/* Login/Logout Toggle */}
               <span className="login-text">

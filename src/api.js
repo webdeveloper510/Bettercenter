@@ -92,8 +92,7 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
-    getMlbSpreadData: async (date
-    ) => {
+    getMlbSpreadData: async (date) => {
         try {
             const formattedDate = date || '';
             const response = await axios.get(`${API_URL}/mlb-spread-data/?date=${formattedDate}`, {
@@ -268,19 +267,18 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
-     getadmindata : async () => {
+    getadmindata: async () => {
         try {
-          const response = await axios.get(`${API_URL}/admin-user`, {
-          })
-          return response.data;
+            const response = await axios.get(`${API_URL}/admin-user`, {
+            })
+            return response.data;
         } catch (error) {
-          console.error("Error fetching websites:", error);
-          return { status: "error", data: [] };
+            console.error("Error fetching websites:", error);
+            return { status: "error", data: [] };
         }
-      },
-      getAdminPicks: async (adminId) => {
+    },
+    getAdminPicks: async (adminId) => {
         try {
-
             const formData = new FormData();
             formData.append('id', adminId);
         
@@ -296,7 +294,64 @@ const api = {
             throw error.response ? error.response.data : { message: "Failed to fetch admin picks" };
         }
     },
+    
+    getPickDetailsAuth: async (pickId) => {
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                throw new Error('User not authenticated');
+            }
 
+            const formData = new FormData();
+            formData.append('id', pickId);
+            formData.append('token', token);
+            
+            const response = await apiClient.post('/singlepick-with-login/', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Pick details fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch pick details" };
+        }
+    },
+    getPickDetailsPublic: async (pickId) => {
+        try {
+            const formData = new FormData();
+            formData.append('id', pickId);
+            
+            const response = await axios.post(`${API_URL}/singlepick-without-login/`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Pick details fetch error:", error);
+            throw error.response ? error.response.data : { message: "Failed to fetch pick details" };
+        }
+    },
+  
+    getPickDetails: async (pickId) => {
+        try {
+            const token = getAccessToken();
+            
+            if (token) {
+            
+                return await api.getPickDetailsAuth(pickId);
+            } else {
+        
+                return await api.getPickDetailsPublic(pickId);
+            }
+        } catch (error) {
+            console.error("Pick details fetch error:", error);
+            throw error;
+        }
+    },
 
 };
 

@@ -1,0 +1,175 @@
+
+
+.checkout-container {
+    padding: 2rem;
+  }
+  
+  .checkout-title {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  
+  /* Checkout Cards */
+  .checkout-card {
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: none;
+  }
+  
+  .checkout-card.active {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+  
+  .checkout-card.completed .step-title::after {
+    content: "✓";
+    color: green;
+    margin-left: 10px;
+  }
+  
+  .step-title {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .step-content {
+    padding: 0.5rem 0;
+  }
+  
+  /* Order Summary Card */
+  .order-summary-card {
+    background-color: white;
+    border-radius: 8px;
+    border: none;
+    position: sticky;
+    top: 20px;
+  }
+  
+  .summary-title {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .order-items {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .order-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .item-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+  
+  .item-details {
+    flex-grow: 1;
+  }
+  
+  .item-details h6 {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+  
+  .item-price {
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+  
+  .summary-totals {
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+  
+  .total-amount {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #eee;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  /* Buttons */
+  .continue-btn {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .back-btn {
+    background-color: transparent;
+    border: 1px solid #6c757d;
+    color: #6c757d;
+  }
+  
+  .place-order-btn {
+    background-color: #28a745;
+    border-color: #28a745;
+    font-weight: bold;
+  }
+  
+  /* Review Sections */
+  .review-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .review-section h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .paypal-info {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Form Styling */
+  .form-label {
+    font-weight: 500;
+  }
+  
+  .form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+  }
+  
+  /* Responsiveness */
+  @media (max-width: 992px) {
+    .order-summary-card {
+      margin-top: 2rem;
+    }
+  }
+  
+  .main {
+    background-color: #000;
+    min-height: 100vh;
+    padding: 20px 0;
+  }
+  .edit-link {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 10px;
+  }
+  
+  .edit-link:hover {
+    color: #0056b3;
+  }
+  
+  .completed-step-content {
+    padding: 10px 0;
+  }
