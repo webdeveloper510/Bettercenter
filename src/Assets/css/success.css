@@ -1,0 +1,43 @@
+/* Order Confirmation Styles */
+.order-confirmation-card {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: none;
+  }
+  
+  .confirmation-icon {
+    margin: 0 auto;
+    height: 100px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(40, 167, 69, 0.1);
+    border-radius: 50%;
+  }
+  
+  .order-details-card {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+  }
+  
+  .order-details-card .card-body {
+    padding: 1.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .order-confirmation-card {
+      margin: 0 15px;
+    }
+    
+    .confirmation-icon {
+      height: 80px;
+      width: 80px;
+    }
+    
+    .confirmation-icon svg {
+      width: 50px;
+      height: 50px;
+    }
+  }

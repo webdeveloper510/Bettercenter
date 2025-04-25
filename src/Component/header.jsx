@@ -12,7 +12,6 @@ const Header = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const cartQuantity = useSelector(state => state.cart.totalQuantity);
-  console.log("🚀 ~ Header ~ cartQuantity:", cartQuantity)
   useEffect(() => {
     const checkLoginStatus = () => {
       const token = localStorage.getItem("accessToken");
@@ -94,10 +93,9 @@ const Header = () => {
                 </Link>
               </li>
             </ul>
-            
-            {/* Right Section: Cart, Login/Logout, and CTA Button */}
+    
             <div className="header-content">
-              {/* Cart Icon with Badge */}
+  
               <div className="cart-container" onClick={handleCartClick} style={{ cursor: 'pointer' }}>
           <FaShoppingBag className="cart-icon" />
           <span className="cart-badge">{cartQuantity > 0 ? cartQuantity : ''}</span>

@@ -29,7 +29,7 @@ export const logout = () => {
 const token = getAccessToken();
 if (token) {
     apiClient.defaults.headers.Authorization = `Bearer ${token}`;
-    console.log("Token loaded from localStorage on app init");
+ 
 }
 
 const api = {
@@ -43,7 +43,7 @@ const api = {
             return response.data;
         } catch (error) {
             console.error("Registration error:", error);
-            throw error.response ? error.response.data : { message: "Registration failed" };
+            return error.response ? error.response.data : { message: "Registration failed" };
         }
     },
     getMoneyData: async (date) => {
@@ -55,7 +55,7 @@ const api = {
             return response.data;
         } catch (error) {
             console.error("Money data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch money data" };
+            return error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
     getSpreadData: async (date) => {
@@ -66,7 +66,7 @@ const api = {
             });
             return response.data;
         } catch (error) {
-            throw error.response ? error.response.data : { message: "Failed to fetch spread data" };
+        return error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
     getOverUnderData: async (date) => {
@@ -77,7 +77,7 @@ const api = {
             });
             return response.data;
         } catch (error) {
-            throw error.response ? error.response.data : { message: "Failed to fetch over/under data" };
+            return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
     },
     getMlbMoneyData: async (date) => {
@@ -89,7 +89,7 @@ const api = {
             return response.data;
         } catch (error) {
             console.error("Money data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch money data" };
+            return error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
     getMlbSpreadData: async (date) => {
@@ -100,7 +100,7 @@ const api = {
             });
             return response.data;
         } catch (error) {
-            throw error.response ? error.response.data : { message: "Failed to fetch spread data" };
+            return error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
     getMlbOverUnderData: async (date) => {
@@ -111,7 +111,7 @@ const api = {
             });
             return response.data;
         } catch (error) {
-            throw error.response ? error.response.data : { message: "Failed to fetch over/under data" };
+            return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
     },
     getNhlMoneyData: async (date) => {
@@ -123,7 +123,7 @@ const api = {
             return response.data;
         } catch (error) {
             console.error("Money data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch money data" };
+            return error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
     getNhlSpreadData: async (date) => {
@@ -134,7 +134,7 @@ const api = {
             });
             return response.data;
         } catch (error) {
-            throw error.response ? error.response.data : { message: "Failed to fetch spread data" };
+            return error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
     getNhlOverUnderData: async (date) => {
@@ -145,7 +145,7 @@ const api = {
             });
             return response.data;
         } catch (error) {
-            throw error.response ? error.response.data : { message: "Failed to fetch over/under data" };
+            return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
     },
     getNewsData: async () => {
@@ -156,7 +156,7 @@ const api = {
             return response.data;
         } catch (error) {
             console.error("News data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+            return error.response ? error.response.data : { message: "Failed to fetch news data" };
         }
     },
     getNbaTeamsData: async () => {
@@ -165,12 +165,12 @@ const api = {
                 headers: { 'Content-Type': 'application/json' } 
         
             });
-            console.log("🚀 ~ getNbaTeamsData: ~ response:", response)
+          
             return response.data;
           
         } catch (error) {
             console.error("News data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+            return error.response ? error.response.data : { message: "Failed to fetch news data" };
         }
     },
     getNhlTeamsData: async () => {
@@ -181,7 +181,7 @@ const api = {
             return response.data;
         } catch (error) {
             console.error("News data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+            return error.response ? error.response.data : { message: "Failed to fetch news data" };
         }
     },
     getMlbteamsData: async () => {
@@ -192,7 +192,7 @@ const api = {
             return response.data;
         } catch (error) {
             console.error("News data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+            return error.response ? error.response.data : { message: "Failed to fetch news data" };
         }
     },
     getNbaInjuriesData: async () => {
@@ -203,7 +203,7 @@ const api = {
             return response.data.data;
         } catch (error) {
             console.error("News data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+            return error.response ? error.response.data : { message: "Failed to fetch news data" };
         }
     },
     getMlbInjuriesData: async () => {
@@ -214,7 +214,7 @@ const api = {
             return response.data.data;
         } catch (error) {
             console.error("News data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+            return error.response ? error.response.data : { message: "Failed to fetch news data" };
         }
     },
     getNhlInjuriesData: async () => {
@@ -225,7 +225,7 @@ const api = {
             return response.data.data;
         } catch (error) {
             console.error("News data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch news data" };
+            return error.response ? error.response.data : { message: "Failed to fetch news data" };
         }
     },
     getNbaScheduleData: async (date) => {
@@ -234,11 +234,11 @@ const api = {
             const response = await axios.get(`${API_URL}/nba-schedule-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
-            console.log("Schedule data fetched:", response.data);
+       
             return response.data.data;
         } catch (error) {
             console.error("Schedule data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch schedule data" };
+            return error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
     getNhlScheduleData: async (date) => {
@@ -247,11 +247,11 @@ const api = {
             const response = await axios.get(`${API_URL}/nhl-schedule-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
-            console.log("Schedule data fetched:", response.data);
+          
             return response.data.data;
         } catch (error) {
             console.error("Schedule data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch schedule data" };
+            return error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
     getMlbScheduleData: async (date) => {
@@ -260,11 +260,11 @@ const api = {
             const response = await axios.get(`${API_URL}/mlb-schedule-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
-            console.log("Schedule data fetched:", response.data);
+        
             return response.data.data;
         } catch (error) {
             console.error("Schedule data fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch schedule data" };
+            return error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
     getadmindata: async () => {
@@ -279,60 +279,56 @@ const api = {
     },
     getAdminPicks: async (adminId) => {
         try {
-            const formData = new FormData();
-            formData.append('id', adminId);
-        
-            const response = await apiClient.post('/admin-user-picks/', formData, {
+            const response = await apiClient.post('/admin-user-picks/', {
+                id: adminId
+            }, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 }
             });
-            
+    
             return response.data;
         } catch (error) {
             console.error("Admin picks fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch admin picks" };
+            return error.response ? error.response.data : { message: "Failed to fetch admin picks" };
         }
     },
+    
     
     getPickDetailsAuth: async (pickId) => {
         try {
             const token = getAccessToken();
             if (!token) {
-                throw new Error('User not authenticated');
+                return new Error('User not authenticated');
             }
-
-            const formData = new FormData();
-            formData.append('id', pickId);
-            formData.append('token', token);
-            
-            const response = await apiClient.post('/singlepick-with-login/', formData, {
+            const response = await apiClient.post('/singlepick-with-login/', {
+                     id: pickId,
+            }, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json',
                 }
             });
             
             return response.data;
         } catch (error) {
             console.error("Pick details fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch pick details" };
+            return error.response ? error.response.data : { message: "Failed to fetch pick details" };
         }
     },
     getPickDetailsPublic: async (pickId) => {
         try {
-            const formData = new FormData();
-            formData.append('id', pickId);
-            
-            const response = await axios.post(`${API_URL}/singlepick-without-login/`, formData, {
+            const response = await axios.post(`${API_URL}/singlepick-without-login/`,{
+                id: pickId
+            } ,{
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json',
                 }
             });
             
             return response.data;
         } catch (error) {
             console.error("Pick details fetch error:", error);
-            throw error.response ? error.response.data : { message: "Failed to fetch pick details" };
+            return error.response ? error.response.data : { message: "Failed to fetch pick details" };
         }
     },
   
@@ -349,10 +345,111 @@ const api = {
             }
         } catch (error) {
             console.error("Pick details fetch error:", error);
-            throw error;
+            return error;
+        }
+    },
+    placeOrderAuth: async (orderData) => {
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                return new Error('User not authenticated');
+            }
+            
+            const response = await apiClient.post('/create-order-with-login/', {
+                ...orderData,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Order placement error:", error);
+            return error.response ? error.response.data : { message: "Failed to place order" };
         }
     },
 
+    placeOrderPublic: async (orderData) => {
+        try {
+            const response = await axios.post(`${API_URL}/create-order-without-login/`, orderData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Order placement error:", error);
+            return error.response ? error.response.data : { message: "Failed to place order" };
+        }
+    },
+    placeOrder: async (orderData) => {
+        try {
+            const token = getAccessToken();
+            
+            if (token) {
+                return await api.placeOrderAuth(orderData);
+            } else {
+
+                return await api.placeOrderPublic(orderData);
+            }
+        } catch (error) {
+            console.error("Order placement error:", error);
+            return error;
+        }
+    },
+    purchaseOrderAuth: async (orderDetails) => {
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                return new Error('User not authenticated');
+            }
+            
+            const response = await apiClient.post('/update-order-with-login/', {
+                ...orderDetails,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Order placement error:", error);
+            return error.response ? error.response.data : { message: "Failed to place order" };
+        }
+    },
+
+    purchaseOrderPublic: async (orderDetails) => {
+        try {
+            const response = await axios.post(`${API_URL}/update-order-without-login/`, orderDetails, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Order placement error:", error);
+            return error.response ? error.response.data : { message: "Failed to place order" };
+        }
+    },
+    purchaseOrder: async (orderDetails) => {
+        try {
+            const token = getAccessToken();
+            
+            if (token) {
+                return await api.purchaseOrderAuth(orderDetails);
+            } else {
+
+                return await api.purchaseOrderPublic(orderDetails);
+            }
+        } catch (error) {
+            console.error("Order placement error:", error);
+            return error;
+        }
+    },
 };
 
 export default api;

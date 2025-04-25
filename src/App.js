@@ -25,6 +25,7 @@ import MatchesPage from "./Component/Pages/gameteamtab";
 import BlogList from "./Component/Pages/blog";
 import BlogDetail from "./Component/Pages/blogdetail";
 import Cart from "./Component/Pages/cart";
+import OrderConfirmation from "./Component/Pages/success";
 
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
@@ -94,6 +95,7 @@ function Layout() {
             </ProtectedRoute>
           } /> */}
               <Route path="/cart" element={<Cart />} />
+              <Route path ="order-confirmation" element={<OrderConfirmation />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           {/* <Route path="/checkout" element={<Checkout />} /> */}

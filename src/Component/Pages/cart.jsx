@@ -19,7 +19,7 @@ const Cart = () => {
   };
 
   const handleContinueShopping = () => {
-    navigate("/"); // Navigate to home or picks list page
+    navigate("/"); 
   };
 
   const handleCheckout = () => {

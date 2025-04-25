@@ -12,11 +12,9 @@ import { toast } from "react-toastify";
 const Pickdetail = () => {
   const location = useLocation();
   const id = location.state?.pickId;
-  console.log("🚀 ~ Pickdetail ~ id:", id)
   const navigate = useNavigate();
   const dispatch = useDispatch(); 
   const [pickDetail, setPickDetail] = useState(null);
-  console.log("🚀 ~ Pickdetail ~ pickDetail:", pickDetail)
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -53,20 +51,12 @@ const Pickdetail = () => {
         price: pickDetail.price,
         image: pickDetail.file_url || require("../../Assets/images/all1.png"),
       };
-  
-      console.log("Item being added to cart:", {
-        item,
-        quantity,
-      });
-  
       dispatch(addToCart({
         item,
         quantity
       }));
     
       toast.success("Item added to cart successfully!");
-      
-      // Navigate to checkout page after adding item to cart
       navigate("/checkout");
     }
   };

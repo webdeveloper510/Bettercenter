@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import { 
@@ -9,8 +9,11 @@ import {
   useElements,
   CardElement
 } from "@stripe/react-stripe-js";
+import Select from "react-select";
+import { Country, State } from "country-state-city";
 import "../../Assets/css/Checkout.css";
 import { toast } from "react-toastify";
+import api from "../../api";
 const stripePromise = loadStripe("pk_test_51Ln28UHxWF1dGmnD9lu1nHP1J02utFX75NY1C5tpuRbu4kKTBdXEQmQEjRSomEufNGnvAisS5DcYmdwKHNYtOHaY008Mu2hsjT");
 
 const CardPaymentForm = ({ handlePaymentSuccess }) => {
@@ -56,12 +59,11 @@ const CardPaymentForm = ({ handlePaymentSuccess }) => {
       setLoading(false);
       return;
     }
-    
-    // In a real implementation, you would send the payment method ID to your server
-    // and create a PaymentIntent. Here we're simulating a successful payment.
+
     console.log('Payment method created:', paymentMethod.id);
+  
+    handlePaymentSuccess(paymentMethod.id);
     setLoading(false);
-    handlePaymentSuccess();
   };
   
   return (
@@ -91,25 +93,23 @@ const CardPaymentForm = ({ handlePaymentSuccess }) => {
 };
 
 const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
-  // Country options
-  const countries = [
-    { code: "US", name: "United States" },
-    { code: "CA", name: "Canada" },
-    { code: "UK", name: "United Kingdom" },
-    { code: "AU", name: "Australia" },
-    // Add more countries as needed
-  ];
 
-  // State options (US states as example)
-  const states = [
-    { code: "AL", name: "Alabama" },
-    { code: "AK", name: "Alaska" },
-    { code: "AZ", name: "Arizona" },
-    { code: "AR", name: "Arkansas" },
-    { code: "CA", name: "California" },
-    // Add more states as needed
-  ];
-
+  const countries = useMemo(() => {
+    return Country.getAllCountries().map(country => ({
+      value: country.isoCode,
+      label: country.name
+    }));
+  }, []);
+  
+  const states = useMemo(() => {
+    if (!billingDetails.country) return [];
+    
+    return State.getStatesOfCountry(billingDetails.country).map(state => ({
+      value: state.isoCode,
+      label: state.name
+    }));
+  }, [billingDetails.country]);
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBillingDetails({
@@ -117,6 +117,24 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
       [name]: value
     });
   };
+  
+  const handleSelectChange = (selectedOption, { name }) => {
+    if (name === "country") {
+      setBillingDetails({
+        ...billingDetails,
+        [name]: selectedOption.value,
+        state: "" 
+      });
+    } else {
+      setBillingDetails({
+        ...billingDetails,
+        [name]: selectedOption.value
+      });
+    }
+  };
+
+  const selectedCountry = countries.find(country => country.value === billingDetails.country);
+  const selectedState = states.find(state => state.value === billingDetails.state);
 
   return (
     <div className="billing-address-form mb-4">
@@ -173,19 +191,15 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
         <Col md={6}>
           <Form.Group className="mb-3">
             <Form.Label>Country</Form.Label>
-            <Form.Select
+            <Select
               name="country"
-              value={billingDetails.country}
-              onChange={handleInputChange}
+              options={countries}
+              value={selectedCountry}
+              onChange={(option) => handleSelectChange(option, { name: "country" })}
+              placeholder="Select Country"
+              className="country-select"
               required
-            >
-              <option value="">Select Country</option>
-              {countries.map(country => (
-                <option key={country.code} value={country.code}>
-                  {country.name}
-                </option>
-              ))}
-            </Form.Select>
+            />
           </Form.Group>
         </Col>
         <Col md={6}>
@@ -218,19 +232,26 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
         <Col md={6}>
           <Form.Group className="mb-3">
             <Form.Label>State/Province</Form.Label>
-            <Form.Select
-              name="state"
-              value={billingDetails.state}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Select State</option>
-              {states.map(state => (
-                <option key={state.code} value={state.code}>
-                  {state.name}
-                </option>
-              ))}
-            </Form.Select>
+            {states.length > 0 ? (
+              <Select
+                name="state"
+                options={states}
+                value={selectedState}
+                onChange={(option) => handleSelectChange(option, { name: "state" })}
+                placeholder="Select State/Province"
+                className="state-select"
+                required
+              />
+            ) : (
+              <Form.Control
+                type="text"
+                name="state"
+                value={billingDetails.state}
+                onChange={handleInputChange}
+                placeholder="Enter state/province"
+                required
+              />
+            )}
           </Form.Group>
         </Col>
       </Row>
@@ -249,79 +270,40 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
   );
 };
 
-const CheckoutNew = () => {
-  const navigate = useNavigate();
-  const cartItems = useSelector((state) => state.cart.items);
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const [activeStep, setActiveStep] = useState(1);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("credit");
+const OrderReview = ({ 
+  cartItems, 
+  total, 
+  email, 
+  phone, 
+  paymentMethod, 
+  billingDetails, 
+  onPlaceOrder, 
+  isProcessing,
+  handlePaymentSuccess,
+  showPaymentOptions
+}) => {
+
+  const countryData = Country.getAllCountries().find(
+    country => country.isoCode === billingDetails.country
+  );
+  
+  const stateData = State.getStatesOfCountry(billingDetails.country).find(
+    state => state.isoCode === billingDetails.state
+  );
+  
+  const countryName = countryData ? countryData.name : billingDetails.country;
+  const stateName = stateData ? stateData.name : billingDetails.state;
+  
   const paypalRef = useRef();
-  const [billingDetails, setBillingDetails] = useState({
-    firstName: "",
-    lastName: "",
-    address1: "",
-    address2: "",
-    country: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    phone: ""
-  });
-  
-  const handleContinue = (step) => {
-    setActiveStep(step + 1);
-  };
-  
-  const handleBack = (step) => {
-    setActiveStep(step - 1);
-  };
-  
-  const isEmailValid = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-  
-  const handlePaymentSuccess = () => {
-    toast.success("Payment successful!");
-    navigate("/order-confirmation");
-  };
-  
-  // Load PayPal SDK
-  useEffect(() => {
-    if (window.paypal) {
-   
-      return;
-    }
-    const clientId =
-    process.env.REACT_APP_PAYPAL_CLIENT_ID || '';
-    console.log("🚀 ~ useEffect ~ clientId:", clientId)
-    const script = document.createElement("script");
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD`;
-    script.async = true;
-    script.onload = () => console.log("PayPal SDK loaded");
-    script.onerror = () => console.error("PayPal SDK failed to load");
 
-    document.body.appendChild(script);
-
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
-  
   useEffect(() => {
     if (
-      paymentMethod !== "paypal" 
-      ||
+      !showPaymentOptions ||
+      paymentMethod !== "paypal" || 
       !window.paypal ||
-    
       !paypalRef.current ||
-      cartItems.length === 0
-       || isProcessing 
+      cartItems.length === 0 ||
+      isProcessing 
     ) {
       return;
     }
@@ -358,8 +340,6 @@ const CheckoutNew = () => {
           },
 
           onApprove: function (data, actions) {
-            setIsProcessing(true);
-          
             return actions.order.capture().then(function (orderData) {
               const transactionId = orderData.id;
               console.log("Transaction completed:", transactionId);
@@ -367,23 +347,284 @@ const CheckoutNew = () => {
                 paypalRef.current.innerHTML = "";
               }
               
-              setIsProcessing(false);
-              handlePaymentSuccess();
+              handlePaymentSuccess(transactionId); 
             });
           },
           
           onError: function (err) {
             console.error("PayPal error", err);
             toast.error("Payment failed. Please try again.");
-            setIsProcessing(false);
           },
         })
         .render(paypalRef.current);
     } catch (error) {
       console.error("Error rendering PayPal buttons:", error);
-
     }
-  }, [paymentMethod, cartItems, total]);
+  }, [showPaymentOptions, paymentMethod, cartItems, total]);
+  
+  return (
+    <div className="order-review">
+      <h5 className="mb-3">Review Your Order</h5>
+      
+      <div className="review-section mb-3">
+        <h6>Contact Information</h6>
+        <p><strong>Email:</strong> {email}</p>
+        <p><strong>Phone:</strong> {phone}</p>
+      </div>
+      
+      <div className="review-section mb-3">
+        <h6>Billing Address</h6>
+        <p>{billingDetails.firstName} {billingDetails.lastName}</p>
+        <p>{billingDetails.address1}</p>
+        {billingDetails.address2 && <p>{billingDetails.address2}</p>}
+        <p>{billingDetails.city}, {stateName} {billingDetails.zipCode}</p>
+        <p>{countryName}</p>
+      </div>
+      
+      <div className="review-section mb-3">
+        <h6>Payment Method</h6>
+        <p>{paymentMethod === "credit" ? "Credit Card" : "PayPal"}</p>
+      </div>
+      
+      <div className="review-section mb-3">
+        <h6>Order Items</h6>
+        {cartItems.map(item => (
+          <div key={item.id} className="d-flex justify-content-between mb-2">
+            <div>
+              <span>{item.title} x {item.quantity}</span>
+            </div>
+            <span>${(item.price * item.quantity).toFixed(2)}</span>
+          </div>
+        ))}
+        <hr />
+        <div className="d-flex justify-content-between">
+          <strong>Total</strong>
+          <strong>${total.toFixed(2)}</strong>
+        </div>
+      </div>
+      
+      {!showPaymentOptions ? (
+        <Button 
+          className="w-100" 
+          onClick={onPlaceOrder}
+          disabled={isProcessing}
+        >
+          {isProcessing ? "Processing..." : "Place Order"}
+        </Button>
+      ) : (
+        <>
+          {paymentMethod === "credit" ? (
+            <Elements stripe={stripePromise}>
+              <CardPaymentForm handlePaymentSuccess={handlePaymentSuccess} />
+            </Elements>
+          ) : (
+            <div className="paypal-container mb-4">
+              <p>Complete your purchase securely with PayPal:</p>
+              <div 
+                ref={paypalRef} 
+                className="paypal-button-container"
+                style={{ minHeight: "150px" }}
+              >
+                {!window.paypal && (
+                  <div className="text-center py-3">
+                    <div
+                      className="spinner-border text-primary"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-2">Loading PayPal...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+const CheckoutNew = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const [activeStep, setActiveStep] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("credit");
+  const [orderId, setOrderId] = useState(null);
+  const [billingDetails, setBillingDetails] = useState({
+    firstName: "",
+    lastName: "",
+    address1: "",
+    address2: "",
+    country: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    phone: ""
+  });
+  
+  const handleContinue = (step) => {
+    setActiveStep(step + 1);
+  };
+  
+  const handleBack = (step) => {
+    setActiveStep(step - 1);
+  };
+  
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  
+  const handlePaymentSuccess = async (transactionId) => {
+    try {
+      setIsProcessing(true);
+  
+      const storedOrderId = localStorage.getItem('currentOrderId');
+  
+      if (!storedOrderId) {
+        toast.error("Order information not found. Please try again.");
+        setIsProcessing(false);
+        return;
+      }
+  
+      const paymentData = {
+        orderId: storedOrderId,
+        transaction_id: transactionId,
+        purchase_status: true
+      };
+  
+      const response = await api.purchaseOrder(paymentData);
+  
+      if (response instanceof Error) {
+        toast.error("Failed to confirm payment. Please contact support.");
+        setIsProcessing(false);
+        return;
+      }
+  
+      if (response.status === 200) {
+        const orderDetails = {
+          orderId: storedOrderId,
+          orderDate: new Date().toISOString(),
+          total: total,
+          items: cartItems
+        };
+  
+        localStorage.removeItem('currentOrderId');
+        navigate("/order-confirmation", { 
+          state: { orderDetails } 
+        });
+      } else {
+        toast.error("Payment confirmation failed. Please try again.");
+      }
+  
+    } catch (error) {
+      console.error('Error completing payment:', error);
+      toast.error("An error occurred during payment confirmation.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+  
+  const prepareOrderData = () => {
+    const countryData = Country.getAllCountries().find(
+      country => country.isoCode === billingDetails.country
+    );
+    
+    const stateData = State.getStatesOfCountry(billingDetails.country).find(
+      state => state.isoCode === billingDetails.state
+    );
+    
+    const countryName = countryData ? countryData.name : billingDetails.country;
+    const stateName = stateData ? stateData.name : billingDetails.state;
+    return {
+      orderInfo: {
+        orderId: `ORD-${Date.now()}`,
+        orderDate: new Date().toISOString(),
+        paymentMethod: paymentMethod,
+        total: total.toFixed(2)
+      },
+      customerInfo: {
+        email: email,
+        phone: phone,
+        firstName: billingDetails.firstName,
+        lastName: billingDetails.lastName
+      },
+      shippingAddress: {
+        addressLine1: billingDetails.address1,
+        addressLine2: billingDetails.address2 || "",
+        city: billingDetails.city,
+        state: stateName,
+        country: countryName,
+        zipCode: billingDetails.zipCode,
+        phone: billingDetails.phone
+      },
+      items: cartItems.map(item => ({
+        productId: item.id,
+        quantity: item.quantity,
+        subtotal: (item.price * item.quantity).toFixed(2)
+      }))
+    };
+  };
+  
+  const handlePlaceOrder = async () => {
+    try {
+      setIsProcessing(true);
+  
+      const orderData = prepareOrderData();
+      const response = await api.placeOrder(orderData);
+  
+      if (response instanceof Error) {
+        toast.error("An unexpected error occurred.");
+        setIsProcessing(false);
+        return;
+      }
+  
+      if (response.status === 200) {
+        // Store the order ID from the response in localStorage
+        const orderId = response.data.orderId;
+        localStorage.setItem('currentOrderId', orderId);
+        setOrderId(orderId);
+        
+        setShowPaymentOptions(true);
+      } else {
+        toast.error("Failed to place order. Please try again.");
+      }
+  
+    } catch (error) {
+      console.error('Error placing order:', error);
+      toast.error("Failed to place order. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+  
+  useEffect(() => {
+    if (window.paypal) {
+      return;
+    }
+    const clientId =
+    process.env.REACT_APP_PAYPAL_CLIENT_ID || '';
+    const script = document.createElement("script");
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD`;
+    script.async = true;
+    script.onload = () => console.log("PayPal SDK loaded");
+    script.onerror = () => console.error("PayPal SDK failed to load");
+
+    document.body.appendChild(script);
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
   
   return (
     <div className="main">
@@ -395,7 +636,7 @@ const CheckoutNew = () => {
             {/* Step 1: Email */}
             <Card className={`checkout-card mb-3 ${activeStep === 1 ? 'active' : ''}`}>
               <Card.Body>
-                <h4 className="step-title"> Your Email</h4>
+                <h4 className="step-title">Your Email</h4>
                 {activeStep === 1 ? (
                   <div className="step-content">
                     <Form.Group className="mb-3">
@@ -467,12 +708,19 @@ const CheckoutNew = () => {
               </Card.Body>
             </Card>
             
-            {/* Step 3: Payment */}
+            {/* Step 3: Billing Address and Payment Method Selection */}
             <Card className={`checkout-card mb-3 ${activeStep === 3 ? 'active' : activeStep > 3 ? 'completed' : ''}`}>
               <Card.Body>
-                <h4 className="step-title">Payment</h4>
+                <h4 className="step-title">Billing & Payment Method</h4>
                 {activeStep === 3 && (
                   <div className="step-content">
+                    {/* Billing Address Form */}
+                    <BillingAddressForm 
+                      billingDetails={billingDetails}
+                      setBillingDetails={setBillingDetails}
+                    />
+                    
+                    {/* Payment Method Selection */}
                     <Form.Group className="mb-3">
                       <Form.Label>Payment Method</Form.Label>
                       <div>
@@ -497,79 +745,73 @@ const CheckoutNew = () => {
                       </div>
                     </Form.Group>
                     
-                    {paymentMethod === "credit" && (
-                      <>
-                        <Elements stripe={stripePromise}>
-                          <CardPaymentForm handlePaymentSuccess={handlePaymentSuccess} />
-                        </Elements>
-                        
-                        {/* Billing Address Form */}
-                        <BillingAddressForm 
-                          billingDetails={billingDetails}
-                          setBillingDetails={setBillingDetails}
-                        />
-                      </>
-                    )}
-                    
-                    {paymentMethod === "paypal" && (
-                      <>
-                        <div className="paypal-container mb-4">
-                          <p>You'll complete your purchase securely with PayPal.</p>
-                          <div 
-                            ref={paypalRef} 
-                            className="paypal-button-container"
-                            style={{ minHeight: "150px" }}
-                          >
-                            {!window.paypal && (
-                              <div className="text-center py-3">
-                                <div
-                                  className="spinner-border text-primary"
-                                  role="status"
-                                >
-                                  <span className="visually-hidden">Loading...</span>
-                                </div>
-                                <p className="mt-2">Loading PayPal...</p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {/* Billing Address Form */}
-                        <BillingAddressForm 
-                          billingDetails={billingDetails}
-                          setBillingDetails={setBillingDetails}
-                        />
-                        
-                        <div className="d-flex justify-content-between mt-3">
-                          <Button 
-                            className="back-btn"
-                            onClick={() => handleBack(3)}
-                            disabled={isProcessing}
-                          >
-                            Back
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                    
-                    {paymentMethod === "credit" && (
-                      <div className="d-flex justify-content-between mt-3">
-                        <Button 
-                          className="back-btn"
-                          onClick={() => handleBack(3)}
-                        >
-                          Back
-                        </Button>
-                      </div>
-                    )}
+                    <div className="d-flex justify-content-between mt-3">
+                      <Button 
+                        className="back-btn"
+                        onClick={() => handleBack(3)}
+                        disabled={isProcessing}
+                      >
+                        Back
+                      </Button>
+                      <Button 
+                        className="continue-btn"
+                        onClick={() => handleContinue(3)}
+                        disabled={
+                          !billingDetails.firstName ||
+                          !billingDetails.lastName ||
+                          !billingDetails.address1 ||
+                          !billingDetails.country ||
+                          !billingDetails.city ||
+                          !billingDetails.state ||
+                          !billingDetails.zipCode ||
+                          !billingDetails.phone
+                        }
+                      >
+                        Continue to Review
+                      </Button>
+                    </div>
                   </div>
                 )}
                 {activeStep > 3 && (
                   <div className="completed-step-content">
                     <p>
-                      {paymentMethod === "credit" ? "Credit Card" : "PayPal"}
+                      {billingDetails.firstName} {billingDetails.lastName} | {paymentMethod === "credit" ? "Credit Card" : "PayPal"}
                       <span onClick={() => setActiveStep(3)} className="edit-link"> Edit</span>
                     </p>
+                  </div>
+                )}
+              </Card.Body>
+            </Card>
+            
+            {/* Step 4: Review and Payment */}
+            <Card className={`checkout-card mb-3 ${activeStep === 4 ? 'active' : ''}`}>
+              <Card.Body>
+                <h4 className="step-title">Review & Payment</h4>
+                {activeStep === 4 && (
+                  <div className="step-content">
+                    <OrderReview 
+                      cartItems={cartItems}
+                      total={total}
+                      email={email}
+                      phone={phone}
+                      paymentMethod={paymentMethod}
+                      billingDetails={billingDetails}
+                      onPlaceOrder={handlePlaceOrder}
+                      isProcessing={isProcessing}
+                      handlePaymentSuccess={handlePaymentSuccess}
+                      showPaymentOptions={showPaymentOptions}
+                    />
+                    {!showPaymentOptions && (
+                      <div className="d-flex justify-content-between mt-3">
+                        <Button 
+                          className="back-btn"
+                          onClick={() => handleBack(4)}
+                          disabled={isProcessing}
+                        >
+                          Back
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
               </Card.Body>
