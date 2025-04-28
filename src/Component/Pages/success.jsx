@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
-import { FaCheckCircle, FaFileAlt, FaShoppingBag } from "react-icons/fa";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
+import { FaCheckCircle, FaShoppingBag } from "react-icons/fa";
 import { clearCart } from "../../cartSlice";
 import "../../Assets/css/success.css";
-import api from "../../api";
 import { toast } from "react-toastify";
 
 const OrderConfirmation = () => {
@@ -13,64 +12,39 @@ const OrderConfirmation = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [orderDetails, setOrderDetails] = useState(location.state?.orderDetails || {
-    orderId: "",
-    orderDate: new Date().toISOString(),
-    total: 0,
-    items: []
-  });
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(location.state?.orderDetails || null);
   useEffect(() => {
     const handleBeforeUnload = () => {
       sessionStorage.setItem('pageIsReloading', 'true');
     };
-    const checkIfReloaded = () => {
-      if (sessionStorage.getItem('pageIsReloading') === 'true') {
-        sessionStorage.removeItem('pageIsReloading');
-        navigate('/page');
-      }
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    checkIfReloaded();
+    window.addEventListener('beforeunload', handleBeforeUnload);  
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [navigate]);
-
+  }, []);
+  
   useEffect(() => {
-    const fetchOrderDetails = async () => {
-      try {
-        if (location.state?.orderDetails) {
-          setLoading(false);
-          return;
-        }
-        const orderId = localStorage.getItem('currentOrderId');
-        
-        if (!orderId) {
-          setError("Order information not found.");
-          setLoading(false);
-          return;
-        }
-      } catch (error) {
-        console.error('Error fetching order details:', error);
-        setError("An error occurred while loading order details.");
-      } finally {
-        setLoading(false);
-        localStorage.removeItem('currentOrderId');
+    const checkIfReloaded = () => {
+      if (sessionStorage.getItem('pageIsReloading') === 'true') {
+        sessionStorage.removeItem('pageIsReloading');
+        navigate('/');
       }
     };
-
-    fetchOrderDetails();
-  }, [location.state]);
+    checkIfReloaded();
+  }, [navigate]);
   
   useEffect(() => {
+    if (!location.state?.orderDetails) {
+      setShouldRedirect(true);
+      return;
+    }
     dispatch(clearCart());
-  }, [dispatch]);
-  
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+    setLoading(false);
+  }, [location.state, dispatch]);
+  if (shouldRedirect) {
+    return <Navigate to="/" replace />;
+  }
 
   if (loading) {
     return (
@@ -79,29 +53,7 @@ const OrderConfirmation = () => {
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
-          <p className="mt-3">Loading order details...</p>
-        </Container>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="main">
-        <Container className="py-5">
-          <Card className="order-confirmation-card">
-            <Card.Body className="text-center p-4">
-              <h3 className="text-danger mb-3">Error</h3>
-              <p>{error}</p>
-              <Button 
-                variant="primary" 
-                className="mt-3"
-                onClick={() => navigate("/")}
-              >
-                Return to Home
-              </Button>
-            </Card.Body>
-          </Card>
+          <p className="mt-3">Finalizing your order...</p>
         </Container>
       </div>
     );

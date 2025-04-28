@@ -29,7 +29,7 @@ const Cart = () => {
 
   return (
     <div className="main">
-      <Container className="cart-container my-5">
+      <Container className="cart-container_new my-5">
         <h2 className="cart-title text-center mb-4">SHOPPING CART</h2>
 
         {cartItems.length === 0 ? (
@@ -47,7 +47,7 @@ const Cart = () => {
             <div className="cart-items-container">
               <Table responsive className="cart-table">
                 <thead>
-                  <tr>
+                  <tr className="heading_table">
                     <th>Image</th>
                     <th>Title</th>
                     <th>Quantity</th>

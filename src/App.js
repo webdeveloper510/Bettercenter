@@ -37,6 +37,16 @@ const ProtectedRoute = ({ children }) => {
   
   return children;
 };
+const OrderProtectedRoute = ({ children }) => {
+  const location = useLocation();
+  
+  // Only allow access if there's order details in the location state
+  if (!location.state?.orderDetails) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return children;
+};
 
 function Layout() {
   const location = useLocation();
@@ -95,7 +105,14 @@ function Layout() {
             </ProtectedRoute>
           } /> */}
               <Route path="/cart" element={<Cart />} />
-              <Route path ="order-confirmation" element={<OrderConfirmation />} />
+              <Route 
+  path="/order-confirmation" 
+  element={
+    <OrderProtectedRoute>
+      <OrderConfirmation />
+    </OrderProtectedRoute>
+  } 
+/>
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           {/* <Route path="/checkout" element={<Checkout />} /> */}

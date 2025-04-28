@@ -12,10 +12,13 @@
   
   /* Checkout Cards */
   .checkout-card {
-    background-color: white;
-    border-radius: 8px;
+   
+  
     margin-bottom: 1rem;
     border: none;
+    background-color: #1B1E3D;
+    color: #fff;
+    border-radius: 15px;
   }
   
   .checkout-card.active {
@@ -29,10 +32,11 @@
   }
   
   .step-title {
-    color: #333;
-    font-weight: 600;
+    color: #0F93EB;
+    font-weight: 700;
     margin-bottom: 1rem;
-  }
+    font-size: 22px;
+}
   
   .step-content {
     padding: 0.5rem 0;
@@ -40,30 +44,35 @@
   
   /* Order Summary Card */
   .order-summary-card {
-    background-color: white;
-    border-radius: 8px;
+    background-color: #1B1E3D;
+    color: #fff;
+    border-radius: 15px;
     border: none;
     position: sticky;
     top: 20px;
   }
   
   .summary-title {
-    color: #333;
+    color: #0F93EB;
     font-weight: 600;
     margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee;
   }
   
   .order-items {
     max-height: 300px;
     overflow-y: auto;
-    margin-bottom: 1rem;
-  }
   
+  }
+  .country-select{
+    color: black;
+  }
+  .state-select{
+    color: black;
+  }
   .order-item {
     padding: 0.75rem 0;
-    border-bottom: 1px solid #eee;
+   
   }
   
   .item-thumbnail {
@@ -88,10 +97,7 @@
     margin-top: 0.25rem;
   }
   
-  .summary-totals {
-    padding-top: 1rem;
-    border-top: 1px solid #eee;
-  }
+ 
   
   .total-amount {
     margin-top: 0.75rem;
@@ -146,6 +152,15 @@
     border-color: #28a745;
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
   }
+  .checkout_new_card{
+    border: 1px solid #c0bfbf;
+    padding: 8px;
+  }
+  .checkout_card_new{
+    background-color: #1B1E3D;
+    color: #fff;
+    border-radius: 15px;
+}
   
   /* Responsiveness */
   @media (max-width: 992px) {

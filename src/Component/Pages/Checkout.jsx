@@ -92,7 +92,18 @@ const CardPaymentForm = ({ handlePaymentSuccess }) => {
   );
 };
 
+// Add this to the BillingAddressForm component
 const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
+  const [errors, setErrors] = useState({
+    firstName: '',
+    lastName: '',
+    address1: '',
+    country: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    phone: ''
+  });
 
   const countries = useMemo(() => {
     return Country.getAllCountries().map(country => ({
@@ -110,11 +121,39 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
     }));
   }, [billingDetails.country]);
   
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'firstName':
+      case 'lastName':
+        return value.trim() === '' ? `${name === 'firstName' ? 'First' : 'Last'} name is required` : '';
+      case 'address1':
+        return value.trim() === '' ? 'Address is required' : '';
+      case 'country':
+        return value === '' ? 'Country is required' : '';
+      case 'city':
+        return value.trim() === '' ? 'City is required' : '';
+      case 'state':
+        return value === '' ? 'State/Province is required' : '';
+      case 'zipCode':
+        return value.trim() === '' ? 'Zip/Postal code is required' : 
+               !/^\d{5}(-\d{4})?$/.test(value) && billingDetails.country === 'US' ? 'Invalid US zip code' : '';
+      case 'phone':
+        return value.trim() === '' ? 'Phone number is required' : 
+               !/^\+?[0-9\s\-()]{7,20}$/.test(value) ? 'Invalid phone number' : '';
+      default:
+        return '';
+    }
+  };
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBillingDetails({
       ...billingDetails,
       [name]: value
+    });
+    setErrors({
+      ...errors,
+      [name]: validateField(name, value)
     });
   };
   
@@ -125,12 +164,29 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
         [name]: selectedOption.value,
         state: "" 
       });
+      setErrors({
+        ...errors,
+        [name]: validateField(name, selectedOption.value),
+        state: '' 
+      });
     } else {
       setBillingDetails({
         ...billingDetails,
         [name]: selectedOption.value
       });
+    
+      setErrors({
+        ...errors,
+        [name]: validateField(name, selectedOption.value)
+      });
     }
+  };
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: validateField(name, value)
+    });
   };
 
   const selectedCountry = countries.find(country => country.value === billingDetails.country);
@@ -148,8 +204,13 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
               name="firstName"
               value={billingDetails.firstName}
               onChange={handleInputChange}
+              onBlur={handleBlur}
+              isInvalid={!!errors.firstName}
               required
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.firstName}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col md={6}>
@@ -160,8 +221,13 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
               name="lastName"
               value={billingDetails.lastName}
               onChange={handleInputChange}
+              onBlur={handleBlur}
+              isInvalid={!!errors.lastName}
               required
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.lastName}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
       </Row>
@@ -173,8 +239,13 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
           name="address1"
           value={billingDetails.address1}
           onChange={handleInputChange}
+          onBlur={handleBlur}
+          isInvalid={!!errors.address1}
           required
         />
+        <Form.Control.Feedback type="invalid">
+          {errors.address1}
+        </Form.Control.Feedback>
       </Form.Group>
       
       <Form.Group className="mb-3">
@@ -197,9 +268,14 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
               value={selectedCountry}
               onChange={(option) => handleSelectChange(option, { name: "country" })}
               placeholder="Select Country"
-              className="country-select"
+              className={`country-select ${errors.country ? 'is-invalid' : ''}`}
               required
             />
+            {errors.country && (
+              <div className="invalid-feedback" style={{ display: 'block' }}>
+                {errors.country}
+              </div>
+            )}
           </Form.Group>
         </Col>
         <Col md={6}>
@@ -210,8 +286,13 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
               name="zipCode"
               value={billingDetails.zipCode}
               onChange={handleInputChange}
+              onBlur={handleBlur}
+              isInvalid={!!errors.zipCode}
               required
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.zipCode}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
       </Row>
@@ -225,32 +306,51 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
               name="city"
               value={billingDetails.city}
               onChange={handleInputChange}
+              onBlur={handleBlur}
+              isInvalid={!!errors.city}
               required
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.city}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col md={6}>
           <Form.Group className="mb-3">
             <Form.Label>State/Province</Form.Label>
             {states.length > 0 ? (
-              <Select
-                name="state"
-                options={states}
-                value={selectedState}
-                onChange={(option) => handleSelectChange(option, { name: "state" })}
-                placeholder="Select State/Province"
-                className="state-select"
-                required
-              />
+              <>
+                <Select
+                  name="state"
+                  options={states}
+                  value={selectedState}
+                  onChange={(option) => handleSelectChange(option, { name: "state" })}
+                  placeholder="Select State/Province"
+                  className={`state-select ${errors.state ? 'is-invalid' : ''}`}
+                  required
+                />
+                {errors.state && (
+                  <div className="invalid-feedback" style={{ display: 'block' }}>
+                    {errors.state}
+                  </div>
+                )}
+              </>
             ) : (
               <Form.Control
                 type="text"
                 name="state"
                 value={billingDetails.state}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
+                isInvalid={!!errors.state}
                 placeholder="Enter state/province"
                 required
               />
+            )}
+            {errors.state && states.length === 0 && (
+              <Form.Control.Feedback type="invalid">
+                {errors.state}
+              </Form.Control.Feedback>
             )}
           </Form.Group>
         </Col>
@@ -263,13 +363,17 @@ const BillingAddressForm = ({ billingDetails, setBillingDetails }) => {
           name="phone"
           value={billingDetails.phone}
           onChange={handleInputChange}
+          onBlur={handleBlur}
+          isInvalid={!!errors.phone}
           required
         />
+        <Form.Control.Feedback type="invalid">
+          {errors.phone}
+        </Form.Control.Feedback>
       </Form.Group>
     </div>
   );
 };
-
 const OrderReview = ({ 
   cartItems, 
   total, 
@@ -364,32 +468,32 @@ const OrderReview = ({
   
   return (
     <div className="order-review">
-      <h5 className="mb-3">Review Your Order</h5>
+      <h5 className="mb-2  text-center m-auto fw-bold fs-4">Review Your Order</h5>
       
-      <div className="review-section mb-3">
-        <h6>Contact Information</h6>
-        <p><strong>Email:</strong> {email}</p>
-        <p><strong>Phone:</strong> {phone}</p>
+      <div className="review-section mb-2 ">
+        <h6 className="fw-bold ">Contact Information</h6>
+        <p className="checkout_new_card Regular shadow rounded-2"><strong>Email:</strong> {email}</p>
+        <p className="checkout_new_card Regular shadow rounded-2"><strong>Phone:</strong> {phone}</p>
       </div>
       
-      <div className="review-section mb-3">
-        <h6>Billing Address</h6>
-        <p>{billingDetails.firstName} {billingDetails.lastName}</p>
-        <p>{billingDetails.address1}</p>
-        {billingDetails.address2 && <p>{billingDetails.address2}</p>}
-        <p>{billingDetails.city}, {stateName} {billingDetails.zipCode}</p>
-        <p>{countryName}</p>
+      <div className="review-section mb-2 ">
+        <h6 className="fw-bold">Billing Address</h6>
+        <p className="checkout_new_card Regular shadow rounded-2">{billingDetails.firstName} {billingDetails.lastName}</p>
+        <p className="checkout_new_card Regular shadow rounded-2">{billingDetails.address1}</p>
+        {billingDetails.address2 && <p className="checkout_new_card">{billingDetails.address2}</p>}
+        <p className="checkout_new_card Regular shadow rounded-2">{billingDetails.city}, {stateName} {billingDetails.zipCode}</p>
+        <p className="checkout_new_card Regular shadow rounded-2">{countryName}</p>
       </div>
       
-      <div className="review-section mb-3">
-        <h6>Payment Method</h6>
-        <p>{paymentMethod === "credit" ? "Credit Card" : "PayPal"}</p>
+      <div className="review-section mb-2 ">
+        <h6 className="fw-bold">Payment Method</h6>
+        <p className="checkout_new_card Regular shadow rounded-2">{paymentMethod === "credit" ? "Credit Card" : "PayPal"}</p>
       </div>
       
-      <div className="review-section mb-3">
-        <h6>Order Items</h6>
+      <div className="review-section mb-2">
+        <h6 className="fw-bold">Order Items</h6>
         {cartItems.map(item => (
-          <div key={item.id} className="d-flex justify-content-between mb-2">
+          <div key={item.id} className="d-flex justify-content-between mb-2 checkout_new_card Regular shadow rounded-2">
             <div>
               <span>{item.title} x {item.quantity}</span>
             </div>
@@ -418,7 +522,7 @@ const OrderReview = ({
               <CardPaymentForm handlePaymentSuccess={handlePaymentSuccess} />
             </Elements>
           ) : (
-            <div className="paypal-container mb-4">
+            <div className="paypal-container mb-3">
               <p>Complete your purchase securely with PayPal:</p>
               <div 
                 ref={paypalRef} 
@@ -842,10 +946,6 @@ const CheckoutNew = () => {
                   ))}
                 </div>
                 <div className="summary-totals">
-                  <div className="d-flex justify-content-between">
-                    <span>Subtotal:</span>
-                    <span>${total.toFixed(2)}</span>
-                  </div>
                   <div className="d-flex justify-content-between total-amount">
                     <span>Total:</span>
                     <span>${total.toFixed(2)}</span>
