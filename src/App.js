@@ -28,6 +28,7 @@ import Cart from "./Component/Pages/cart";
 import OrderConfirmation from "./Component/Pages/success";
 import PromoBanner from "./Component/Pages/homebanner";
 
+
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
   // Comment out the token check to always render children
