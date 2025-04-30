@@ -1,0 +1,72 @@
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+
+:root {
+    --body-font: 'Gilroy-Bold', sans-serif;
+    --heading-font: 'Zuume', sans-serif;
+}
+
+h1, h2, h3, h5 {
+    font-family: var(--heading-font);
+  }
+
+  .blog-articles {
+    margin-top: 50px;
+}
+  .title_blog {
+    font-family: var(--font-body) !important;
+    font-size: 40px !important;
+    font-weight: 500 !important;
+  }
+.article-card {
+    background-color: #1B1E3D;
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    transition: box-shadow .3s;
+}
+.article-card:hover {
+    box-shadow: 0 0 7px rgb(46 190 232);
+}
+  .blog-articles .card-body {
+    flex: 1 1 auto;
+    padding: 24px 24px;
+}
+  .article-card img {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    height: 200px;
+    object-fit: cover;
+    padding: 14px 14px 0px 14px;
+  }
+  
+  .article-tag {
+    color: #0F93EB;
+    margin-bottom: 7px;
+    font-weight: 500;
+    font-family: var(--font-body);
+    font-size: 20px;
+}
+  
+  .article-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+  
+  .article-meta {
+    color: #ffffff94;
+    font-size: 14px;
+}
+  
+  .view-more-link {
+    color: #2ebefc;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  
+  .view-more-link:hover {
+    text-decoration: underline;
+  }
+  

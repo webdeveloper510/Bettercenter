@@ -16,6 +16,10 @@ import Schedule from "./Schedule";
 import NBAInjuryTable from "./injury";
 import Futures from "./futures";
 import MatchesPage from "./gameteamtab";
+import PromoBanner from "./homebanner";
+import HomeBlog from "./homeblog";
+import StaticInfo from "./staticcontent";
+
 
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
@@ -543,8 +547,13 @@ const Games = () => {
   return (
     <section className="backgroung_image">
       <div className="container">
+      <div className="row">
+          <div className="top_banner mt-5">
+            <PromoBanner />
+          </div>
+        </div>
         <div className="row">
-          <div className="col-12 mt-5">
+          <div className="col-12 mt-2">
             <div className="nfl-games-container">
 
               <div className="selectors">
@@ -856,7 +865,8 @@ const Games = () => {
           </div>
         </div>
       </div>
-
+      < HomeBlog />
+      < StaticInfo />
       {/* Pagination */}
       {/* <div className="home_pagination d-flex justify-content-center align-items-center my-5">
           <button

@@ -1,0 +1,26 @@
+.odds-info-section {
+    color: #e4e6ed;
+  }
+  
+  .section-title {
+    color: #ffffff;
+    font-weight: 400;
+    letter-spacing: 0px;
+    font-size: 40px;
+    margin-bottom: 5px !important;
+}
+.section-heading {
+    font-size: 30px;
+    font-weight: 500;
+    color: #ffffff;
+    margin-top: 40px;
+    font-family: var(--font-body);
+    letter-spacing: 0px;
+}
+  
+.section-description {
+    font-size: 17px;
+    color: #b6b8c2;
+    line-height: normal;
+}
+  

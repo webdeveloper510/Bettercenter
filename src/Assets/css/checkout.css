@@ -1,570 +1,190 @@
-@import url('https://fonts.cdnfonts.com/css/zuume');
-@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
 
-:root {
-    --body-font: 'Gilroy-Bold', sans-serif;
-    --heading-font: 'Zuume', sans-serif;
-}
 
-body {
-    font-family: var(--body-font);
-
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: var(--heading-font);
-    letter-spacing: 1px;
-}
-
-.animated-heading {
-    animation: fadeInUp 1.5s ease-out forwards;
-    opacity: 0;
-}
-
-@keyframes fadeInUp {
-    from {
-        transform: translateY(50px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.card_checkout {
+.checkout-container {
+    padding: 2rem;
+  }
+  
+  .checkout-title {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  
+  /* Checkout Cards */
+  .checkout-card {
+   
+  
+    margin-bottom: 1rem;
+    border: none;
     background-color: #1B1E3D;
-    border: 1px solid #1B1E3D;
-    border-radius: 15px;
-    padding: 0px;
-}
-
-.card_heading {
-    background-color: #23274A;
-    padding: 15px 15px;
-    padding-left: 10px;
-    border-radius: 15px 15px 0px 0px;
-    border: 1px solid #23274A;
-}
-
-.card_image {
-    display: flex;
-    padding: 15px;
-    gap: 10px;
-}
-
-.remove-btn {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-}
-
-.remove_tab {
-    background-color: transparent;
-    outline: none;
-    border: none;
-    color: #0F93EB;
-}
-
-.card_border {
-    color: #807d7d;
-    padding: 15px;
-    width: 90%;
-    margin: auto;
-}
-
-.card_tab {
-    border: 1px solid #585656;
-    padding: 15px;
-    margin: 20px;
-    background-color: #3c4063;
-    border-radius: 10px;
-    align-items: center;
-}
-
-.card_code {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-}
-
-.card_input_get {
-    width: 80%;
-    border: 1px solid #ffffff52;
-    border-radius: 40px;
-    background-color: #ffffff3a;
-    height: 55px !important;
-    margin-top: 10px;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: space-between;
-}
-
-.code_type {
-    height: 52px;
-    background-color: transparent;
-    padding-left: 20px;
-    width: 40%;
-    border: none;
-    outline: none;
-    border-radius: 30%;
-}
-
-.Discount_Code {
-    color: #898a8b;
-    font-size: 15px;
-    padding-top: 15px;
-    padding-left: 16px;
-}
-
-.apply_btn {
-    height: 55px;
-    width: 15%;
-    background-color: #0F93EB;
     color: #fff;
-    outline: none;
-    border: 1px solid #0F93EB;
-    margin-top: 10px;
-    border-radius: 100px;
-}
-
-.Subtotal_heading {
-    color: #858383;
-}
-
-.card_code_one {
-    display: flex;
-    justify-content: space-between;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-
-.secure_btn {
-    display: flex;
-    justify-content: center;
-    background-color: #ffff;
-    width: 20%;
-    margin: auto;
-    padding: 10px;
     border-radius: 15px;
-    margin-bottom: 20px;
-}
-
-.secure_icon {
-    width: 20px;
-    fill: #355f43;
-}
-
-.ssl_btn {
-    background-color: transparent;
-    color: #353232;
-    border: none;
-    outline: none;
-
-}
-
-.card_email {
-    background-color: #1B1E3D;
-    border: 1px solid #1B1E3D;
-    border-radius: 15px;
-    padding: 0px;
+  }
+  
+  .checkout-card.active {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+  
+  .checkout-card.completed .step-title::after {
+    content: "✓";
+    color: green;
     margin-left: 10px;
-    height: fit-content;
-}
-
-.card_input {
-    width: 100%;
-    border: 1px solid #ffffff52;
-    border-radius: 40px;
-    background-color: #ffffff3a;
-    height: 55px !important;
-    margin-top: 10px;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: space-between;
-}
-
-.Discount_email {
-    padding: 15px;
-    color: #898a8b;
-    width: 30%;
-}
-
-.email_type {
-    height: 52px;
-    background-color: transparent;
-    padding-left: 20px;
-    width: 70%;
-    border: none;
-    outline: none;
-    border-radius: 30%;
-}
-
-.email_account {
-    padding: 15px;
-    color: #a8a4a4;
-    font-size: 15px;
-    font-weight: 400;
-}
-
-.sign_check {
-    text-decoration: none;
+  }
+  
+  .step-title {
     color: #0F93EB;
-    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 22px;
+}
+  
+  .step-content {
+    padding: 0.5rem 0;
+  }
+  
+  /* Order Summary Card */
+  .order-summary-card {
+    background-color: #1B1E3D;
+    color: #fff;
+    border-radius: 15px;
+    border: none;
+    position: sticky;
+    top: 20px;
+  }
+  
+  .summary-title {
+    color: #0F93EB;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .order-items {
+    max-height: 300px;
+    overflow-y: auto;
+  
+  }
+  .country-select{
+    color: black;
+  }
+  .state-select{
+    color: black;
+  }
+  .order-item {
+    padding: 0.75rem 0;
+   
+  }
+  
+  .item-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+  
+  .item-details {
+    flex-grow: 1;
+  }
+  
+  .item-details h6 {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+  
+  .item-price {
     font-weight: 500;
-    padding-left: 10px;
-
-}
-
-.check_box {
-    padding-left: 10px;
-    padding-right: 10px;
-    gap: 10px;
-}
-
-.Sign_check_label {
-    color: #0F93EB;
-    padding-left: 7px;
-    font-size: 17px;
-    font-weight: 400;
-}
-
-.Continue_btn {
-    height: 50px;
-    width: 35%;
-    background-color: #0F93EB;
-    color: #fff;
-    outline: none;
-    border: 1px solid #0F93EB;
-    margin-top: 20px;
-    border-radius: 100px;
-    margin-bottom: 20px;
-}
-
-.Additional_Information {
-    border: 1px solid #3c4063;
-    border-radius: 12px;
-    padding: 10px;
-    background-color: #3c4063;
-    width: 96%;
-    margin: auto;
-    margin-top: 20px;
-    margin-left: 15px;
-}
-
-.Additional_link {
-    text-decoration: none;
-    color: #0F93EB;
-    padding-left: 7px;
-    font-size: 17px;
-    font-weight: 400;
+    margin-top: 0.25rem;
+  }
+  
+ 
+  
+  .total-amount {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #eee;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  /* Buttons */
+  .continue-btn {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .back-btn {
     background-color: transparent;
-    display: flex;
-}
-
-.card_Additional {
+    border: 1px solid #6c757d;
+    color: #6c757d;
+  }
+  
+  .place-order-btn {
+    background-color: #28a745;
+    border-color: #28a745;
+    font-weight: bold;
+  }
+  
+  /* Review Sections */
+  .review-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .review-section h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .paypal-info {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Form Styling */
+  .form-label {
+    font-weight: 500;
+  }
+  
+  .form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+  }
+  .checkout_new_card{
+    border: 1px solid #c0bfbf;
+    padding: 8px;
+  }
+  .checkout_card_new{
     background-color: #1B1E3D;
-    border: 1px solid #1B1E3D;
-    border-radius: 15px;
-    padding: 0px;
-    margin-left: 10px;
-    height: fit-content;
-    position: relative;
-    top: -48px !important;
-}
-
-h2.section-title {
     color: #fff;
-    font-family: 'Zuume', sans-serif;
-    font-size: 67px;
-    font-weight: 900;
-    text-align: center;
+    border-radius: 15px;
 }
-
-.main {
-    padding-top: 90px;
-}
-
-@media (min-width: 320px) and (max-width: 580px) {
-    .checkout_responsive {
-        display: block !important;
-        justify-items: center;
-        padding: 10px;
+  
+  /* Responsiveness */
+  @media (max-width: 992px) {
+    .order-summary-card {
+      margin-top: 2rem;
     }
-
-    .card_checkout {
-        width: 100%;
-    }
-
-    .remove-btn {
-        display: block !important;
-    }
-
-    .card_responsive {
-        width: 100%;
-        margin-top: 20px;
-        padding: 0px !important;
-    }
-
-
-    .card_code {
-        display: block !important;
-
-    }
-
-    .card_tab {
-        border: 1px solid #585656;
-        padding: 0px;
-        margin: 5px;
-        background-color: #3c4063;
-        border-radius: 10px;
-        align-items: center;
-    }
-
-    .card_code {
-        padding: 5px;
-    }
-
-    .card_input_get {
-        width: 100%;
-    }
-
-    .Discount_Code {
-        color: #898a8b;
-        font-size: 12px;
-        padding-top: 18px;
-        padding-left: 9px;
-    }
-    .apply_btn {
-        height: 55px;
-        width: 100%;
-        background-color: #0F93EB;
-        color: #fff;
-        outline: none;
-        border: 1px solid #0F93EB;
-        margin-top: 10px;
-        border-radius: 100px;
-    
-    }
-    .email_type{
-        width: 100%;
-    }
-    .card_padding{
-        padding: 0px !important;
-    }
-    .Discount_email {
-     
-        color: #898a8b;
-        width: 26%;
-        font-size: 10px;
-        padding-top: 16px;
-        padding-left: 11px;
-    }
-    .Sign_check_label {
-        color: #0F93EB;
-        padding-left: 7px;
-        font-size: 13px !important;
-        font-weight: 400;
-    }
-    .secure_btn {
-        width: 50%;
-        margin-top: 15px;
-    }
-    .faq-section.accordion {
-        padding-bottom: 100px;
-        padding-bottom: 100px;
-        width: 100%;
-        margin: 0 auto;
-    }
-}
-
-@media (min-width:580px) and (max-width: 768px) {
-
-    .checkout_responsive {
-        display: block !important;
-        justify-items: center;
-        padding: 10px;
-    }
-
-    .card_checkout {
-        width: 100%;
-    }
-
-    .remove-btn {
-        display: block !important;
-    }
-
-    .card_responsive {
-        width: 100%;
-        margin-top: 20px;
-        padding: 0px !important;
-    }
-
-
-    .card_code {
-        display: block !important;
-
-    }
-
-    .card_tab {
-        border: 1px solid #585656;
-        padding: 0px;
-        margin: 5px;
-        background-color: #3c4063;
-        border-radius: 10px;
-        align-items: center;
-    }
-
-    .card_code {
-        padding: 5px;
-    }
-
-    .card_input_get {
-        width: 100%;
-    }
-
-    .Discount_Code {
-        color: #898a8b;
-        font-size: 12px;
-        padding-top: 18px;
-        padding-left: 9px;
-    }
-    .apply_btn {
-        height: 55px;
-        width: 100%;
-        background-color: #0F93EB;
-        color: #fff;
-        outline: none;
-        border: 1px solid #0F93EB;
-        margin-top: 10px;
-        border-radius: 100px;
-    
-    }
-    .email_type{
-        width: 100%;
-    }
-    .card_padding{
-        padding: 0px !important;
-    }
-    .Discount_email {
-     
-        color: #898a8b;
-        width: 26%;
-        font-size: 10px;
-        padding-top: 16px;
-        padding-left: 11px;
-    }
-    .Sign_check_label {
-        color: #0F93EB;
-        padding-left: 7px;
-        font-size: 13px !important;
-        font-weight: 400;
-    }
-    .secure_btn {
-        width: 50%;
-        margin-top: 15px;
-    }
-
-}
-@media (min-width:768px) and (max-width: 1024x) {
-    .checkout_responsive {
-        display: block !important;
-        justify-items: center;
-        padding: 10px;
-    }
-
-
-    .card_checkout {
-        width: 100%;
-    }
-
-    .remove-btn {
-        display: block !important;
-    }
-
-    .card_responsive {
-        width: 100%;
-        margin-top: 20px;
-        padding: 0px !important;
-    }
-
-    .card_code {
-        display: block !important;
-
-    }
-
-    .card_tab {
-        border: 1px solid #585656;
-        padding: 0px;
-        margin: 5px;
-        background-color: #3c4063;
-        border-radius: 10px;
-        align-items: center;
-    }
-
-    .card_code {
-        padding: 5px;
-    }
-
-    .card_input_get {
-        width: 100%;
-    }
-
-    .Discount_Code {
-        color: #898a8b;
-        font-size: 12px;
-        padding-top: 18px;
-        padding-left: 9px;
-    }
-    .apply_btn {
-        height: 55px;
-        width: 100%;
-        background-color: #0F93EB;
-        color: #fff;
-        outline: none;
-        border: 1px solid #0F93EB;
-        margin-top: 10px;
-        border-radius: 100px;
-    
-    }
-    .email_type{
-        width: 100%;
-    }
-    .card_padding{
-        padding: 0px !important;
-    }
-    .Discount_email {
-     
-        color: #898a8b;
-        width: 26%;
-        font-size: 10px;
-        padding-top: 16px;
-        padding-left: 11px;
-    }
-    .Sign_check_label {
-        color: #0F93EB;
-        padding-left: 7px;
-        font-size: 13px !important;
-        font-weight: 400;
-    }
-    .secure_btn {
-        width: 50%;
-        margin-top: 15px;
-    }
-}
-@media (min-width:940px) and (max-width: 1024x) {
-.Discount_Code {
-    /* padding: 10px; */
-    color: #898a8b;
-    font-size: 12px;
-    padding-top: 15px;
-    padding-left: 16px;
-}
-
-}
+  }
+  
+  .main {
+    background-color: #000;
+    min-height: 100vh;
+    padding: 20px 0;
+  }
+  .edit-link {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 10px;
+  }
+  
+  .edit-link:hover {
+    color: #0056b3;
+  }
+  
+  .completed-step-content {
+    padding: 10px 0;
+  }

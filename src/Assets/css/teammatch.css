@@ -6,7 +6,7 @@
     --heading-font: 'Zuume', sans-serif;
 }
 
-h1, h2, h3, .nba_odds, table th. .match-venue {
+h1, h2, h3 {
     font-family: var(--heading-font);
   }
   .match-result {

@@ -26,6 +26,7 @@ import BlogList from "./Component/Pages/blog";
 import BlogDetail from "./Component/Pages/blogdetail";
 import Cart from "./Component/Pages/cart";
 import OrderConfirmation from "./Component/Pages/success";
+import PromoBanner from "./Component/Pages/homebanner";
 
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
@@ -125,7 +126,7 @@ function Layout() {
           <Route path="/gameteamtab" element={<MatchesPage />} />
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
-
+          <Route path="PromoBanner" element={<homebanner />} />
           {/* Redirect to home for any unmatched routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
