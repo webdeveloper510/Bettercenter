@@ -11,19 +11,19 @@
   
   .single-image-banner button.banner-btn {
     position: absolute;
-    left: 3%;
-    bottom: 22%;
+    right: 6%;
+    bottom: 38%;
     color: #0F93EB;
     background: #fff;
     border: 1px solid #fff;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 400 !important;
     padding: 10px 30px;
     border-radius: 25px;
 }
 
 .single-image-banner button.banner-btn:hover {
-    border: 1px solid #fff;
-    background: transparent;
-    color: #fff;
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: white;
 }
