@@ -865,8 +865,28 @@ const Games = () => {
           </div>
         </div>
       </div>
+
       < HomeBlog />
+
+      {/* Ifame code */}
+      <div className="outer_custom">
+       <div className="container">
+                    <div className="row py-5 gap-3">
+
+                    <iframe
+                          src="https://betscienceai.shinyapps.io/sports-predictor/?mode=full"
+                          width="100%"
+                          height="800"
+                          style={{ border: 'none' }}
+                          title="Sports Predictor"
+                        />
+                    </div>
+                </div>
+       </div>
+     {/* Ifame code End*/}
+
       < StaticInfo />
+
       {/* Pagination */}
       {/* <div className="home_pagination d-flex justify-content-center align-items-center my-5">
           <button
