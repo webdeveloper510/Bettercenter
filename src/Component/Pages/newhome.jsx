@@ -70,6 +70,8 @@ const Games = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState("OVERVIEW");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showIframe, setShowIframe] = useState(false);
   const tabs = [
     "OVERVIEW",
     "GAMES",
@@ -86,7 +88,34 @@ const Games = () => {
   const isFirstLoadRef = useRef(true);
   const [bookmarkedGames, setBookmarkedGames] = useState([]);
   const currentSportMarketRef = useRef("");
-
+  useEffect(() => {
+    const checkLoginStatusAndSubscription = async () => {
+      const token = localStorage.getItem("accessToken");
+      const userId = localStorage.getItem("user_id");
+  
+      console.log("🚀 ~ userId:", userId);
+      console.log("🚀 ~ token:", token);
+  
+      if (token && userId) {
+        setIsLoggedIn(true);
+  
+        try {
+          const data = await api.getSubscriptionStatus(userId);
+          console.log("🚀 ~ Subscription API response:", data);
+          setShowIframe(data.free_trial);
+        } catch (error) {
+          console.error("Failed to fetch subscription status:", error);
+          setShowIframe(false);
+        }
+      } else {
+        setIsLoggedIn(false);
+        setShowIframe(false);
+      }
+    };
+  
+    checkLoginStatusAndSubscription();
+  }, []);
+  
   const totalPages = 4;
   const toggleBookmark = (gameIndex) => {
     setBookmarkedGames((prev) => {
@@ -872,14 +901,23 @@ const Games = () => {
       <div className="outer_custom">
        <div className="container">
                     <div className="row py-5 gap-3">
-
-                    <iframe
-                          src="https://betscienceai.shinyapps.io/sports-predictor/?mode=full"
-                          width="100%"
-                          height="800"
-                          style={{ border: 'none' }}
-                          title="Sports Predictor"
-                        />
+                    {isLoggedIn ? (
+            showIframe ? (
+              <iframe
+                src="https://betscienceai.shinyapps.io/sports-predictor/?mode=full"
+                width="100%"
+                height="800"
+                style={{ border: "none" }}
+                title="Sports Predictor"
+              />
+            ) : (
+              <div className="text-center">
+                <button className="btn btn-primary">Buy Now to Unlock Sports Predictions</button>
+              </div>
+            )
+          ) : (
+            <p></p>
+          )}
                     </div>
                 </div>
        </div>

@@ -15,6 +15,7 @@ export const apiClient = axios.create({
 export const setAuthToken = (token) => {
     if (token) {
         localStorage.setItem('accessToken', token);
+    
         apiClient.defaults.headers.Authorization = `Bearer ${token}`;
     } else {
         localStorage.removeItem('accessToken');
@@ -473,6 +474,22 @@ const api = {
             return error;
         }
     },
+    getSubscriptionStatus: async (userId) => {
+        try {
+            const token = localStorage.getItem("accessToken");
+            const response = await axios.get(`${API_URL}/picks-subscription-status/${userId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Subscription status fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
+        }
+    },
+    
 };
 
 export default api;

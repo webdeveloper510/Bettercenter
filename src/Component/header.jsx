@@ -30,8 +30,10 @@ const Header = () => {
   const handleLogout = () => {
     logout();
     localStorage.removeItem("accessToken"); 
+    localStorage.removeItem("user_id");
     setIsLoggedIn(false);
     toast.success("Logged out successfully!");
+    window.location.reload();
     navigate("/"); 
   };
 

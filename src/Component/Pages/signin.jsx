@@ -19,9 +19,11 @@ const Signin = () => {
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             const response = await axios.post("http://54.174.64.250:8000/login", values);
-            const token = response.data?.token?.access;
+            const user_id = response.data?.user_id;
+            const token = response.data?.token;
             if (token) {
                 setAuthToken(token);
+localStorage.setItem("user_id", user_id);
                 toast.success("Login successful!");
 
                 navigate('/');
