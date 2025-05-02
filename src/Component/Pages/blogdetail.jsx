@@ -1,53 +1,65 @@
-import React from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../../Assets/css/blogdetail.css';
-import blog1 from '../../Assets/images/blog1.jpg' // Sample image
+import api from '../../api';
+import blog1 from '../../Assets/images/blog1.jpg'; // Fallback image
 
 const BlogDetail = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [blog, setBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // For demo purposes — you can replace with API fetch using `id`
-  const blog = {
-    id,
-    title: 'New York Mets vs. Miami Marlins: Game Preview',
-    description:
-      'A detailed breakdown of the upcoming game between the New York Mets and Miami Marlins, including key players, strategies, and predictions. This matchup brings two competitive teams head-to-head with both having standout players. The Mets have shown strong batting skills while the Marlins are holding up great on defense. Analysts expect a close game with strategic plays on both sides. Stay tuned for live updates, player stats, and post-game analysis.',
-    uploaded_at: '2025-04-09',
-    file_url: blog1,
-  }
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const response = await api.getBlogsData();
+        if (response && response.data) {
+          const matchedBlog = response.data.find(item => String(item.id) === String(id));
+          if (matchedBlog) {
+            setBlog(matchedBlog);
+          } else {
+            setError("Blog not found");
+          }
+        } else {
+          setError("Failed to fetch blog data");
+        }
+      } catch (err) {
+        setError("An error occurred while fetching blog data");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const isVideo = blog.file_url?.endsWith('.mp4')
+    fetchBlog();
+  }, [id]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!blog) return <div>No blog found.</div>;
+
+  const isVideo = blog.file_url?.endsWith('.mp4');
 
   return (
-    <section className="blog-detail-page backgroung_image">
-      <div className="container">
-        <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
+    <div className="blog-detail-container">
+      <button onClick={() => navigate(-1)}>← Back</button>
+      <h1>{blog.title}</h1>
 
-        <h1 className="blog-detail-title">{blog.title}</h1>
+      {isVideo ? (
+        <video controls>
+          <source src={blog.file_url} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <img src={blog.file_url || blog1} alt={blog.title} />
+      )}
 
-        <div className="blog-detail-media">
-          {isVideo ? (
-            <video controls width="100%">
-              <source src={blog.file_url} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          ) : (
-            <img src={blog.file_url} alt={blog.title} />
-          )}
-        </div>
+      <p>Posted on: {new Date(blog.uploaded_at).toLocaleDateString()}</p>
+      <div dangerouslySetInnerHTML={{ __html: blog.description }}></div>
 
-        <p className="blog-detail-date">
-          Posted on: {new Date(blog.uploaded_at).toLocaleDateString()}
-        </p>
+    </div>
+  );
+};
 
-        <div className="blog-detail-content">
-          <p>{blog.description}</p>
-        </div>
-      </div>
-    </section>
-
-  )
-}
-
-export default BlogDetail
+export default BlogDetail;

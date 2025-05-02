@@ -46,6 +46,29 @@ const api = {
             return error.response ? error.response.data : { message: "Registration failed" };
         }
     },
+    getBlogsData: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/get-blog-data`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Blog data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch blog data" };
+        }
+    },
+    getBlogById: async (id) => {
+        try {
+          const response = await axios.get(`${API_URL}/get-blog-data/${id}`, {
+            headers: { 'Content-Type': 'application/json' }
+          });
+          return response.data;
+        } catch (error) {
+          console.error("Error fetching blog by ID:", error);
+          return error.response ? error.response.data : { message: "Failed to fetch blog" };
+        }
+      },
+      
     getMoneyData: async (date) => {
         try {
             const formattedDate = date || ''; 
