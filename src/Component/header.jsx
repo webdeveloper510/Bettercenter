@@ -94,14 +94,16 @@ const Header = () => {
                   NEWS
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link
-                  className={`nav-link ${location.pathname === "/newspage" ? "active-link" : ""}`}
-                  to="/aipicks"
-                >
-                  AI PICKS
-                </Link>
-              </li>
+              {isLoggedIn && (
+  <li className="nav-item">
+    <Link
+      className={`nav-link ${location.pathname === "/aipicks" ? "active-link" : ""}`}
+      to="/aipicks"
+    >
+      AI PICKS
+    </Link>
+  </li>
+)}
             </ul>
     
             <div className="header-content">

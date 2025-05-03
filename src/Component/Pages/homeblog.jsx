@@ -87,7 +87,7 @@ const HomeBlog = () => {
         </Row>
 
         <div className="text-center mt-3">
-          <a href="/blogs" className="view-more-link text-uppercase">View More Articles</a>
+          <a href="/blog" className="view-more-link text-uppercase">View More Articles</a>
         </div>
       </Container>
     </section>
