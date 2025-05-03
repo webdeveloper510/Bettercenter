@@ -18,7 +18,7 @@ const Signin = () => {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            const response = await axios.post("http://54.174.64.250:8000/login", values);
+            const response = await axios.post("http://54.209.247.111:8000/login", values);
             const user_id = response.data?.user_id;
             const token = response.data?.token;
             if (token) {

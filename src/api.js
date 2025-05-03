@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { format } from 'date-fns';
 
-export const API_URL = 'http://54.174.64.250:8000';
+export const API_URL = 'http://54.209.247.111:8000';
 
 const getAccessToken = () => localStorage.getItem('accessToken');
 

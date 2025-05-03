@@ -895,36 +895,7 @@ const Games = () => {
         </div>
       </div>
 
-<<<<<<< Updated upstream
       < HomeBlog />
-
-      {/* Ifame code */}
-      <div className="outer_custom">
-       <div className="container">
-                    <div className="row py-5 gap-3">
-                    {isLoggedIn ? (
-            showIframe ? (
-              <iframe
-                src="https://betscienceai.shinyapps.io/sports-predictor/?mode=full"
-                width="100%"
-                height="800"
-                style={{ border: "none" }}
-                title="Sports Predictor"
-              />
-            ) : (
-              <div className="text-center">
-                <button className="btn btn-primary">Buy Now to Unlock Sports Predictions</button>
-              </div>
-            )
-          ) : (
-            <p></p>
-          )}
-                    </div>
-                </div>
-       </div>
-     {/* Ifame code End*/}
-=======
->>>>>>> Stashed changes
 
       < StaticInfo />
 
