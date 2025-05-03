@@ -27,6 +27,7 @@ import BlogDetail from "./Component/Pages/blogdetail";
 import Cart from "./Component/Pages/cart";
 import OrderConfirmation from "./Component/Pages/success";
 import PromoBanner from "./Component/Pages/homebanner";
+import AIPicks from "./Component/Pages/aipicks";
 
 
 // Modified ProtectedRoute to skip token check
@@ -101,6 +102,11 @@ function Layout() {
               <Pickdetail />
             </ProtectedRoute>
           } />
+              <Route path="/aipicks" element={
+            <ProtectedRoute>
+              <AIPicks />
+            </ProtectedRoute>
+          } />
           {/* <Route path="/checkout" element={
             <ProtectedRoute>
               <Checkout />
@@ -128,6 +134,7 @@ function Layout() {
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="PromoBanner" element={<homebanner />} />
+          <Route path="AIPicks" element={<aipicks />} />
           {/* Redirect to home for any unmatched routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

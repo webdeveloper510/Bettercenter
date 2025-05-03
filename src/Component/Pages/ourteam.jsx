@@ -41,7 +41,7 @@ const Ourteam = () => {
   return (
     <section className="main">
       <Container>
-        <h2 className="text-center our_team_head">OUR TEAM</h2>
+        <h2 className="text-center our_team_head py-4 gap-3">OUR TEAM</h2>
         <p className="text-center team-subtitle">
           From winning huge capping contests to features on HBO Sports & ESPN among other networks and publications, our cappers have over 100 years of combined experience backed by a proprietary database.
           <br />

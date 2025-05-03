@@ -94,6 +94,14 @@ const Header = () => {
                   NEWS
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link
+                  className={`nav-link ${location.pathname === "/newspage" ? "active-link" : ""}`}
+                  to="/aipicks"
+                >
+                  Ai Picks
+                </Link>
+              </li>
             </ul>
     
             <div className="header-content">

@@ -1,21 +1,41 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
-// import bannerimg from '../../Assets/images/homebanner.png';
-import bannerimg2 from '../../Assets/images/homebanner2.png';
+import { Carousel, Button } from 'react-bootstrap';
+// import banner1 from '../../Assets/images/homebanner1.png';
+import banner1 from '../../Assets/images/homebanner.png';
+import banner2 from '../../Assets/images/homebanner2.png';
 import '../../Assets/css/homebanner.css';
 
 const PromoBanner = () => {
   return (
-    <div className="single-image-banner text-center">
-      <img
-        src={bannerimg2}
-        alt="Promo"
-        className="img-fluid banner-img"
-      />
-      <Button variant="primary" className="banner-btn mt-3">
-        CLICK HERE
-      </Button>
-    </div>
+    <Carousel className="promo-slider">
+      {/* Slide 1 */}
+      <Carousel.Item>
+        <img
+          className="d-block w-100"
+          src={banner1}
+          alt="First slide"
+        />
+        <Carousel.Caption className="text-center">
+          <Button variant="primary" className="banner-btn mt-3">
+            CLICK HERE
+          </Button>
+        </Carousel.Caption>
+      </Carousel.Item>
+
+      {/* Slide 2 */}
+      <Carousel.Item>
+        <img
+          className="d-block w-100"
+          src={banner2}
+          alt="Second slide"
+        />
+        <Carousel.Caption className="text-center">
+          <Button variant="primary" className="banner-btn mt-3">
+            CLICK HERE
+          </Button>
+        </Carousel.Caption>
+      </Carousel.Item>
+    </Carousel>
   );
 };
 

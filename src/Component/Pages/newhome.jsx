@@ -895,6 +895,7 @@ const Games = () => {
         </div>
       </div>
 
+<<<<<<< Updated upstream
       < HomeBlog />
 
       {/* Ifame code */}
@@ -922,6 +923,8 @@ const Games = () => {
                 </div>
        </div>
      {/* Ifame code End*/}
+=======
+>>>>>>> Stashed changes
 
       < StaticInfo />
 
