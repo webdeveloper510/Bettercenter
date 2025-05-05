@@ -20,7 +20,6 @@ import PromoBanner from "./homebanner";
 import HomeBlog from "./homeblog";
 import StaticInfo from "./staticcontent";
 
-
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
   DraftKings: { logo: draftkingsLogo },
@@ -92,16 +91,11 @@ const Games = () => {
     const checkLoginStatusAndSubscription = async () => {
       const token = localStorage.getItem("accessToken");
       const userId = localStorage.getItem("user_id");
-  
-      console.log("🚀 ~ userId:", userId);
-      console.log("🚀 ~ token:", token);
-  
       if (token && userId) {
         setIsLoggedIn(true);
-  
+
         try {
           const data = await api.getSubscriptionStatus(userId);
-          console.log("🚀 ~ Subscription API response:", data);
           setShowIframe(data.free_trial);
         } catch (error) {
           console.error("Failed to fetch subscription status:", error);
@@ -112,10 +106,10 @@ const Games = () => {
         setShowIframe(false);
       }
     };
-  
+
     checkLoginStatusAndSubscription();
   }, []);
-  
+
   const totalPages = 4;
   const toggleBookmark = (gameIndex) => {
     setBookmarkedGames((prev) => {
@@ -309,7 +303,7 @@ const Games = () => {
     isFirstLoadRef.current = true;
     changeTimestampsRef.current = {};
     previousDataRef.current = [];
-    
+
     const fetchAndUpdateData = async () => {
       setLoading(true);
       try {
@@ -318,12 +312,12 @@ const Games = () => {
         setLoading(false);
       }
     };
-  
+
     fetchAndUpdateData();
     const interval = setInterval(fetchAndUpdateData, 60000);
-  
+
     return () => clearInterval(interval);
-  }, [sport, marketType, selectedDate]); 
+  }, [sport, marketType, selectedDate]);
   const processSpreadData = (apiData) => {
     if (!apiData || !apiData.data) return [];
 
@@ -395,6 +389,7 @@ const Games = () => {
     if (!apiData || !apiData.data) return [];
 
     const processedGames = [];
+
     Object.keys(apiData.data).forEach((gameKey) => {
       if (
         gameKey.startsWith("game") &&
@@ -414,16 +409,16 @@ const Games = () => {
             homeTeamData = gameEntry[teamNames[1]];
             awayTeamData = gameEntry[teamNames[0]];
           }
-
           const game = {
             homeTeam: homeTeamData["Home Team"],
             awayTeam: awayTeamData["Away Team"],
+            homePitcher: homeTeamData["Home Pitcher"] || "N/A",
+            awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
             homeOpen: formatOdds(homeTeamData["Home Open"]),
             awayOpen: formatOdds(awayTeamData["Away Open"]),
             homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
             awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
             date: homeTeamData?.Date || awayTeamData?.Date || "TODAY",
-            // time: "7:30PM",
           };
 
           Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
@@ -576,7 +571,7 @@ const Games = () => {
   return (
     <section className="backgroung_image">
       <div className="container">
-      <div className="row">
+        <div className="row">
           <div className="top_banner mt-5">
             <PromoBanner />
           </div>
@@ -584,53 +579,6 @@ const Games = () => {
         <div className="row">
           <div className="col-12 mt-2">
             <div className="nfl-games-container">
-
-
-
-
-    <div className="nfl-games-container">
-      <div className="selectors">
-        <select value={sport} onChange={handleSportChange}>
-          <option value="NBA">NBA</option>
-          <option value="NHL">NHL</option>
-          <option value="MLB">MLB</option>
-        </select>
-
-        {activeTab !== 'INJURIES' &&
-          activeTab !== 'SCHEDULE' &&
-          activeTab !== 'TEAMS' &&
-          activeTab !== 'FUTURES' && (
-            <select value={marketType} onChange={handleMarketTypeChange}>
-              {/* {getMarketOptions()} */}
-            </select>
-          )}
-
-        {activeTab !== 'TEAMS' &&
-          activeTab !== 'FUTURES' &&
-          activeTab !== 'INJURIES' && (
-            <div className="date-picker-wrapper">
-              <DatePicker
-                selected={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                dateFormat="EEE MMM dd"
-                className="calendar-input"
-                popperPlacement="bottom"
-                maxDate={activeTab === 'OVERVIEW' ? getTomorrowDate() : null}
-              />
-            </div>
-          )}
-      </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
               <div className="selectors">
                 <select value={sport} onChange={handleSportChange}>
                   <option value="NBA">NBA</option>
@@ -669,10 +617,6 @@ const Games = () => {
                     </div>
                   )}
               </div>
-
-
-
-
             </div>
 
             {/* Tabs */}
@@ -690,14 +634,13 @@ const Games = () => {
 
             {/* Table: Only show when active tab is OVERVIEW */}
             {activeTab === "OVERVIEW" && (
-              
               <div className="betting-table-wrapper table_flow">
-                   <h1 className="nba_odds">Upcoming {sport} Games</h1>
+                <h1 className="nba_odds">Upcoming {sport} Games</h1>
                 {loading ? (
-                 <div className="loader-container my-5">
-                 <div className="loader spinner-border text-primary text-center"></div>
-                 <p className="text-center mt-5 "></p>
-               </div>
+                  <div className="loader-container my-5">
+                    <div className="loader spinner-border text-primary text-center"></div>
+                    <p className="text-center mt-5 "></p>
+                  </div>
                 ) : error ? (
                   <div className="text-center py-4 text-danger">{error}</div>
                 ) : (
@@ -705,6 +648,8 @@ const Games = () => {
                     <thead>
                       <tr>
                         <th>MATCHUP</th>
+                        <th>{marketType === "MONEYLINE" ? "PITCHERS" : ""}</th>
+
                         <th>
                           {marketType === "SPREAD"
                             ? "SPREAD"
@@ -749,6 +694,16 @@ const Games = () => {
                               <div className="team-name">{game.homeTeam}</div>
                               <div className="team-name">{game.awayTeam}</div>
                             </td>
+                            {marketType === "MONEYLINE" && (
+                              <td>
+                                <div className="pitcher-name">
+                                  {game.homePitcher || "N/A"}
+                                </div>
+                                <div className="pitcher-name">
+                                  {game.awayPitcher || "N/A"}
+                                </div>
+                              </td>
+                            )}
                             <td>
                               {marketType === "SPREAD" ? (
                                 <>
@@ -945,9 +900,9 @@ const Games = () => {
         </div>
       </div>
 
-      < HomeBlog />
+      <HomeBlog />
 
-      < StaticInfo />
+      <StaticInfo />
       <Faq />
     </section>
   );
