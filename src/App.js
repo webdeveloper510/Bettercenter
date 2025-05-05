@@ -34,6 +34,7 @@ import Cart from "./Component/Pages/cart";
 import OrderConfirmation from "./Component/Pages/success";
 import PromoBanner from "./Component/Pages/homebanner";
 import AIPicks from "./Component/Pages/aipicks";
+import GameSelector from "./Component/Pages/test";
 
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
@@ -110,6 +111,8 @@ function Layout() {
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="PromoBanner" element={<homebanner />} />
+          <Route path="GameSelector" element={<test />} />
+          
           <Route
             path="AIPicks"
             element={

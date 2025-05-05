@@ -585,6 +585,52 @@ const Games = () => {
           <div className="col-12 mt-2">
             <div className="nfl-games-container">
 
+
+
+
+    <div className="nfl-games-container">
+      <div className="selectors">
+        <select value={sport} onChange={handleSportChange}>
+          <option value="NBA">NBA</option>
+          <option value="NHL">NHL</option>
+          <option value="MLB">MLB</option>
+        </select>
+
+        {activeTab !== 'INJURIES' &&
+          activeTab !== 'SCHEDULE' &&
+          activeTab !== 'TEAMS' &&
+          activeTab !== 'FUTURES' && (
+            <select value={marketType} onChange={handleMarketTypeChange}>
+              {/* {getMarketOptions()} */}
+            </select>
+          )}
+
+        {activeTab !== 'TEAMS' &&
+          activeTab !== 'FUTURES' &&
+          activeTab !== 'INJURIES' && (
+            <div className="date-picker-wrapper">
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                dateFormat="EEE MMM dd"
+                className="calendar-input"
+                popperPlacement="bottom"
+                maxDate={activeTab === 'OVERVIEW' ? getTomorrowDate() : null}
+              />
+            </div>
+          )}
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
               <div className="selectors">
                 <select value={sport} onChange={handleSportChange}>
                   <option value="NBA">NBA</option>
@@ -623,6 +669,10 @@ const Games = () => {
                     </div>
                   )}
               </div>
+
+
+
+
             </div>
 
             {/* Tabs */}

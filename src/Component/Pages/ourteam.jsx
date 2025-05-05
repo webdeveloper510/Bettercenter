@@ -4,6 +4,7 @@ import "../../Assets/ourteam.css";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
 import Faq from "./faq";
 import api from "../../api";
+import GameSelector from "./test";
 
 const Ourteam = () => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const Ourteam = () => {
             ))}
           </Row>
         )}
-
+        <GameSelector />
         <Faq />
       </Container>
     </section>
