@@ -55,7 +55,7 @@ const AIPicks = () => {
             <div className="text-center py-5">
            
               <Button variant="primary" onClick={() => window.location.href = '/pricing'}>
-                Buy Now
+                Buy Now 
               </Button>
             </div>
           )}
