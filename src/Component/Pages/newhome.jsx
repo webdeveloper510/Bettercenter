@@ -355,6 +355,8 @@ const Games = () => {
             awayTeam: awayTeamData["Away Team"],
             homeSpread: homeSpread,
             awaySpread: awaySpread,
+            homePitcher: homeTeamData["Home Pitcher"] || "N/A",
+            awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
             homeOpen: formatOdds(homeTeamData["Home Open"]),
             awayOpen: formatOdds(awayTeamData["Away Open"]),
             homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
@@ -497,6 +499,8 @@ const Games = () => {
                 homeTeam: homeTeam,
                 awayTeam: awayTeam,
                 overValue: totalValue,
+                homePitcher: homeTeamData["Home Pitcher"] || "N/A",
+                awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
                 homeOpen: formatOdds(homeTeamData["Home Open"]),
                 awayOpen: formatOdds(awayTeamData["Away Open"]),
                 homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
@@ -541,17 +545,6 @@ const Games = () => {
 
     return processedGames;
   };
-
-  const toggleTab = (tabIndex) => {
-    setActiveTab(tabIndex);
-  };
-
-  const goToPage = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
   const handleSportChange = (e) => {
     setSport(e.target.value);
   };
@@ -648,7 +641,7 @@ const Games = () => {
                     <thead>
                       <tr>
                         <th>MATCHUP</th>
-                        <th>{marketType === "MONEYLINE" ? "PITCHERS" : ""}</th>
+                        <th>PITCHERS</th>
 
                         <th>
                           {marketType === "SPREAD"
@@ -694,7 +687,7 @@ const Games = () => {
                               <div className="team-name">{game.homeTeam}</div>
                               <div className="team-name">{game.awayTeam}</div>
                             </td>
-                            {marketType === "MONEYLINE" && (
+                           
                               <td>
                                 <div className="pitcher-name">
                                   {game.homePitcher || "N/A"}
@@ -703,7 +696,7 @@ const Games = () => {
                                   {game.awayPitcher || "N/A"}
                                 </div>
                               </td>
-                            )}
+                          
                             <td>
                               {marketType === "SPREAD" ? (
                                 <>
