@@ -68,7 +68,7 @@ localStorage.setItem("user_id", user_id);
                             onSubmit={handleSubmit}
                         >
                             {({ touched, errors, isSubmitting }) => (
-                                <Form className='form_sign_in'>
+                                <Form className='form_sign_in log_in'>
                                     <div className='sign_heading'>
                                         <h1 className='sign_heading_in'>Sign in</h1>
                                         <p className='sign_heading_in_one'>Welcome to BettorCenter</p>

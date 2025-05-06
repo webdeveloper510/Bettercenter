@@ -108,10 +108,12 @@ const Header = () => {
     
             <div className="header-content">
   
-              <div className="cart-container" onClick={handleCartClick} style={{ cursor: 'pointer' }}>
-          <FaShoppingBag className="cart-icon" />
-          <span className="cart-badge">{cartQuantity > 0 ? cartQuantity : ''}</span>
-        </div>
+            <div className="cart-container" onClick={handleCartClick} style={{ cursor: 'pointer' }}>
+              <FaShoppingBag className="cart-icon" />
+              {cartQuantity > 0 && (
+                <span className="cart-badge">{cartQuantity}</span>
+              )}
+            </div>
 
               {/* Login/Logout Toggle */}
               <span className="login-text">

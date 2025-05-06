@@ -27,3 +27,9 @@
   background-color: #007bff;
   color: white;
 }
+a.carousel-control-prev {
+  justify-content: start;
+}
+a.carousel-control-next {
+  justify-content: end;
+}

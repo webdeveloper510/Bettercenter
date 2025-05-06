@@ -11,7 +11,7 @@ import {
 } from "@stripe/react-stripe-js";
 import Select from "react-select";
 import { Country, State } from "country-state-city";
-import "../../Assets/css/Checkout.css";
+import '../../Assets/css/checkout.css';
 import { toast } from "react-toastify";
 import api from "../../api";
 const stripePromise = loadStripe("pk_test_51Ln28UHxWF1dGmnD9lu1nHP1J02utFX75NY1C5tpuRbu4kKTBdXEQmQEjRSomEufNGnvAisS5DcYmdwKHNYtOHaY008Mu2hsjT");
