@@ -116,6 +116,19 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
+    getMlbDefaultData: async (date) => {
+        try {
+            const formattedDate = date || '';
+            const response = await axios.get(`${API_URL}/mlb-default-data/?date=${formattedDate}`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Default data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch default data" };
+        }
+    }
+    ,
     getMlbSpreadData: async (date) => {
         try {
             const formattedDate = date || '';

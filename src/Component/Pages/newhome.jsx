@@ -226,8 +226,6 @@ const Games = () => {
               processedData = processTotalData(apiData);
               break;
             default:
-              apiData = await api.getSpreadData(formattedDate);
-              processedData = processSpreadData(apiData);
           }
           break;
 
@@ -245,9 +243,12 @@ const Games = () => {
               apiData = await api.getMlbOverUnderData(formattedDate);
               processedData = processTotalData(apiData);
               break;
+              case "DEFAULT":
+                apiData = await api.getMlbDefaultData(formattedDate);
+                processedData = processDefaultData(apiData);
+                break;
             default:
-              apiData = await api.getMlbSpreadData(formattedDate);
-              processedData = processSpreadData(apiData);
+             
           }
           break;
 
@@ -266,8 +267,7 @@ const Games = () => {
               processedData = processTotalData(apiData);
               break;
             default:
-              apiData = await api.getNhlSpreadData(formattedDate);
-              processedData = processSpreadData(apiData);
+
           }
           break;
 
@@ -545,6 +545,60 @@ const Games = () => {
 
     return processedGames;
   };
+  const processDefaultData = (apiData) => {
+    if (!apiData || !Array.isArray(apiData.data)) return [];
+  
+    const processedGames = [];
+  
+    apiData.data.forEach((gameEntry) => {
+      const homeTeam = gameEntry["Home Team"];
+      const awayTeam = gameEntry["Away Team"];
+      const homePitcher = gameEntry["Home Pitcher"] || "N/A";
+      const awayPitcher = gameEntry["Away Pitcher"] || "N/A";
+  
+      const homeOpen = formatOdds(gameEntry["Home Open"]);
+      const awayOpen = formatOdds(gameEntry["Away Open"]);
+      const homeBestOdds = formatOdds(gameEntry["Home Best odds"]);
+      const awayBestOdds = formatOdds(gameEntry["Away Best odds"]);
+      const date = gameEntry?.Date || "TODAY";
+  
+      const game = {
+        homeTeam,
+        awayTeam,
+        homePitcher,
+        awayPitcher,
+        homeOpen,
+        awayOpen,
+        homeBestOdds,
+        awayBestOdds,
+        date,
+      };
+  
+      Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
+        const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+  
+        const homeOddsKey = `Home ${apiBookmaker}`;
+        const awayOddsKey = `Away ${apiBookmaker}`;
+  
+        if (gameEntry[homeOddsKey] && gameEntry[homeOddsKey] !== "0 / 0") {
+          game[`${componentBookmaker.toLowerCase()}HomeOdds`] = formatOdds(
+            gameEntry[homeOddsKey]
+          );
+        }
+  
+        if (gameEntry[awayOddsKey] && gameEntry[awayOddsKey] !== "0 / 0") {
+          game[`${componentBookmaker.toLowerCase()}AwayOdds`] = formatOdds(
+            gameEntry[awayOddsKey]
+          );
+        }
+      });
+  
+      processedGames.push(game);
+    });
+  
+    return processedGames;
+  };
+  
   const handleSportChange = (e) => {
     setSport(e.target.value);
   };
@@ -587,6 +641,7 @@ const Games = () => {
                       value={marketType}
                       onChange={handleMarketTypeChange}
                     >
+                      <option value="DEFAULT">DEFAULT(Moneyline/Total)</option>
                       <option value="SPREAD">SPREAD</option>
                       <option value="MONEYLINE">MONEYLINE</option>
                       <option value="TOTAL">TOTAL</option>
