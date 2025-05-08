@@ -502,7 +502,19 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
     },
-    
+    processPayment :async(data)=>{
+        try {
+            const response = await axios.post(`${API_URL}/stripe-payment`,data,{
+            headers: {
+                'Content-Type': 'application/json',
+               Authorization: `Bearer ${getAccessToken()}`
+        }});
+        
+            return response.data
+        } catch (error) {
+            return (error)
+        }
+    }
 };
 
 export default api;
