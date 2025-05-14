@@ -54,6 +54,66 @@ apiClient.interceptors.response.use(
    
 
 const api = {
+     getUserProfile: async () => {
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                return { error: 'User not authenticated' };
+            }
+            
+            const response = await apiClient.get('/get-user-profile', {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Profile fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch user profile" };
+        }
+    },
+    
+    updateUserProfile: async (profileData) => {
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                return { error: 'User not authenticated' };
+            }
+            
+            const response = await apiClient.put('/change-password', profileData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Profile update error:", error);
+            return error.response ? error.response.data : { message: "Failed to update user profile" };
+        }
+    },
+    
+    // changePassword: async (passwordData) => {
+    //     try {
+    //         const token = getAccessToken();
+    //         if (!token) {
+    //             return { error: 'User not authenticated' };
+    //         }
+            
+    //         const response = await apiClient.post('/change-password', passwordData, {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             }
+    //         });
+            
+    //         return response.data;
+    //     } catch (error) {
+    //         console.error("Password change error:", error);
+    //         return error.response ? error.response.data : { message: "Failed to change password" };
+    //     }
+    // },
+    
     register: async (userData) => {
         try {
 
