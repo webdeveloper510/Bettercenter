@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import { format } from 'date-fns';
 
@@ -15,11 +16,10 @@ export const apiClient = axios.create({
 export const setAuthToken = (token) => {
     if (token) {
         localStorage.setItem('accessToken', token);
-    
         apiClient.defaults.headers.Authorization = `Bearer ${token}`;
     } else {
         localStorage.removeItem('accessToken');
-        delete apiClient.defaults.headers.Authorization
+        delete apiClient.defaults.headers.Authorization;
     }
 };
 
@@ -30,8 +30,28 @@ export const logout = () => {
 const token = getAccessToken();
 if (token) {
     apiClient.defaults.headers.Authorization = `Bearer ${token}`;
- 
 }
+
+apiClient.interceptors.response.use(
+  response => response,
+  error => {
+    const status = error.response?.status;
+    const errorCode = error.response?.data?.code;
+    if (
+      status === 401 &&
+      errorCode === 'token_not_valid' &&
+      window.location.pathname !== '/signin'
+    ) {
+      logout();
+      window.location.href = '/signin'; 
+    }
+
+    return Promise.reject(error);
+  }
+);
+   
+
+   
 
 const api = {
     register: async (userData) => {
@@ -49,7 +69,7 @@ const api = {
     },
     getBlogsData: async () => {
         try {
-            const response = await axios.get(`${API_URL}/get-blog-data`, {
+            const response = await apiClient.get(`${API_URL}/get-blog-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -60,7 +80,7 @@ const api = {
     },
     getBlogById: async (id) => {
         try {
-          const response = await axios.get(`${API_URL}/get-blog-data/${id}`, {
+          const response = await apiClient.get(`${API_URL}/get-blog-data/${id}`, {
             headers: { 'Content-Type': 'application/json' }
           });
           return response.data;
@@ -73,7 +93,7 @@ const api = {
     getMoneyData: async (date) => {
         try {
             const formattedDate = date || ''; 
-            const response = await axios.get(`${API_URL}/nba-money-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/nba-money-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -85,7 +105,7 @@ const api = {
     getSpreadData: async (date) => {
         try {
             const formattedDate = date || ''; 
-            const response = await axios.get(`${API_URL}/nba-spread-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/nba-spread-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -96,7 +116,7 @@ const api = {
     getOverUnderData: async (date) => {
         try {
             const formattedDate = date || ''; 
-            const response = await axios.get(`${API_URL}/nba-over-under-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/nba-over-under-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -107,7 +127,7 @@ const api = {
     getMlbMoneyData: async (date) => {
         try {
             const formattedDate = date || '';
-            const response = await axios.get(`${API_URL}/mlb-money-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/mlb-money-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -119,7 +139,7 @@ const api = {
     getMlbDefaultData: async (date) => {
         try {
             const formattedDate = date || '';
-            const response = await axios.get(`${API_URL}/mlb-default-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/mlb-default-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -132,7 +152,7 @@ const api = {
     getMlbSpreadData: async (date) => {
         try {
             const formattedDate = date || '';
-            const response = await axios.get(`${API_URL}/mlb-spread-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/mlb-spread-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -143,7 +163,7 @@ const api = {
     getMlbOverUnderData: async (date) => {
         try {
             const formattedDate = date || '';
-            const response = await axios.get(`${API_URL}/mlb-over-under-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/mlb-over-under-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -154,7 +174,7 @@ const api = {
     getNhlMoneyData: async (date) => {
         try {
             const formattedDate = date || '';
-            const response = await axios.get(`${API_URL}/nhl-money-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/nhl-money-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -166,7 +186,7 @@ const api = {
     getNhlSpreadData: async (date) => {
         try {
             const formattedDate = date || '';
-            const response = await axios.get(`${API_URL}/nhl-spread-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/nhl-spread-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -177,7 +197,7 @@ const api = {
     getNhlOverUnderData: async (date) => {
         try {
             const formattedDate = date || '';
-            const response = await axios.get(`${API_URL}/nhl-over-under-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/nhl-over-under-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -187,7 +207,7 @@ const api = {
     },
     getNewsData: async () => {
         try {
-            const response = await axios.get(`${API_URL}/news-data`, {
+            const response = await apiClient.get(`${API_URL}/news-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -198,7 +218,7 @@ const api = {
     },
     getNbaTeamsData: async () => {
         try {
-            const response = await axios.get(`${API_URL}/nba-teams`, {
+            const response = await apiClient.get(`${API_URL}/nba-teams`, {
                 headers: { 'Content-Type': 'application/json' } 
         
             });
@@ -212,7 +232,7 @@ const api = {
     },
     getNhlTeamsData: async () => {
         try {
-            const response = await axios.get(`${API_URL}/nhl-teams`, {
+            const response = await apiClient.get(`${API_URL}/nhl-teams`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -223,7 +243,7 @@ const api = {
     },
     getMlbteamsData: async () => {
         try {
-            const response = await axios.get(`${API_URL}/mlb-teams`, {
+            const response = await apiClient.get(`${API_URL}/mlb-teams`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -234,7 +254,7 @@ const api = {
     },
     getNbaInjuriesData: async () => {
         try {
-            const response = await axios.get(`${API_URL}/nba-injuries-data`, {
+            const response = await apiClient.get(`${API_URL}/nba-injuries-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data.data;
@@ -245,7 +265,7 @@ const api = {
     },
     getMlbInjuriesData: async () => {
         try {
-            const response = await axios.get(`${API_URL}/mlb-injuries-data`, {
+            const response = await apiClient.get(`${API_URL}/mlb-injuries-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data.data;
@@ -256,7 +276,7 @@ const api = {
     },
     getNhlInjuriesData: async () => {
         try {
-            const response = await axios.get(`${API_URL}/nhl-injuries-data`, {
+            const response = await apiClient.get(`${API_URL}/nhl-injuries-data`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data.data;
@@ -268,7 +288,7 @@ const api = {
     getNbaScheduleData: async (date) => {
         try {
             const formattedDate = date || ''; 
-            const response = await axios.get(`${API_URL}/nba-schedule-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/nba-schedule-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
        
@@ -281,7 +301,7 @@ const api = {
     getNhlScheduleData: async (date) => {
         try {
             const formattedDate = date || ''; 
-            const response = await axios.get(`${API_URL}/nhl-schedule-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/nhl-schedule-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
           
@@ -294,7 +314,7 @@ const api = {
     getMlbScheduleData: async (date) => {
         try {
             const formattedDate = date || ''; 
-            const response = await axios.get(`${API_URL}/mlb-schedule-data/?date=${formattedDate}`, {
+            const response = await apiClient.get(`${API_URL}/mlb-schedule-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
         
@@ -306,7 +326,7 @@ const api = {
     },
     getadmindata: async () => {
         try {
-            const response = await axios.get(`${API_URL}/admin-user`, {
+            const response = await apiClient.get(`${API_URL}/admin-user`, {
             })
             return response.data;
         } catch (error) {
@@ -354,7 +374,7 @@ const api = {
     },
     getPickDetailsPublic: async (pickId) => {
         try {
-            const response = await axios.post(`${API_URL}/singlepick-without-login/`,{
+            const response = await apiClient.post(`${API_URL}/singlepick-without-login/`,{
                 id: pickId
             } ,{
                 headers: {
@@ -409,7 +429,7 @@ const api = {
 
     placeOrderPublic: async (orderData) => {
         try {
-            const response = await axios.post(`${API_URL}/create-order-without-login/`, orderData, {
+            const response = await apiClient.post(`${API_URL}/create-order-without-login/`, orderData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -426,10 +446,10 @@ const api = {
             const token = getAccessToken();
             
             if (token) {
-                return await api.placeOrderAuth(orderData);
+                return await apiClient.placeOrderAuth(orderData);
             } else {
 
-                return await api.placeOrderPublic(orderData);
+                return await apiClient.placeOrderPublic(orderData);
             }
         } catch (error) {
             console.error("Order placement error:", error);
@@ -460,7 +480,7 @@ const api = {
 
     purchaseOrderPublic: async (orderDetails) => {
         try {
-            const response = await axios.post(`${API_URL}/update-order-without-login/`, orderDetails, {
+            const response = await apiClient.post(`${API_URL}/update-order-without-login/`, orderDetails, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -477,10 +497,10 @@ const api = {
             const token = getAccessToken();
             
             if (token) {
-                return await api.purchaseOrderAuth(orderDetails);
+                return await apiClient.purchaseOrderAuth(orderDetails);
             } else {
 
-                return await api.purchaseOrderPublic(orderDetails);
+                return await apiClient.purchaseOrderPublic(orderDetails);
             }
         } catch (error) {
             console.error("Order placement error:", error);
@@ -490,7 +510,7 @@ const api = {
     getSubscriptionStatus: async (userId) => {
         try {
             const token = localStorage.getItem("accessToken");
-            const response = await axios.get(`${API_URL}/picks-subscription-status/${userId}`, {
+            const response = await apiClient.get(`${API_URL}/picks-subscription-status/${userId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
@@ -504,7 +524,7 @@ const api = {
     },
     processPayment :async(data)=>{
         try {
-            const response = await axios.post(`${API_URL}/stripe-payment`,data,{
+            const response = await apiClient.post(`${API_URL}/stripe-payment`,data,{
             headers: {
                 'Content-Type': 'application/json',
                Authorization: `Bearer ${getAccessToken()}`
@@ -512,7 +532,8 @@ const api = {
         
             return response.data
         } catch (error) {
-            return (error)
+              console.error("Subscription status fetch error:", error);
+              return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
     }
 };

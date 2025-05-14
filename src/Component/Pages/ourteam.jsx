@@ -90,7 +90,6 @@ const Ourteam = () => {
             ))}
           </Row>
         )}
-        <GameSelector />
         <Faq />
       </Container>
     </section>

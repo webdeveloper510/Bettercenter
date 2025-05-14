@@ -43,7 +43,7 @@ const BlogDetail = () => {
 
   return (
     <div className="blog-detail-container">
-      <button onClick={() => navigate(-1)}>← Back</button>
+ALL DAVID'S PICKS
       <h1>{blog.title}</h1>
 
       {isVideo ? (
