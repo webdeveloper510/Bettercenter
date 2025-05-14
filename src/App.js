@@ -35,6 +35,9 @@ import OrderConfirmation from "./Component/Pages/success";
 import PromoBanner from "./Component/Pages/homebanner";
 import AIPicks from "./Component/Pages/aipicks";
 import GameSelector from "./Component/Pages/test";
+import ManageSubscription from "./Component/Pages/msubscription";
+import MProfile from "./Component/Pages/mprofile";
+
 
 // Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
@@ -112,6 +115,8 @@ function Layout() {
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="PromoBanner" element={<homebanner />} />
           <Route path="GameSelector" element={<test />} />
+          <Route path="/msubscription" element={<ManageSubscription />} />
+          <Route path="/mprofile" element={<MProfile />} />
           
           <Route
             path="AIPicks"

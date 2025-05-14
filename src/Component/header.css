@@ -125,3 +125,14 @@ span.login-text {
   color: #ffc107 !important;
   
 }
+
+.profile-icon-btn {
+  border: none;
+  background: none;
+  color: white;
+}
+
+.profile-icon-btn:hover {
+  color: #3d76c7;
+  background: none;
+}

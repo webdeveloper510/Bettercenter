@@ -1,0 +1,8 @@
+.main_profile {
+       background-image: url(http://localhost:3000/static/media/page-bg.2dbc9d6a163cecf58a41.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+        min-height: 100vh;
+}

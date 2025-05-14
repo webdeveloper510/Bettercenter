@@ -4,21 +4,28 @@ import "../../Assets/ourteam.css";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
 import Faq from "./faq";
 import api from "../../api";
-import GameSelector from "./test";
+
+// Corrected image imports
+import Team1 from "../../Assets/images/team1.png"; 
+import Team2 from "../../Assets/images/team2.png"; 
+import Team3 from "../../Assets/images/team3.png"; 
+import Team4 from "../../Assets/images/team4.png";
+
+// Array of fallback images
+const fallbackImages = [Team1, Team2, Team3, Team4];
 
 const Ourteam = () => {
   const navigate = useNavigate();
   const [teamData, setTeamData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Modified to use navigate with state
   const handleBuyClick = (adminId, firstName, lastName) => {
     const adminName = `${firstName} ${lastName}`.trim();
-    navigate('/allpicks', { 
-      state: { 
+    navigate('/allpicks', {
+      state: {
         adminId,
-        adminName 
-      } 
+        adminName
+      }
     });
   };
 
@@ -55,32 +62,32 @@ const Ourteam = () => {
           </div>
         ) : (
           <Row className="justify-content-center tem_menber">
-            {teamData.map((member) => (
+            {teamData.map((member, index) => (
               <Col md={3} sm={6} key={member.id}>
                 <Card className="team-card">
-                  {/* Use member profile image if available, otherwise default */}
-                  <Card.Img 
-                    variant="top" 
-                    src={member.profile_image || "/path-to-default-image.png"} 
-                    className="team-img" 
+                  <Card.Img
+                    variant="top"
+                    src={member.profile_image || fallbackImages[index % fallbackImages.length]}
+                    className="team-img"
                   />
                   <Card.Body className="text-center team_details">
                     <Card.Title className="team-name">
-                      {member.firstname !== "None" ? member.firstname : ""}{" "}
-                      {member.lastname !== "None" ? member.lastname : ""}
+                      {(member.firstname !== "None" ? member.firstname : "")}{" "}
+                      {(member.lastname !== "None" ? member.lastname : "")}
                     </Card.Title>
                     <Card.Text className="team-description">
                       {member.about !== "None" ? member.about : ""}
-                   
                     </Card.Text>
-                    <Button 
-                      variant="outline-light" 
-                      className="buy_pick" 
-                      onClick={() => handleBuyClick(
-                        member.id, 
-                        member.firstname !== "None" ? member.firstname : "", 
-                        member.lastname !== "None" ? member.lastname : ""
-                      )}
+                    <Button
+                      variant="outline-light"
+                      className="buy_pick"
+                      onClick={() =>
+                        handleBuyClick(
+                          member.id,
+                          member.firstname !== "None" ? member.firstname : "",
+                          member.lastname !== "None" ? member.lastname : ""
+                        )
+                      }
                     >
                       BUY PICKS
                     </Button>
