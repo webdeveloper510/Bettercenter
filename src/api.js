@@ -73,7 +73,25 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch user profile" };
         }
     },
-    
+      getSubscriptionDetail: async () => {
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                return { error: 'User not authenticated' };
+            }
+            
+            const response = await apiClient.get('/get-active-subscription', {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Profile fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch user profile" };
+        }
+    },
     updateUserProfile: async (profileData) => {
         try {
             const token = getAccessToken();
