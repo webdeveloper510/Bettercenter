@@ -23,31 +23,53 @@ const AIPicks = () => {
   const [packages, setPackages] = useState({
     month: { amount: '99', name: 'One Month Access' }
   });
-
-useEffect(() => {
-  const checkLoginStatusAndAccess = async () => {
-    const token = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem("user_id");
-    if (token && userId) {
-      setIsLoggedIn(true);
-
-      try {
-        const data = await api.getSubscriptionStatus(userId);
-        setShowIframe(data.free_trial);
-      } catch (error) {
-        console.error("Failed to fetch access status:", error);
-        setShowIframe(false);
+  const checkSubscriptionStatus = async () => {
+    try {
+      const data = await api.getSubscriptionStatus();
+      if (data.data) {
+        setShowIframe(true);
+        return true;
       }
-    } else {
-      setIsLoggedIn(false);
-      setShowIframe(false);
+      return false;
+    } catch (error) {
+      console.error("Failed to fetch subscription status:", error);
+      return false;
     }
-    setSubscriptionLoading(false); 
   };
 
-  checkLoginStatusAndAccess();
-}, []);
+  useEffect(() => {
+    const checkLoginStatusAndAccess = async () => {
+      setSubscriptionLoading(true);
+      const token = localStorage.getItem("accessToken");
+      const userId = localStorage.getItem("user_id");
+      
+      if (token && userId) {
+        setIsLoggedIn(true);
 
+        try {
+          const freeTrialData = await api.getFreeTrialStatus();
+          
+          if (freeTrialData.free_trial) {
+            setShowIframe(true);
+          } else {
+            const hasSubscription = await checkSubscriptionStatus();
+            if (!hasSubscription) {
+              setShowIframe(false);
+            }
+          }
+        } catch (error) {
+          console.error("Failed to fetch access status:", error);
+          setShowIframe(false);
+        }
+      } else {
+        setIsLoggedIn(false);
+        setShowIframe(false);
+      }
+      setSubscriptionLoading(false); 
+    };
+
+    checkLoginStatusAndAccess();
+  }, []);
 
   const handleBuyNow = () => {
     setShowCheckoutModal(true);
@@ -57,44 +79,43 @@ useEffect(() => {
     <section className="main">
       <div className="outer_custom">
         <h2 className="text-center our_team_head py-4 gap-3">AI Picks</h2>
-     <Container>
-  {subscriptionLoading ? (
-    <div className="d-flex justify-content-center align-items-center" style={{ height: '400px' }}>
-      <Spinner animation="border" role="status" variant="primary" style={{ width: '4rem', height: '4rem' }}>
-        <span className="visually-hidden">Loading...</span>
-      </Spinner>
-    </div>
-  ) : isLoggedIn && showIframe ? (
-    <div className="row py-5 gap-3 position-relative">
-      {iframeLoading && (
-        <div className="d-flex justify-content-center align-items-center w-100" style={{ height: '800px', position: 'absolute', zIndex: 1, backgroundColor: 'white' }}>
-          <Spinner animation="border" role="status" variant="primary" style={{ width: '4rem', height: '4rem' }}>
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </div>
-      )}
-      <iframe
-        src="https://betscienceai.shinyapps.io/sports-predictor/?mode=full"
-        width="100%"
-        height="800"
-        style={{ border: 'none', zIndex: 0 }}
-        title="Sports Predictor"
-        onLoad={() => setIframeLoading(false)}
-        onError={() => {
-          setIframeLoading(false);
-          toast.error("Failed to load AI Picks.");
-        }}
-      />
-    </div>
-  ) : (
-    <div className="text-center py-5">
-      <Button variant="primary" onClick={handleBuyNow}>
-        Buy Now
-      </Button>
-    </div>
-  )}
-</Container>
-
+        <Container>
+          {subscriptionLoading ? (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '400px' }}>
+              <Spinner animation="border" role="status" variant="primary" style={{ width: '4rem', height: '4rem' }}>
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          ) : isLoggedIn && showIframe ? (
+            <div className="row py-5 gap-3 position-relative">
+              {iframeLoading && (
+                <div className="d-flex justify-content-center align-items-center w-100" style={{ height: '800px', position: 'absolute', zIndex: 1, backgroundColor: 'white' }}>
+                  <Spinner animation="border" role="status" variant="primary" style={{ width: '4rem', height: '4rem' }}>
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </div>
+              )}
+              <iframe
+                src="https://betscienceai.shinyapps.io/sports-predictor/?mode=full"
+                width="100%"
+                height="800"
+                style={{ border: 'none', zIndex: 0 }}
+                title="Sports Predictor"
+                onLoad={() => setIframeLoading(false)}
+                onError={() => {
+                  setIframeLoading(false);
+                  toast.error("Failed to load AI Picks.");
+                }}
+              />
+            </div>
+          ) : (
+            <div className="text-center py-5">
+              <Button variant="primary" onClick={handleBuyNow}>
+                Buy Now
+              </Button>
+            </div>
+          )}
+        </Container>
       </div>
 
       {/* Payment Checkout Component */}
@@ -104,14 +125,14 @@ useEffect(() => {
           onHide={() => setShowCheckoutModal(false)}
           selectedPackage={selectedPackage} 
           packages={packages}
-          setShowIframe={setShowIframe}
+          checkSubscriptionStatus={checkSubscriptionStatus}
         />
       </Elements>
     </section>
   );
 };
 
-const CheckoutModal = ({ show, onHide, selectedPackage, packages, setShowIframe }) => {
+const CheckoutModal = ({ show, onHide, selectedPackage, packages, checkSubscriptionStatus }) => {
   const [loading, setLoading] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState(0);
 
@@ -157,13 +178,17 @@ const CheckoutModal = ({ show, onHide, selectedPackage, packages, setShowIframe 
         try {
           const result = await api.processPayment(data, token);
           const status = result?.status;
-          const responseData = result;
+          
           if (status === 200) {
             toast.success('Payment successful!');
-            onHide();
-            setShowIframe(true);
+            const hasSubscription = await checkSubscriptionStatus();
+            if (hasSubscription) {
+              onHide();
+            } else {
+              toast.error('Payment processed but subscription not activated. Please contact support.');
+            }
           } else if (status === 400) {
-            toast.error(responseData?.message || 'Invalid payment details or promo code');
+            toast.error(result?.message || 'Invalid payment details or promo code');
           } else {
             toast.error('Payment not completed');
           }

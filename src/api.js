@@ -566,10 +566,10 @@ const api = {
             return error;
         }
     },
-    getSubscriptionStatus: async (userId) => {
+    getFreeTrialStatus: async (userId) => {
         try {
             const token = localStorage.getItem("accessToken");
-            const response = await apiClient.get(`${API_URL}/picks-subscription-status/${userId}`, {
+            const response = await apiClient.get(`${API_URL}/free-trial-status`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
@@ -581,6 +581,22 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
     },
+   getSubscriptionStatus: async () => {
+        try {
+            const token = localStorage.getItem("accessToken");
+            const response = await apiClient.get(`${API_URL}/active-inactive-subscription`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Subscription status fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
+        }
+    },
+
     processPayment :async(data)=>{
         try {
             const response = await apiClient.post(`${API_URL}/stripe-payment`,data,{

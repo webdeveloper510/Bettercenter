@@ -87,29 +87,6 @@ const Games = () => {
   const isFirstLoadRef = useRef(true);
   const [bookmarkedGames, setBookmarkedGames] = useState([]);
   const currentSportMarketRef = useRef("");
-  useEffect(() => {
-    const checkLoginStatusAndSubscription = async () => {
-      const token = localStorage.getItem("accessToken");
-      const userId = localStorage.getItem("user_id");
-      if (token && userId) {
-        setIsLoggedIn(true);
-
-        try {
-          const data = await api.getSubscriptionStatus(userId);
-          setShowIframe(data.free_trial);
-        } catch (error) {
-          console.error("Failed to fetch subscription status:", error);
-          setShowIframe(false);
-        }
-      } else {
-        setIsLoggedIn(false);
-        setShowIframe(false);
-      }
-    };
-
-    checkLoginStatusAndSubscription();
-  }, []);
-
   const totalPages = 4;
   const toggleBookmark = (gameIndex) => {
     setBookmarkedGames((prev) => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../Assets/css/blogdetail.css';
 import api from '../../api';
-import blog1 from '../../Assets/images/blog1.jpg'; // Fallback image
+import blog1 from '../../Assets/images/blog1.jpg'; 
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -43,7 +43,6 @@ const BlogDetail = () => {
 
   return (
     <div className="blog-detail-container">
-ALL DAVID'S PICKS
       <h1>{blog.title}</h1>
 
       {isVideo ? (
