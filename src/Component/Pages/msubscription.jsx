@@ -2,15 +2,23 @@ import React from "react";
 import { Container, Card, Button } from "react-bootstrap";
 import '../../Assets/css/msubscription.css';
 import api from "../../api";
-
+import { toast } from "react-toastify";
 const ManageSubscription = () => {
   const handleCancelSubscription = async () => {
-    const response = await api.cancelSubscription();
-    console.log("🚀 ~ handleCancelSubscription ~ response:", response)
-    if (response && response.success) {
-      alert("Subscription cancelled successfully.");
-    } else {
-      alert(response?.message || "Failed to cancel subscription.");
+    try {
+      const userId = localStorage.getItem("userId");
+      
+      const response = await api.cancelSubscription();
+      console.log("🚀 ~ handleCancelSubscription ~ response:", response)
+      
+      if (response && response.success) {
+        toast.success("Subscription cancelled successfully.");
+      } else {
+        toast.error(response?.message || "Failed to cancel subscription.");
+      }
+    } catch (err) {
+      console.error("Error cancelling subscription:", err);
+      alert("An error occurred while cancelling your subscription.");
     }
   };
 

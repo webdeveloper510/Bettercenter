@@ -92,7 +92,27 @@ const api = {
             console.error("Profile update error:", error);
             return error.response ? error.response.data : { message: "Failed to update user profile" };
         }
-    },   
+    }, 
+    cancelSubscription: async () => {
+    try {
+        const token = getAccessToken();
+        if (!token) {
+            return { error: 'User not authenticated' };
+        }
+        
+        const response = await apiClient.delete('/cancel-stripe-subscription', {
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        return response.data;
+    } catch (error) {
+        console.error("Subscription cancellation error:", error);
+        return error.response ? error.response.data : { message: "Failed to cancel subscription" };
+    }
+},  
     register: async (userData) => {
         try {
 

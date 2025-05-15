@@ -14,7 +14,6 @@ import "react-toastify/dist/ReactToastify.css";
 // Import components
 import Home from "./Component/Pages/home";
 import Signup from "./Component/Pages/signup";
-import Subscription from "./Component/Pages/subscriptions";
 import Ourteam from "./Component/Pages/ourteam";
 import Pickdetail from "./Component/Pages/pickdetail";
 import AllPicks from "./Component/Pages/allpicks";
@@ -38,8 +37,6 @@ import GameSelector from "./Component/Pages/test";
 import ManageSubscription from "./Component/Pages/msubscription";
 import MProfile from "./Component/Pages/mprofile";
 
-
-// Modified ProtectedRoute to skip token check
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("accessToken");
   if (!token) {
@@ -49,8 +46,6 @@ const ProtectedRoute = ({ children }) => {
 };
 const OrderProtectedRoute = ({ children }) => {
   const location = useLocation();
-
-  // Only allow access if there's order details in the location state
   if (!location.state?.orderDetails) {
     return <Navigate to="/" replace />;
   }
@@ -78,7 +73,6 @@ function Layout() {
           {/* Home as default route */}
           <Route path="/" element={<Games />} />
 
-          <Route path="/subscription" element={<Subscription />} />
           <Route path="/ourteam" element={<Ourteam />} />
 
           {/* Updated routes with parameters */}
@@ -115,8 +109,8 @@ function Layout() {
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="PromoBanner" element={<homebanner />} />
           <Route path="GameSelector" element={<test />} />
-          <Route path="/msubscription" element={<ManageSubscription />} />
-          <Route path="/mprofile" element={<MProfile />} />
+          <Route path="/subscription" element={<ManageSubscription />} />
+          <Route path="/profile" element={<MProfile />} />
           
           <Route
             path="AIPicks"

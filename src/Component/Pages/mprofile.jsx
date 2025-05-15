@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
 import '../../Assets/css/mprofile.css';
 import api from "../../api";
-
+import { toast } from "react-toastify";
 const MProfile = () => {
   const [formData, setFormData] = useState({
     first_name: "",
@@ -11,22 +11,15 @@ const MProfile = () => {
     old_password: "",
     new_password: ""
   });
-  console.log("🚀 ~ MProfile ~ formData:", formData)
-  const [alert, setAlert] = useState({
-    show: false,
-    variant: "success",
-    message: ""
-  });
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   const fetchUserProfile = async () => {
     setIsLoading(true);
     try {
       const response = await api.getUserProfile();
-      console.log("🚀 ~ fetchUserProfile ~ response:", response)
       if (response.data && response.status == 200 && !response.error) {
         setFormData({
-          id: response.data[0]?.id || "",
           first_name: response.data[0]?.firstname || "",
           last_name: response.data[0]?.lastname || "",
           email: response.data[0]?.email || "",
@@ -34,11 +27,11 @@ const MProfile = () => {
           new_password: ""
         });
       } else {
-        showAlert("danger", "Failed to load profile data");
+        toast.error("Failed to load profile data");
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
-      showAlert("danger", "An error occurred while loading profile data");
+      toast.error("An error occurred while loading profile data");
     } finally {
       setIsLoading(false);
     }
@@ -56,75 +49,63 @@ const MProfile = () => {
     if (fieldName === "lastname") fieldName = "last_name";
     if (fieldName === "oldpassword") fieldName = "old_password";
     if (fieldName === "newpassword") fieldName = "new_password";
-    
-    console.log("Field being updated:", id, "->", fieldName, "with value:", value);
+    if (fieldName === "old_password" || fieldName === "new_password") {
+      setPasswordError("");
+    }
     
     setFormData({
       ...formData,
       [fieldName]: value
     });
   };
-
-  const showAlert = (variant, message) => {
-    setAlert({
-      show: true,
-      variant,
-      message
-    });
-
-    setTimeout(() => {
-      setAlert({ ...alert, show: false });
-    }, 5000);
-  };
-
  const handleSubmit = async (e) => {
   e.preventDefault();
+  if (formData.old_password && !formData.new_password) {
+    setPasswordError("New password is required when changing password");
+    return;
+  }
+  
   setIsLoading(true);
 
   let updateData = {
-    id: formData.id,
     firstname: formData.first_name,
     lastname: formData.last_name,
   };
   
-  if (formData.new_password) {
+  if (formData.old_password) {
     updateData.old_password = formData.old_password;
     updateData.new_password = formData.new_password;
   }
 
   try {
     const profileResponse = await api.updateUserProfile(updateData);
+    console.log("🚀 ~ handleSubmit ~ profileResponse:", profileResponse)
 
     if (profileResponse.status === 200) {
-      showAlert("success", "Profile updated successfully");
+      toast.success("Profile updated successfully");
       await fetchUserProfile();
     } else {
-      showAlert("danger", profileResponse.data?.message || "Failed to update profile");
+      toast.error( profileResponse.message || "Failed to update profile");
     }
   } catch (error) {
     console.error("Error updating profile:", error);
-    showAlert("danger", "An error occurred while updating your profile");
+    toast.error( "An error occurred while updating your profile");
   } finally {
     setIsLoading(false);
   }
 };
 
   const handleCancel = () => {
+    setPasswordError("");
     fetchUserProfile();
   };
+  const isNewPasswordFieldActive = formData.old_password.length > 0;
 
   return (
     <div className="main_profile">
       <h2 className="text-center our_team_head pb-4 py-5 gap-3">Overview</h2>
       <Container className="py-5 text-white">
         <p className="text-muted mb-4">Update your personal information</p>
-
-        {alert.show && (
-          <Alert variant={alert.variant} onClose={() => setAlert({ ...alert, show: false })} dismissible>
-            {alert.message}
-          </Alert>
-        )}
-
         <Card className="bg-dark border-0 text-white p-4">
           <Form onSubmit={handleSubmit}>
             <Row className="mb-3">
@@ -165,9 +146,6 @@ const MProfile = () => {
                   />
                 </Form.Group>
               </Col>
-            </Row>
-
-            <Row className="mb-4">
               <Col md={6}>
                 <Form.Group controlId="formOldPassword">
                   <Form.Label>Current Password</Form.Label>
@@ -180,6 +158,9 @@ const MProfile = () => {
                   />
                 </Form.Group>
               </Col>
+            </Row>
+
+            <Row className="mb-4">
               <Col md={6}>
                 <Form.Group controlId="formNewPassword">
                   <Form.Label>New Password</Form.Label>
@@ -188,8 +169,13 @@ const MProfile = () => {
                     placeholder="Enter new password" 
                     value={formData.new_password}
                     onChange={handleInputChange}
-                    disabled={isLoading}
+                    disabled={!isNewPasswordFieldActive || isLoading}
                   />
+                  {passwordError && (
+                    <div className="text-danger mt-1" style={{fontSize: "0.875rem"}}>
+                      {passwordError}
+                    </div>
+                  )}
                 </Form.Group>
               </Col>
             </Row>

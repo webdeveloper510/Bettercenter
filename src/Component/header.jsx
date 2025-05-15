@@ -126,10 +126,10 @@ const Header = () => {
                   <FaUserCircle size={24} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => navigate("/mprofile")}>
+                  <Dropdown.Item onClick={() => navigate("/profile")}>
                     Profile
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => navigate("/msubscription")}>
+                  <Dropdown.Item onClick={() => navigate("/subscription")}>
                     Manage Subscription
                   </Dropdown.Item>
                   <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
