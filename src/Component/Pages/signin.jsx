@@ -16,35 +16,43 @@ const Signin = () => {
         }
     }, [navigate]);
 
-    const handleSubmit = async (values, { setSubmitting }) => {
-        try {
-            const response = await axios.post("http://54.209.247.111:8000/login", values);
+const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+        const response = await axios.post("http://54.209.247.111:8000/login", values);
+        if (response.data?.status === 200) {
             const user_id = response.data?.user_id;
             const token = response.data?.token;
+
             if (token) {
                 setAuthToken(token);
-localStorage.setItem("user_id", user_id);
+                localStorage.setItem("user_id", user_id);
                 toast.success("Login successful!");
-
                 navigate('/');
             } else {
                 console.error("No token found in response");
                 toast.error("Login failed: No access token received");
             }
-        } catch (error) {
-            console.error("Login error details:", {
-                message: error.message,
-                response: error.response ? error.response.data : 'No response',
-                request: error.request ? 'Request exists' : 'No request',
-                config: error.config ? 'Config exists' : 'No config'
-            });
-
-            toast.error(`Login failed: ${error.response?.data?.detail || error.message}`);
-        } finally {
-            setSubmitting(false);
+        } else if (response.data?.status === 400) {
+            toast.error(response.data?.message || "Login failed");
+        } else {
+            toast.error("Unexpected response from server");
         }
-    };
-    
+
+    } catch (error) {
+        console.error("Login error details:", {
+            message: error.message,
+            response: error.response ? error.response.data : 'No response',
+            request: error.request ? 'Request exists' : 'No request',
+            config: error.config ? 'Config exists' : 'No config'
+        });
+
+        toast.error(`Login failed: ${error.response?.data?.detail || error.message}`);
+    } finally {
+        setSubmitting(false);
+    }
+};
+
+
     return (
         <>
             <section className='login_page signin_login_page'>

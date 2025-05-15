@@ -5,11 +5,9 @@ import api from "../../api";
 
 const MProfile = () => {
   const [formData, setFormData] = useState({
-    id: "",
     first_name: "",
     last_name: "",
     email: "",
-    phone: "",
     old_password: "",
     new_password: ""
   });
@@ -32,7 +30,6 @@ const MProfile = () => {
           first_name: response.data[0]?.firstname || "",
           last_name: response.data[0]?.lastname || "",
           email: response.data[0]?.email || "",
-          phone: response.phone || "",
           old_password: "",
           new_password: ""
         });
@@ -55,7 +52,6 @@ const MProfile = () => {
     const { id, value } = e.target;
     let fieldName = id.replace("form", "").toLowerCase();
     
-    // Map field names correctly
     if (fieldName === "firstname") fieldName = "first_name";
     if (fieldName === "lastname") fieldName = "last_name";
     if (fieldName === "oldpassword") fieldName = "old_password";
@@ -87,9 +83,8 @@ const MProfile = () => {
 
   let updateData = {
     id: formData.id,
-    first_name: formData.first_name,
-    last_name: formData.last_name,
-    phone: formData.phone || ""
+    firstname: formData.first_name,
+    lastname: formData.last_name,
   };
   
   if (formData.new_password) {
@@ -102,7 +97,6 @@ const MProfile = () => {
 
     if (profileResponse.status === 200) {
       showAlert("success", "Profile updated successfully");
-      // Fetch updated user profile after successful update
       await fetchUserProfile();
     } else {
       showAlert("danger", profileResponse.data?.message || "Failed to update profile");
@@ -168,21 +162,6 @@ const MProfile = () => {
                     type="email" 
                     value={formData.email} 
                     disabled 
-                  />
-                  <Form.Text className="text-muted">
-                    Email cannot be changed
-                  </Form.Text>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formPhone">
-                  <Form.Label>Phone Number (Optional)</Form.Label>
-                  <Form.Control 
-                    type="text" 
-                    placeholder="Phone Number (Optional)" 
-                    value={formData.phone || ""}
-                    onChange={handleInputChange}
-                    disabled={isLoading}
                   />
                 </Form.Group>
               </Col>
