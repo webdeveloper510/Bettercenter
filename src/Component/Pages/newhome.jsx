@@ -626,7 +626,7 @@ const Games = () => {
                       value={marketType}
                       onChange={handleMarketTypeChange}
                     >
-                      <option value="DEFAULT">DEFAULT(Moneyline/Total)</option>
+                      <option value="DEFAULT">DEFAULT({sport === "NBA" ? "Spread/Total" : "Moneyline/Total"})</option>
                       <option value="SPREAD">SPREAD</option>
                       <option value="MONEYLINE">MONEYLINE</option>
                       <option value="TOTAL">TOTAL</option>
