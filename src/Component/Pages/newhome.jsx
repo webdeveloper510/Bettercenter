@@ -101,20 +101,27 @@ const Games = () => {
     const today = new Date();
     setSelectedDate(today);
   }, []);
-  const formatOdds = (odds) => {
-    if (odds === null || odds === undefined) return "";
-    if (parseFloat(odds) === 0) return "0";
+const formatOdds = (odds) => {
+  if (odds === null || odds === undefined) return "";
+  if (typeof odds !== "string") odds = String(odds);
 
-    if (typeof odds === "string") {
-      odds = odds.trim();
+  odds = odds.trim();
 
-      if (odds === "-" || odds.startsWith("+") || odds.startsWith("-")) {
-        return odds;
-      }
-      odds = parseFloat(odds);
-    }
-    return odds > 0 ? `+${odds}` : `${odds}`;
-  };
+  // If odds are "0 / 0" or similar, just return as-is
+  if (odds === "0 / 0" || odds === "-") return odds;
+
+  // If odds contain "/", it's likely a compound string, so return as-is
+  if (odds.includes("/")) {
+    return odds;
+  }
+
+  // Otherwise, treat as a simple numeric odds string
+  const numeric = parseFloat(odds);
+  if (isNaN(numeric)) return odds;
+
+  return numeric > 0 ? `+${numeric}` : `${numeric}`;
+};
+
   const [colorRefreshTrigger, setColorRefreshTrigger] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
