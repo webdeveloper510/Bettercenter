@@ -46,3 +46,34 @@
     color: #fff !important;
     font-size: 18px;
 }
+.blog-detail-container {
+    display: grid;
+    gap: 40px;
+    padding: 40px;
+    background-color: #1b1e3d;
+    border: 1px solid #1b1e3d;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+}
+.blog-detail-container p span {
+    background: transparent !important;
+}
+.blog-detail-container h2 strong {
+    background: transparent !important;
+}
+.blog-detail-container img {
+    width: 100%;
+    border-radius: 10px;
+}
+p.blog-description span {
+    background: transparent !important;
+}
+
+@media screen and (max-width: 767px) {
+.blog-detail-container {
+    padding: 20px;
+}
+.blog-page {
+    padding: 20px;
+}
+}

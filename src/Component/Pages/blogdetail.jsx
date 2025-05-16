@@ -42,22 +42,28 @@ const BlogDetail = () => {
   const isVideo = blog.file_url?.endsWith('.mp4');
 
   return (
-    <div className="blog-detail-container">
-      <h1>{blog.title}</h1>
 
-      {isVideo ? (
-        <video controls>
-          <source src={blog.file_url} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      ) : (
-        <img src={blog.file_url || blog1} alt={blog.title} />
-      )}
 
-      <p>Posted on: {new Date(blog.uploaded_at).toLocaleDateString()}</p>
-      <div dangerouslySetInnerHTML={{ __html: blog.description }}></div>
-
-    </div>
+  <section className="backgroung_image">
+    <h2 class="text-center our_team_head pb-4 py-5 gap-3">Blog detail</h2>
+      <div className="container">
+            <div className="blog-detail-container">
+              <div className="container">
+                <h1>{blog.title}</h1>
+                {isVideo ? (
+                  <video controls>
+                    <source src={blog.file_url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <img src={blog.file_url || blog1} alt={blog.title} />
+                )}
+                <p>Posted on: {new Date(blog.uploaded_at).toLocaleDateString()}</p>
+                <div dangerouslySetInnerHTML={{ __html: blog.description }}></div>
+              </div>
+            </div>
+        </div>
+     </section>       
   );
 };
 

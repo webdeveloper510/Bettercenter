@@ -1,5 +1,6 @@
 import React from 'react';
 import { Carousel, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 // import banner1 from '../../Assets/images/homebanner1.png';
 import banner1 from '../../Assets/images/homebanner.png';
 import banner2 from '../../Assets/images/homebanner2.png';
@@ -16,9 +17,11 @@ const PromoBanner = () => {
           alt="First slide"
         />
         <Carousel.Caption className="text-center">
-          <Button variant="primary" className="banner-btn mt-3">
-            CLICK HERE
-          </Button>
+          <Link to="/signin">
+            <Button variant="primary" className="banner-btn mt-3">
+              CLICK HERE
+            </Button>
+          </Link>
         </Carousel.Caption>
       </Carousel.Item>
 
@@ -30,9 +33,11 @@ const PromoBanner = () => {
           alt="Second slide"
         />
         <Carousel.Caption className="text-center">
-          <Button variant="primary" className="banner-btn mt-3">
-            CLICK HERE
-          </Button>
+          <Link to="/signin">
+            <Button variant="primary" className="banner-btn mt-3">
+              CLICK HERE
+            </Button>
+          </Link>
         </Carousel.Caption>
       </Carousel.Item>
     </Carousel>
