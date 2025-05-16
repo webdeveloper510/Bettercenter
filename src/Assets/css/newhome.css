@@ -493,3 +493,6 @@ h1, h2, h3, .nba_odds {
   50% { opacity: 0.2; }
   100% { opacity: 1; }
 }
+.backgroung_image p {
+    color: #fff;
+}
