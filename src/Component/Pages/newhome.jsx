@@ -202,6 +202,10 @@ const Games = () => {
               apiData = await api.getOverUnderData(formattedDate);
               processedData = processTotalData(apiData);
               break;
+                  case "DEFAULT":
+                apiData = await api.getNbaDefaultData(formattedDate);
+                processedData = processDefaultData(apiData);
+                break;
             default:
           }
           break;
@@ -243,6 +247,10 @@ const Games = () => {
               apiData = await api.getNhlOverUnderData(formattedDate);
               processedData = processTotalData(apiData);
               break;
+               case "DEFAULT":
+                apiData = await api.getNhlDefaultData(formattedDate);
+                processedData = processDefaultData(apiData);
+                break;
             default:
 
           }

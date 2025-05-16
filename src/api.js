@@ -224,8 +224,31 @@ const api = {
             console.error("Default data fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch default data" };
         }
-    }
-    ,
+    },
+     getNhlDefaultData: async (date) => {
+        try {
+            const formattedDate = date || '';
+            const response = await apiClient.get(`${API_URL}/nhl-default-data/?date=${formattedDate}`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Default data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch default data" };
+        }
+    }  ,
+     getNbaDefaultData: async (date) => {
+        try {
+            const formattedDate = date || '';
+            const response = await apiClient.get(`${API_URL}/nba-default-data/?date=${formattedDate}`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Default data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch default data" };
+        }
+    }  ,
     getMlbSpreadData: async (date) => {
         try {
             const formattedDate = date || '';
