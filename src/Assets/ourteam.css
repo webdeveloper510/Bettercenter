@@ -47,6 +47,7 @@ p.text-center.team-subtitle {
   background: #007bff;
   border: 1px solid #007bff;
   padding: 10px 20px;
+  margin-top: 8px;
 }
 .buy_pick:hover {
   color: #fff;

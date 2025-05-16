@@ -75,9 +75,7 @@ const Ourteam = () => {
                       {(member.firstname !== "None" ? member.firstname : "")}{" "}
                       {(member.lastname !== "None" ? member.lastname : "")}
                     </Card.Title>
-                    <Card.Text className="team-description">
-                      {member.about !== "None" ? member.about : ""}
-                    </Card.Text>
+                  
                     <Button
                       variant="outline-light"
                       className="buy_pick"

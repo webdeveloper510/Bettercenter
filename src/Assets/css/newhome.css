@@ -215,7 +215,9 @@ h1, h2, h3, .nba_odds {
     transition: background-color 0.5s ease;
     width: 100%;
   }
-  
+  .backgroung_image p {
+    color: #fff;
+}
   
   .changed-yellow {
     background-color: #FFBB00 !important;

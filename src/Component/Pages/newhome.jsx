@@ -65,7 +65,7 @@ const isValueChanged = (oldVal, newVal) => {
 
 const Games = () => {
   const [sport, setSport] = useState("NBA");
-  const [marketType, setMarketType] = useState("SPREAD");
+  const [marketType, setMarketType] = useState("DEFAULT");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState("OVERVIEW");
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,7 +73,7 @@ const Games = () => {
   const [showIframe, setShowIframe] = useState(false);
   const tabs = [
     "OVERVIEW",
-    "GAMES",
+    // "GAMES",
     "FUTURES",
     "TEAMS",
     "SCHEDULE",
