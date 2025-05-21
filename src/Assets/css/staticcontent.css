@@ -24,3 +24,15 @@
     line-height: normal;
 }
   
+
+@media screen and (max-width: 767px) {
+.section-title {
+    font-size: 30px;
+}
+h6.section-heading {
+    font-size: 26px !important;
+}
+.section-description {
+    font-size: 15px;
+}
+}

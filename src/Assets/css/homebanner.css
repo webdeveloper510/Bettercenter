@@ -33,3 +33,15 @@ a.carousel-control-prev {
 a.carousel-control-next {
   justify-content: end;
 }
+
+@media screen and (max-width: 767px) {
+.carousel-caption {
+        bottom: -0.75rem;
+}
+button.banner-btn.mt-3.btn.btn-primary {
+    font-size: 12px;
+}
+.carousel-indicators {
+    display: none;
+}
+}

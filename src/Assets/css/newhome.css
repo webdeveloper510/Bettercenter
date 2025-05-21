@@ -423,9 +423,15 @@ h1, h2, h3, .nba_odds {
   }
 
 
-  .table_flow tbody {
+  /* .table_flow tbody {
     min-height: 550px;
     height: 550px;
+    overflow-y: auto;
+    overflow-x: auto;
+} */
+.table_flow tbody {
+    min-height: 300px;
+    height: auto;
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -497,4 +503,59 @@ h1, h2, h3, .nba_odds {
 }
 .backgroung_image p {
     color: #fff;
+}
+
+
+
+
+
+
+@media screen and (max-width: 767px) {
+.nba_odds {
+    font-size: 30px;
+}
+.selectors {
+    display: block;
+    gap: 15px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.selectors select {
+    margin-bottom: 10px;
+    min-width: 80%;
+    width: 80%;
+    margin-right: 7px;
+}
+
+.date-picker-wrapper {
+    min-width: 80%;
+    width: 80%;	
+}
+.tabs {
+    display: block;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+.tabs button {
+    margin-bottom: 11px;
+    margin-right: 10px;
+    width: 47%;
+}
+}
+@media screen and (max-width: 480px) {
+.react-datepicker-popper {
+    left: 25px !important;
+}
+.betting-table-wrapper {
+   
+    overflow-y: scroll;
+}
+.betting-table {
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+}
+.betting-table th {
+    font-size: 12px;
+}
 }
