@@ -68,9 +68,9 @@ const Games = () => {
   const [marketType, setMarketType] = useState("DEFAULT");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState("OVERVIEW");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showIframe, setShowIframe] = useState(false);
+ const [socket, setSocket] = useState(null);
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
+  const initialDataFetchedRef = useRef(false);
   const tabs = [
     "OVERVIEW",
     // "GAMES",
@@ -88,6 +88,15 @@ const Games = () => {
   const [bookmarkedGames, setBookmarkedGames] = useState([]);
   const currentSportMarketRef = useRef("");
   const totalPages = 4;
+    const isCurrentDate = () => {
+    const today = new Date();
+    const selected = new Date(selectedDate);
+    return (
+      today.getDate() === selected.getDate() &&
+      today.getMonth() === selected.getMonth() &&
+      today.getFullYear() === selected.getFullYear()
+    );
+  };
   const toggleBookmark = (gameIndex) => {
     setBookmarkedGames((prev) => {
       if (prev.includes(gameIndex)) {
@@ -101,23 +110,18 @@ const Games = () => {
     const today = new Date();
     setSelectedDate(today);
   }, []);
+
 const formatOdds = (odds) => {
-  if (odds === null || odds === undefined) return "";
+  if (odds === null || odds === undefined) return "0";
   if (typeof odds !== "string") odds = String(odds);
 
   odds = odds.trim();
-
-  // If odds are "0 / 0" or similar, just return as-is
-  if (odds === "0 / 0" || odds === "-") return odds;
-
-  // If odds contain "/", it's likely a compound string, so return as-is
+  if (odds === "0 / 0" || odds === "-") return "0";
   if (odds.includes("/")) {
     return odds;
   }
-
-  // Otherwise, treat as a simple numeric odds string
   const numeric = parseFloat(odds);
-  if (isNaN(numeric)) return odds;
+  if (isNaN(numeric)) return "0";
 
   return numeric > 0 ? `+${numeric}` : `${numeric}`;
 };
@@ -281,6 +285,9 @@ const formatOdds = (odds) => {
         previousDataRef.current = JSON.parse(JSON.stringify(processedData));
         isFirstLoadRef.current = false;
       }
+         if (isCurrentDate()) {
+        initialDataFetchedRef.current = true;
+      }
     } catch (err) {
       console.error("Error fetching data:", err);
       setError(
@@ -295,7 +302,7 @@ const formatOdds = (odds) => {
     isFirstLoadRef.current = true;
     changeTimestampsRef.current = {};
     previousDataRef.current = [];
-
+ initialDataFetchedRef.current = false;
     const fetchAndUpdateData = async () => {
       setLoading(true);
       try {
@@ -306,10 +313,109 @@ const formatOdds = (odds) => {
     };
 
     fetchAndUpdateData();
-    const interval = setInterval(fetchAndUpdateData, 60000);
+    let interval;
+    if (!isCurrentDate()) {
+      interval = setInterval(fetchAndUpdateData, 60000);
+    }
 
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [sport, marketType, selectedDate]);
+useEffect(() => {
+  if (!isCurrentDate()) {
+    if (socket) {
+      console.log("Closing socket - not current date");
+      socket.close();
+      setIsSocketConnected(false);
+    }
+    return;
+  }
+  
+  const connectWebSocket = () => {
+    if (socket) {
+      socket.close();
+    }
+    
+    const wsUrl = `ws://54.209.247.111:8000/ws/chat/`;
+    console.log(`Connecting to WebSocket: ${wsUrl}`);
+    
+    const newSocket = new WebSocket(wsUrl);
+
+    newSocket.onopen = () => {
+      console.log("WebSocket connected");
+      setIsSocketConnected(true);
+    };
+
+    newSocket.onmessage = (event) => {
+      try {
+        console.log("Raw WebSocket message received:", event.data);
+        const data = JSON.parse(event.data);
+        console.log("WebSocket data received:", data);
+       let processedData = [];
+          
+          if (sport === "NBA") {
+            if (data.nba_money_data && marketType === "MONEYLINE") {
+              processedData = processMoneylineData({ data: data.nba_money_data });
+            } else if (data.nba_spread_data && marketType === "SPREAD") {
+              processedData = processSpreadData({ data: data.nba_spread_data });
+            } else if (data.nba_total_data && marketType === "TOTAL") {
+              processedData = processTotalData({ data: data.nba_total_data });
+            } else if (data.nba_default_data && marketType === "DEFAULT") {
+              processedData = processDefaultData({ data: data.nba_default_data });
+            }
+          } else if (sport === "MLB") {
+            if (data.mlb_money_data && marketType === "MONEYLINE") {
+              processedData = processMoneylineData({ data: data.mlb_money_data });
+            } else if (data.mlb_spread_data && marketType === "SPREAD") {
+              processedData = processSpreadData({ data: data.mlb_spread_data });
+            } else if (data.mlb_total_data && marketType === "TOTAL") {
+              processedData = processTotalData({ data: data.mlb_total_data });
+            } else if (data.mlb_default_data && marketType === "DEFAULT") {
+              processedData = processDefaultData({ data: data.mlb_default_data });
+            }
+          } else if (sport === "NHL") {
+            if (data.nhl_money_data && marketType === "MONEYLINE") {
+              processedData = processMoneylineData({ data: data.nhl_money_data });
+            } else if (data.nhl_spread_data && marketType === "SPREAD") {
+              processedData = processSpreadData({ data: data.nhl_spread_data });
+            } else if (data.nhl_total_data && marketType === "TOTAL") {
+              processedData = processTotalData({ data: data.nhl_total_data });
+            } else if (data.nhl_default_data && marketType === "DEFAULT") {
+              processedData = processDefaultData({ data: data.nhl_default_data });
+            }
+          }
+          if (processedData && processedData.length > 0) {
+            updateChangeTimestamps(processedData);
+            setGamesData(processedData);
+          }
+        } catch (error) {
+          console.error("Error processing WebSocket data:", error);
+        }
+      };
+    newSocket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      setIsSocketConnected(false);
+    };
+
+    newSocket.onclose = () => {
+      console.log("WebSocket disconnected");
+      setIsSocketConnected(false);
+    };
+
+    setSocket(newSocket);
+  };
+
+  connectWebSocket();
+  return () => {
+    if (socket) {
+      console.log("Cleaning up WebSocket connection");
+      socket.close();
+    }
+  };
+}, [sport, marketType, selectedDate]);
   const processSpreadData = (apiData) => {
     if (!apiData || !apiData.data) return [];
 
@@ -379,44 +485,78 @@ const formatOdds = (odds) => {
     return processedGames;
   };
 
-  const processMoneylineData = (apiData) => {
-    if (!apiData || !apiData.data) return [];
+const processMoneylineData = (apiData) => {
+  if (!apiData || !apiData.data) return [];
 
-    const processedGames = [];
+  const processedGames = [];
+  
+  Object.keys(apiData.data).forEach((gameKey) => {
+    if (
+      gameKey.startsWith("game") &&
+      Array.isArray(apiData.data[gameKey]) &&
+      apiData.data[gameKey].length > 0
+    ) {
+      const gameEntry = apiData.data[gameKey][0];
+      const teamNames = Object.keys(gameEntry);
 
-    Object.keys(apiData.data).forEach((gameKey) => {
-      if (
-        gameKey.startsWith("game") &&
-        Array.isArray(apiData.data[gameKey]) &&
-        apiData.data[gameKey].length > 0
-      ) {
-        const gameEntry = apiData.data[gameKey][0];
-        const teamNames = Object.keys(gameEntry);
+      if (teamNames.length === 2) {
+        let homeTeamData, awayTeamData;
+        let homeName, awayName;
 
-        if (teamNames.length === 2) {
-          let homeTeamData, awayTeamData;
-
-          if (gameEntry[teamNames[0]]["Home Team"]) {
-            homeTeamData = gameEntry[teamNames[0]];
-            awayTeamData = gameEntry[teamNames[1]];
-          } else {
-            homeTeamData = gameEntry[teamNames[1]];
-            awayTeamData = gameEntry[teamNames[0]];
-          }
-          const game = {
-            homeTeam: homeTeamData["Home Team"],
-            awayTeam: awayTeamData["Away Team"],
-            homePitcher: homeTeamData["Home Pitcher"] || "N/A",
-            awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
-            homeOpen: formatOdds(homeTeamData["Home Open"]),
-            awayOpen: formatOdds(awayTeamData["Away Open"]),
-            homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
-            awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
-            date: homeTeamData?.Date || awayTeamData?.Date || "TODAY",
-          };
+        if (gameEntry[teamNames[0]]["Home Team"]) {
+          homeTeamData = gameEntry[teamNames[0]];
+          homeName = teamNames[0];
+          awayTeamData = gameEntry[teamNames[1]];
+          awayName = teamNames[1];
+        } else {
+          homeTeamData = gameEntry[teamNames[1]];
+          homeName = teamNames[1];
+          awayTeamData = gameEntry[teamNames[0]];
+          awayName = teamNames[0];
+        }
+        
+        const game = {
+          homeTeam: homeTeamData["Home Team"],
+          awayTeam: awayTeamData["Away Team"],
+          homePitcher: homeTeamData["Home Pitcher"] || "N/A",
+          awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
+          date: homeTeamData?.Date || awayTeamData?.Date || "TODAY",
+        };
+        if (sport === "MLB") {
+          game.homeOpen = formatOdds(awayTeamData["Away Open"]);
+          game.awayOpen = formatOdds(homeTeamData["Home Open"]);
+          game.homeBestOdds = formatOdds(awayTeamData["Away Best odds"]);
+          game.awayBestOdds = formatOdds(homeTeamData["Home Best odds"]);
 
           Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
             const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+            const homeOddsKey = `Home ${apiBookmaker}`;
+            if (
+              homeTeamData[homeOddsKey] !== undefined && 
+              homeTeamData[homeOddsKey] !== 0
+            ) {
+              game[`${componentBookmaker.toLowerCase()}AwayOdds`] = formatOdds(
+                homeTeamData[homeOddsKey]
+              );
+            }
+            const awayOddsKey = `Away ${apiBookmaker}`;
+            if (
+              awayTeamData[awayOddsKey] !== undefined &&
+              awayTeamData[awayOddsKey] !== 0
+            ) {
+              game[`${componentBookmaker.toLowerCase()}HomeOdds`] = formatOdds(
+                awayTeamData[awayOddsKey]
+              );
+            }
+          });
+        } else {
+          game.homeOpen = formatOdds(homeTeamData["Home Open"]);
+          game.awayOpen = formatOdds(awayTeamData["Away Open"]);
+          game.homeBestOdds = formatOdds(homeTeamData["Home Best odds"]);
+          game.awayBestOdds = formatOdds(awayTeamData["Away Best odds"])
+          Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
+            const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+            
             const homeOddsKey = `Home ${apiBookmaker}`;
             if (
               homeTeamData[homeOddsKey] !== undefined &&
@@ -426,6 +566,7 @@ const formatOdds = (odds) => {
                 homeTeamData[homeOddsKey]
               );
             }
+            
             const awayOddsKey = `Away ${apiBookmaker}`;
             if (
               awayTeamData[awayOddsKey] !== undefined &&
@@ -436,15 +577,15 @@ const formatOdds = (odds) => {
               );
             }
           });
-
-          processedGames.push(game);
         }
+
+        processedGames.push(game);
       }
-    });
+    }
+  });
 
-    return processedGames;
-  };
-
+  return processedGames;
+};
   const processTotalData = (apiData) => {
     if (!apiData || !apiData.data) return [];
 
