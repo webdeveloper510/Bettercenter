@@ -13,6 +13,7 @@ const InjuryTable = ({ teamName, data }) => {
       <div className="team-header">
         <h3>{teamName}</h3>
       </div>
+      <div className='outer_injurytable'>
       <table className="injury-table">
         <thead>
           <tr>
@@ -48,6 +49,7 @@ const InjuryTable = ({ teamName, data }) => {
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
