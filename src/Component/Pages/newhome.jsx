@@ -19,7 +19,7 @@ import MatchesPage from "./gameteamtab";
 import PromoBanner from "./homebanner";
 import HomeBlog from "./homeblog";
 import StaticInfo from "./staticcontent";
-
+import { useNavigate } from "react-router-dom";
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
   DraftKings: { logo: draftkingsLogo },
@@ -68,7 +68,7 @@ const Games = () => {
   const [marketType, setMarketType] = useState("DEFAULT");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState("OVERVIEW");
- const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = useState(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const initialDataFetchedRef = useRef(false);
   const tabs = [
@@ -85,10 +85,11 @@ const Games = () => {
   const previousDataRef = useRef([]);
   const changeTimestampsRef = useRef({});
   const isFirstLoadRef = useRef(true);
+  const navigate = useNavigate();
   const [bookmarkedGames, setBookmarkedGames] = useState([]);
   const currentSportMarketRef = useRef("");
   const totalPages = 4;
-    const isCurrentDate = () => {
+  const isCurrentDate = () => {
     const today = new Date();
     const selected = new Date(selectedDate);
     return (
@@ -97,6 +98,10 @@ const Games = () => {
       today.getFullYear() === selected.getFullYear()
     );
   };
+  const handleAiPicksClick = (gameIndex) => {
+  navigate('/aipicks');
+};
+
   const toggleBookmark = (gameIndex) => {
     setBookmarkedGames((prev) => {
       if (prev.includes(gameIndex)) {
@@ -111,20 +116,20 @@ const Games = () => {
     setSelectedDate(today);
   }, []);
 
-const formatOdds = (odds) => {
-  if (odds === null || odds === undefined) return "0";
-  if (typeof odds !== "string") odds = String(odds);
+  const formatOdds = (odds) => {
+    if (odds === null || odds === undefined) return "0";
+    if (typeof odds !== "string") odds = String(odds);
 
-  odds = odds.trim();
-  if (odds === "0 / 0" || odds === "-") return "0";
-  if (odds.includes("/")) {
-    return odds;
-  }
-  const numeric = parseFloat(odds);
-  if (isNaN(numeric)) return "0";
+    odds = odds.trim();
+    if (odds === "0 / 0" || odds === "-") return "0";
+    if (odds.includes("/")) {
+      return odds;
+    }
+    const numeric = parseFloat(odds);
+    if (isNaN(numeric)) return "0";
 
-  return numeric > 0 ? `+${numeric}` : `${numeric}`;
-};
+    return numeric > 0 ? `+${numeric}` : `${numeric}`;
+  };
 
   const [colorRefreshTrigger, setColorRefreshTrigger] = useState(0);
   useEffect(() => {
@@ -213,10 +218,10 @@ const formatOdds = (odds) => {
               apiData = await api.getOverUnderData(formattedDate);
               processedData = processTotalData(apiData);
               break;
-                  case "DEFAULT":
-                apiData = await api.getNbaDefaultData(formattedDate);
-                processedData = processDefaultData(apiData);
-                break;
+            case "DEFAULT":
+              apiData = await api.getNbaDefaultData(formattedDate);
+              processedData = processDefaultData(apiData);
+              break;
             default:
           }
           break;
@@ -235,12 +240,11 @@ const formatOdds = (odds) => {
               apiData = await api.getMlbOverUnderData(formattedDate);
               processedData = processTotalData(apiData);
               break;
-              case "DEFAULT":
-                apiData = await api.getMlbDefaultData(formattedDate);
-                processedData = processDefaultData(apiData);
-                break;
+            case "DEFAULT":
+              apiData = await api.getMlbDefaultData(formattedDate);
+              processedData = processDefaultData(apiData);
+              break;
             default:
-             
           }
           break;
 
@@ -258,12 +262,11 @@ const formatOdds = (odds) => {
               apiData = await api.getNhlOverUnderData(formattedDate);
               processedData = processTotalData(apiData);
               break;
-               case "DEFAULT":
-                apiData = await api.getNhlDefaultData(formattedDate);
-                processedData = processDefaultData(apiData);
-                break;
+            case "DEFAULT":
+              apiData = await api.getNhlDefaultData(formattedDate);
+              processedData = processDefaultData(apiData);
+              break;
             default:
-
           }
           break;
 
@@ -285,7 +288,7 @@ const formatOdds = (odds) => {
         previousDataRef.current = JSON.parse(JSON.stringify(processedData));
         isFirstLoadRef.current = false;
       }
-         if (isCurrentDate()) {
+      if (isCurrentDate()) {
         initialDataFetchedRef.current = true;
       }
     } catch (err) {
@@ -302,7 +305,7 @@ const formatOdds = (odds) => {
     isFirstLoadRef.current = true;
     changeTimestampsRef.current = {};
     previousDataRef.current = [];
- initialDataFetchedRef.current = false;
+    initialDataFetchedRef.current = false;
     const fetchAndUpdateData = async () => {
       setLoading(true);
       try {
@@ -324,67 +327,79 @@ const formatOdds = (odds) => {
       }
     };
   }, [sport, marketType, selectedDate]);
-useEffect(() => {
-  if (!isCurrentDate()) {
-    if (socket) {
-      console.log("Closing socket - not current date");
-      socket.close();
-      setIsSocketConnected(false);
+  useEffect(() => {
+    if (!isCurrentDate()) {
+      if (socket) {
+        console.log("Closing socket - not current date");
+        socket.close();
+        setIsSocketConnected(false);
+      }
+      return;
     }
-    return;
-  }
-  
-  const connectWebSocket = () => {
-    if (socket) {
-      socket.close();
-    }
-    
-    const wsUrl = `ws://54.209.247.111:8000/ws/chat/`;
-    console.log(`Connecting to WebSocket: ${wsUrl}`);
-    
-    const newSocket = new WebSocket(wsUrl);
 
-    newSocket.onopen = () => {
-      console.log("WebSocket connected");
-      setIsSocketConnected(true);
-    };
+    const connectWebSocket = () => {
+      if (socket) {
+        socket.close();
+      }
 
-    newSocket.onmessage = (event) => {
-      try {
-        console.log("Raw WebSocket message received:", event.data);
-        const data = JSON.parse(event.data);
-        console.log("WebSocket data received:", data);
-       let processedData = [];
-          
+      const wsUrl = `ws://54.209.247.111:8000/ws/chat/`;
+      console.log(`Connecting to WebSocket: ${wsUrl}`);
+
+      const newSocket = new WebSocket(wsUrl);
+
+      newSocket.onopen = () => {
+        console.log("WebSocket connected");
+        setIsSocketConnected(true);
+      };
+
+      newSocket.onmessage = (event) => {
+        try {
+          console.log("Raw WebSocket message received:", event.data);
+          const data = JSON.parse(event.data);
+          console.log("WebSocket data received:", data);
+          let processedData = [];
+
           if (sport === "NBA") {
             if (data.nba_money_data && marketType === "MONEYLINE") {
-              processedData = processMoneylineData({ data: data.nba_money_data });
+              processedData = processMoneylineData({
+                data: data.nba_money_data,
+              });
             } else if (data.nba_spread_data && marketType === "SPREAD") {
               processedData = processSpreadData({ data: data.nba_spread_data });
             } else if (data.nba_total_data && marketType === "TOTAL") {
               processedData = processTotalData({ data: data.nba_total_data });
             } else if (data.nba_default_data && marketType === "DEFAULT") {
-              processedData = processDefaultData({ data: data.nba_default_data });
+              processedData = processDefaultData({
+                data: data.nba_default_data,
+              });
             }
           } else if (sport === "MLB") {
             if (data.mlb_money_data && marketType === "MONEYLINE") {
-              processedData = processMoneylineData({ data: data.mlb_money_data });
+              processedData = processMoneylineData({
+                data: data.mlb_money_data,
+              });
             } else if (data.mlb_spread_data && marketType === "SPREAD") {
               processedData = processSpreadData({ data: data.mlb_spread_data });
             } else if (data.mlb_total_data && marketType === "TOTAL") {
               processedData = processTotalData({ data: data.mlb_total_data });
             } else if (data.mlb_default_data && marketType === "DEFAULT") {
-              processedData = processDefaultData({ data: data.mlb_default_data });
+              processedData = processDefaultData({
+                data: data.mlb_default_data,
+              });
             }
           } else if (sport === "NHL") {
             if (data.nhl_money_data && marketType === "MONEYLINE") {
-              processedData = processMoneylineData({ data: data.nhl_money_data });
+              processedData = processMoneylineData({
+                data: data.nhl_money_data,
+              });
             } else if (data.nhl_spread_data && marketType === "SPREAD") {
               processedData = processSpreadData({ data: data.nhl_spread_data });
             } else if (data.nhl_total_data && marketType === "TOTAL") {
               processedData = processTotalData({ data: data.nhl_total_data });
             } else if (data.nhl_default_data && marketType === "DEFAULT") {
-              processedData = processDefaultData({ data: data.nhl_default_data });
+              processedData = processDefaultData({
+                data: data.nhl_default_data,
+              });
             }
           }
           if (processedData && processedData.length > 0) {
@@ -395,37 +410,39 @@ useEffect(() => {
           console.error("Error processing WebSocket data:", error);
         }
       };
-    newSocket.onerror = (error) => {
-      console.error("WebSocket error:", error);
-      setIsSocketConnected(false);
+      newSocket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+        setIsSocketConnected(false);
+      };
+
+      newSocket.onclose = () => {
+        console.log("WebSocket disconnected");
+        setIsSocketConnected(false);
+      };
+
+      setSocket(newSocket);
     };
 
-    newSocket.onclose = () => {
-      console.log("WebSocket disconnected");
-      setIsSocketConnected(false);
+    connectWebSocket();
+    return () => {
+      if (socket) {
+        console.log("Cleaning up WebSocket connection");
+        socket.close();
+      }
     };
-
-    setSocket(newSocket);
-  };
-
-  connectWebSocket();
-  return () => {
-    if (socket) {
-      console.log("Cleaning up WebSocket connection");
-      socket.close();
-    }
-  };
-}, [sport, marketType, selectedDate]);
-  const processSpreadData = (apiData) => {
+  }, [sport, marketType, selectedDate]);
+  const processSpreadData = (apiData, sport) => {
     if (!apiData || !apiData.data) return [];
 
     const processedGames = [];
+
+    console.log("Processing data for sport:", sport);
+
     Object.keys(apiData.data).forEach((spreadKey) => {
-      if (
-        Array.isArray(apiData.data[spreadKey]) &&
-        apiData.data[spreadKey].length > 0
-      ) {
-        const spreadEntry = apiData.data[spreadKey][0];
+      const spreadArray = apiData.data[spreadKey];
+
+      if (Array.isArray(spreadArray) && spreadArray.length > 0) {
+        const spreadEntry = spreadArray[0];
         const spreadValues = Object.keys(spreadEntry);
 
         if (spreadValues.length === 2) {
@@ -434,20 +451,25 @@ useEffect(() => {
 
           const data1 = spreadEntry[value1];
           const data2 = spreadEntry[value2];
+
           let homeTeamData, awayTeamData, homeSpread, awaySpread;
+          const isData1Home = !!data1["Home Team"];
+          const isData2Home = !!data2["Home Team"];
 
-          if (data1["Home Team"]) {
+          if (isData1Home && !isData2Home) {
             homeTeamData = data1;
-            homeSpread = value1;
             awayTeamData = data2;
+            homeSpread = value1;
             awaySpread = value2;
-          } else {
+          } else if (!isData1Home && isData2Home) {
             homeTeamData = data2;
-            homeSpread = value2;
             awayTeamData = data1;
+            homeSpread = value2;
             awaySpread = value1;
+          } else {
+          
+            return; 
           }
-
           const game = {
             homeTeam: homeTeamData["Home Team"],
             awayTeam: awayTeamData["Away Team"],
@@ -460,22 +482,120 @@ useEffect(() => {
             homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
             awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
             date: homeTeamData?.Date || awayTeamData?.Date || "TODAY",
-            // time: "7:30PM",
           };
-
           Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
             const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+
             const homeOddsKey = `Home ${apiBookmaker}`;
-            if (homeTeamData[homeOddsKey] && homeTeamData[homeOddsKey] !== 0) {
-              game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
-                homeTeamData[homeOddsKey];
-            }
             const awayOddsKey = `Away ${apiBookmaker}`;
-            if (awayTeamData[awayOddsKey] && awayTeamData[awayOddsKey] !== 0) {
+            const rawHomeOdds = homeTeamData[homeOddsKey];
+            const rawAwayOdds = awayTeamData[awayOddsKey]
+            if (rawHomeOdds && rawHomeOdds !== 0) {
+              game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
+                formatOdds(rawHomeOdds);
+            }
+
+            if (rawAwayOdds && rawAwayOdds !== 0) {
               game[`${componentBookmaker.toLowerCase()}AwayOdds`] =
-                awayTeamData[awayOddsKey];
+                formatOdds(rawAwayOdds);
             }
           });
+          processedGames.push(game);
+        }
+      }
+    });
+
+    return processedGames;
+  };
+  const processMoneylineData = (apiData) => {
+    if (!apiData || !apiData.data) return [];
+
+    const processedGames = [];
+
+    Object.keys(apiData.data).forEach((gameKey) => {
+      if (
+        gameKey.startsWith("game") &&
+        Array.isArray(apiData.data[gameKey]) &&
+        apiData.data[gameKey].length > 0
+      ) {
+        const gameEntry = apiData.data[gameKey][0];
+        const teamNames = Object.keys(gameEntry);
+
+        if (teamNames.length === 2) {
+          let homeTeamData, awayTeamData;
+          let homeName, awayName;
+
+          if (gameEntry[teamNames[0]]["Home Team"]) {
+            homeTeamData = gameEntry[teamNames[0]];
+            homeName = teamNames[0];
+            awayTeamData = gameEntry[teamNames[1]];
+            awayName = teamNames[1];
+          } else {
+            homeTeamData = gameEntry[teamNames[1]];
+            homeName = teamNames[1];
+            awayTeamData = gameEntry[teamNames[0]];
+            awayName = teamNames[0];
+          }
+
+          const game = {
+            homeTeam: homeTeamData["Home Team"],
+            awayTeam: awayTeamData["Away Team"],
+            homePitcher: homeTeamData["Home Pitcher"] || "N/A",
+            awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
+            date: homeTeamData?.Date || awayTeamData?.Date || "TODAY",
+          };
+          if (sport === "MLB") {
+            game.homeOpen = formatOdds(awayTeamData["Away Open"]);
+            game.awayOpen = formatOdds(homeTeamData["Home Open"]);
+            game.homeBestOdds = formatOdds(awayTeamData["Away Best odds"]);
+            game.awayBestOdds = formatOdds(homeTeamData["Home Best odds"]);
+
+            Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
+              const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+              const homeOddsKey = `Home ${apiBookmaker}`;
+              if (
+                homeTeamData[homeOddsKey] !== undefined &&
+                homeTeamData[homeOddsKey] !== 0
+              ) {
+                game[`${componentBookmaker.toLowerCase()}AwayOdds`] =
+                  formatOdds(homeTeamData[homeOddsKey]);
+              }
+              const awayOddsKey = `Away ${apiBookmaker}`;
+              if (
+                awayTeamData[awayOddsKey] !== undefined &&
+                awayTeamData[awayOddsKey] !== 0
+              ) {
+                game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
+                  formatOdds(awayTeamData[awayOddsKey]);
+              }
+            });
+          } else {
+            game.homeOpen = formatOdds(homeTeamData["Home Open"]);
+            game.awayOpen = formatOdds(awayTeamData["Away Open"]);
+            game.homeBestOdds = formatOdds(homeTeamData["Home Best odds"]);
+            game.awayBestOdds = formatOdds(awayTeamData["Away Best odds"]);
+            Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
+              const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+
+              const homeOddsKey = `Home ${apiBookmaker}`;
+              if (
+                homeTeamData[homeOddsKey] !== undefined &&
+                homeTeamData[homeOddsKey] !== 0
+              ) {
+                game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
+                  formatOdds(homeTeamData[homeOddsKey]);
+              }
+
+              const awayOddsKey = `Away ${apiBookmaker}`;
+              if (
+                awayTeamData[awayOddsKey] !== undefined &&
+                awayTeamData[awayOddsKey] !== 0
+              ) {
+                game[`${componentBookmaker.toLowerCase()}AwayOdds`] =
+                  formatOdds(awayTeamData[awayOddsKey]);
+              }
+            });
+          }
 
           processedGames.push(game);
         }
@@ -484,108 +604,6 @@ useEffect(() => {
 
     return processedGames;
   };
-
-const processMoneylineData = (apiData) => {
-  if (!apiData || !apiData.data) return [];
-
-  const processedGames = [];
-  
-  Object.keys(apiData.data).forEach((gameKey) => {
-    if (
-      gameKey.startsWith("game") &&
-      Array.isArray(apiData.data[gameKey]) &&
-      apiData.data[gameKey].length > 0
-    ) {
-      const gameEntry = apiData.data[gameKey][0];
-      const teamNames = Object.keys(gameEntry);
-
-      if (teamNames.length === 2) {
-        let homeTeamData, awayTeamData;
-        let homeName, awayName;
-
-        if (gameEntry[teamNames[0]]["Home Team"]) {
-          homeTeamData = gameEntry[teamNames[0]];
-          homeName = teamNames[0];
-          awayTeamData = gameEntry[teamNames[1]];
-          awayName = teamNames[1];
-        } else {
-          homeTeamData = gameEntry[teamNames[1]];
-          homeName = teamNames[1];
-          awayTeamData = gameEntry[teamNames[0]];
-          awayName = teamNames[0];
-        }
-        
-        const game = {
-          homeTeam: homeTeamData["Home Team"],
-          awayTeam: awayTeamData["Away Team"],
-          homePitcher: homeTeamData["Home Pitcher"] || "N/A",
-          awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
-          date: homeTeamData?.Date || awayTeamData?.Date || "TODAY",
-        };
-        if (sport === "MLB") {
-          game.homeOpen = formatOdds(awayTeamData["Away Open"]);
-          game.awayOpen = formatOdds(homeTeamData["Home Open"]);
-          game.homeBestOdds = formatOdds(awayTeamData["Away Best odds"]);
-          game.awayBestOdds = formatOdds(homeTeamData["Home Best odds"]);
-
-          Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
-            const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
-            const homeOddsKey = `Home ${apiBookmaker}`;
-            if (
-              homeTeamData[homeOddsKey] !== undefined && 
-              homeTeamData[homeOddsKey] !== 0
-            ) {
-              game[`${componentBookmaker.toLowerCase()}AwayOdds`] = formatOdds(
-                homeTeamData[homeOddsKey]
-              );
-            }
-            const awayOddsKey = `Away ${apiBookmaker}`;
-            if (
-              awayTeamData[awayOddsKey] !== undefined &&
-              awayTeamData[awayOddsKey] !== 0
-            ) {
-              game[`${componentBookmaker.toLowerCase()}HomeOdds`] = formatOdds(
-                awayTeamData[awayOddsKey]
-              );
-            }
-          });
-        } else {
-          game.homeOpen = formatOdds(homeTeamData["Home Open"]);
-          game.awayOpen = formatOdds(awayTeamData["Away Open"]);
-          game.homeBestOdds = formatOdds(homeTeamData["Home Best odds"]);
-          game.awayBestOdds = formatOdds(awayTeamData["Away Best odds"])
-          Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
-            const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
-            
-            const homeOddsKey = `Home ${apiBookmaker}`;
-            if (
-              homeTeamData[homeOddsKey] !== undefined &&
-              homeTeamData[homeOddsKey] !== 0
-            ) {
-              game[`${componentBookmaker.toLowerCase()}HomeOdds`] = formatOdds(
-                homeTeamData[homeOddsKey]
-              );
-            }
-            
-            const awayOddsKey = `Away ${apiBookmaker}`;
-            if (
-              awayTeamData[awayOddsKey] !== undefined &&
-              awayTeamData[awayOddsKey] !== 0
-            ) {
-              game[`${componentBookmaker.toLowerCase()}AwayOdds`] = formatOdds(
-                awayTeamData[awayOddsKey]
-              );
-            }
-          });
-        }
-
-        processedGames.push(game);
-      }
-    }
-  });
-
-  return processedGames;
-};
   const processTotalData = (apiData) => {
     if (!apiData || !apiData.data) return [];
 
@@ -680,21 +698,21 @@ const processMoneylineData = (apiData) => {
   };
   const processDefaultData = (apiData) => {
     if (!apiData || !Array.isArray(apiData.data)) return [];
-  
+
     const processedGames = [];
-  
+
     apiData.data.forEach((gameEntry) => {
       const homeTeam = gameEntry["Home Team"];
       const awayTeam = gameEntry["Away Team"];
       const homePitcher = gameEntry["Home Pitcher"] || "N/A";
       const awayPitcher = gameEntry["Away Pitcher"] || "N/A";
-  
+
       const homeOpen = formatOdds(gameEntry["Home Open"]);
       const awayOpen = formatOdds(gameEntry["Away Open"]);
       const homeBestOdds = formatOdds(gameEntry["Home Best odds"]);
       const awayBestOdds = formatOdds(gameEntry["Away Best odds"]);
       const date = gameEntry?.Date || "TODAY";
-  
+
       const game = {
         homeTeam,
         awayTeam,
@@ -706,32 +724,32 @@ const processMoneylineData = (apiData) => {
         awayBestOdds,
         date,
       };
-  
+
       Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
         const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
-  
+
         const homeOddsKey = `Home ${apiBookmaker}`;
         const awayOddsKey = `Away ${apiBookmaker}`;
-  
+
         if (gameEntry[homeOddsKey] && gameEntry[homeOddsKey] !== "0 / 0") {
           game[`${componentBookmaker.toLowerCase()}HomeOdds`] = formatOdds(
             gameEntry[homeOddsKey]
           );
         }
-  
+
         if (gameEntry[awayOddsKey] && gameEntry[awayOddsKey] !== "0 / 0") {
           game[`${componentBookmaker.toLowerCase()}AwayOdds`] = formatOdds(
             gameEntry[awayOddsKey]
           );
         }
       });
-  
+
       processedGames.push(game);
     });
-  
+
     return processedGames;
   };
-  
+
   const handleSportChange = (e) => {
     setSport(e.target.value);
   };
@@ -774,7 +792,10 @@ const processMoneylineData = (apiData) => {
                       value={marketType}
                       onChange={handleMarketTypeChange}
                     >
-                      <option value="DEFAULT">DEFAULT({sport === "NBA" ? "Spread/Total" : "Moneyline/Total"})</option>
+                      <option value="DEFAULT">
+                        (
+                        {sport === "NBA" ? "Spread/Total" : "Moneyline/Total"})
+                      </option>
                       <option value="SPREAD">SPREAD</option>
                       <option value="MONEYLINE">MONEYLINE</option>
                       <option value="TOTAL">TOTAL</option>
@@ -826,227 +847,334 @@ const processMoneylineData = (apiData) => {
                   <div className="text-center py-4 text-danger">{error}</div>
                 ) : (
                   <table className="betting-table">
-                    <thead>
-                      <tr>
-                        <th>MATCHUP</th>
-                        <th>PITCHERS</th>
+                   <thead>
+  <tr>
+    <th>MATCHUP</th>
+    {sport === "MLB" && <th>PITCHERS</th>}
+    {(marketType === "SPREAD" ||
+      marketType === "TOTAL") && (
+      <th>
+        {marketType === "SPREAD" ? "SPREAD" : "TOTAL"}
+      </th>
+    )}
+    <th>OPEN</th>
+    <th>BEST ODDS</th>
+    <th>AI PICKS</th>
+    {Object.entries(BOOKMAKER_LOGOS).map(
+      ([name, { logo }], i) => (
+        <th key={i}>
+          <div className="logo-header">
+            <img
+              src={logo}
+              alt={name}
+              className="bookmaker-logo"
+            />
+          </div>
+        </th>
+      )
+    )}
+  </tr>
+</thead>
+         {/* Table tbody section - replace your existing tbody */}
+<tbody>
+  {gamesData.length > 0 ? (
+    gamesData.map((game, index) => (
+      <tr
+        key={index}
+        className={
+          bookmarkedGames.includes(index)
+            ? "bookmarked-row"
+            : ""
+        }
+        onClick={() => toggleBookmark(index)}
+        style={{ cursor: "pointer" }}
+      >
+        <td>
+          <div className="game-time">
+            {game.date} · {game.time} · {sport}
+          </div>
+          <div className="team-name">{game.homeTeam}</div>
+          <div className="team-name">{game.awayTeam}</div>
+        </td>
+        {sport === "MLB" && (
+          <td>
+            <div className="pitcher-name">
+              {game.homePitcher || "N/A"}
+            </div>
+            <div className="pitcher-name">
+              {game.awayPitcher || "N/A"}
+            </div>
+          </td>
+        )}
 
-                        <th>
-                          {marketType === "SPREAD"
-                            ? "SPREAD"
-                            : marketType === "TOTAL"
-                            ? "TOTAL"
-                            : "Odds"}
-                        </th>
-                        <th>OPEN</th>
-                        <th>BEST ODDS</th>
-                        {Object.entries(BOOKMAKER_LOGOS).map(
-                          ([name, { logo }], i) => (
-                            <th key={i}>
-                              <div className="logo-header">
-                                <img
-                                  src={logo}
-                                  alt={name}
-                                  className="bookmaker-logo"
-                                />
-                              </div>
-                            </th>
-                          )
-                        )}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {gamesData.length > 0 ? (
-                        gamesData.map((game, index) => (
-                          <tr
-                            key={index}
-                            className={
-                              bookmarkedGames.includes(index)
-                                ? "bookmarked-row"
-                                : ""
-                            }
-                            onClick={() => toggleBookmark(index)}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <td>
-                              <div className="game-time">
-                                {game.date} · {game.time} · {sport}
-                              </div>
-                              <div className="team-name">{game.homeTeam}</div>
-                              <div className="team-name">{game.awayTeam}</div>
-                            </td>
-                           
-                              <td>
-                                <div className="pitcher-name">
-                                  {game.homePitcher || "N/A"}
-                                </div>
-                                <div className="pitcher-name">
-                                  {game.awayPitcher || "N/A"}
-                                </div>
-                              </td>
-                          
-                            <td>
-                              {marketType === "SPREAD" ? (
-                                <>
-                                  <div
-                                    className={`odd_n ${getCellColor(
-                                      `${index}-homeSpread`,
-                                      game.homeSpread
-                                    )}`}
-                                  >
-                                    {game.homeSpread}
-                                  </div>
-                                  <div
-                                    className={`odd_n ${getCellColor(
-                                      `${index}-awaySpread`,
-                                      game.awaySpread
-                                    )}`}
-                                  >
-                                    {game.awaySpread}
-                                  </div>
-                                </>
-                              ) : marketType === "TOTAL" ? (
-                                <>
-                                  <div
-                                    className={`odd_n ${getCellColor(
-                                      `${index}-overValue`,
-                                      game.overValue
-                                    )}`}
-                                  >
-                                    O {game.overValue || "0"}
-                                  </div>
-                                  <div
-                                    className={`odd_n ${getCellColor(
-                                      `${index}-underValue`,
-                                      game.underValue
-                                    )}`}
-                                  >
-                                    U {game.underValue || "0"}
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  <div
-                                    className={`odd_${
-                                      isPositiveOdds(game.homeBestOdds)
-                                        ? "y"
-                                        : "n"
-                                    } ${getCellColor(
-                                      `${index}-homeBestOdds`,
-                                      game.homeBestOdds
-                                    )}`}
-                                  >
-                                    {formatOdds(game.homeBestOdds || 0)}
-                                  </div>
-                                  <div
-                                    className={`odd_${
-                                      isPositiveOdds(game.awayBestOdds)
-                                        ? "y"
-                                        : "g"
-                                    } ${getCellColor(
-                                      `${index}-awayBestOdds`,
-                                      game.awayBestOdds
-                                    )}`}
-                                  >
-                                    {formatOdds(game.awayBestOdds || 0)}
-                                  </div>
-                                </>
-                              )}
-                            </td>
-                            <td>
-                              <div
-                                className={`odd_${
-                                  isPositiveOdds(game.homeOpen) ? "y" : "n"
-                                } ${getCellColor(
-                                  `${index}-homeOpen`,
-                                  game.homeOpen
-                                )}`}
-                              >
-                                {game.homeOpen || "-"}
-                              </div>
-                              <div
-                                className={`odd_${
-                                  isPositiveOdds(game.awayOpen) ? "y" : "g"
-                                } ${getCellColor(
-                                  `${index}-awayOpen`,
-                                  game.awayOpen
-                                )}`}
-                              >
-                                {game.awayOpen || "0"}
-                              </div>
-                            </td>
-                            <td>
-                              <div
-                                className={`odd_${
-                                  isPositiveOdds(game.homeBestOdds) ? "y" : "n"
-                                } ${getCellColor(
-                                  `${index}-homeBestOdds`,
-                                  game.homeBestOdds
-                                )}`}
-                              >
-                                {game.homeBestOdds || "0"}
-                              </div>
-                              <div
-                                className={`odd_${
-                                  isPositiveOdds(game.awayBestOdds) ? "y" : "n"
-                                } ${getCellColor(
-                                  `${index}-awayBestOdds`,
-                                  game.awayBestOdds
-                                )}`}
-                              >
-                                {game.awayBestOdds || "0"}
-                              </div>
-                            </td>
-                            {Object.keys(BOOKMAKER_LOGOS).map(
-                              (bookmaker, i) => {
-                                const bookmakerKey = bookmaker.toLowerCase();
-                                const homeOddsKey = `${bookmakerKey}HomeOdds`;
-                                const awayOddsKey = `${bookmakerKey}AwayOdds`;
-                                return (
-                                  <td key={i}>
-                                    <div
-                                      className={`odd ${
-                                        isPositiveOdds(game[awayOddsKey])
-                                          ? "positive odd_red"
-                                          : "negative odd_n"
-                                      } ${getCellColor(
-                                        `${index}-${awayOddsKey}`,
-                                        game[awayOddsKey]
-                                      )}`}
-                                    >
-                                      {game[awayOddsKey] || "0"}
-                                    </div>
-                                    <div
-                                      className={`odd ${
-                                        isPositiveOdds(game[homeOddsKey])
-                                          ? "positive odd_red"
-                                          : "negative odd_n"
-                                      } ${getCellColor(
-                                        `${index}-${homeOddsKey}`,
-                                        game[homeOddsKey]
-                                      )}`}
-                                    >
-                                      {game[homeOddsKey] || "0"}
-                                    </div>
-                                  </td>
-                                );
-                              }
-                            )}
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan={4 + Object.keys(BOOKMAKER_LOGOS).length}
-                            className="text-center py-4"
-                          >
-                            {loading
-                              ? "Loading..."
-                              : "No games available. Try another sport or day."}
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
+        {(marketType === "SPREAD" ||
+          marketType === "TOTAL") && (
+          <td>
+            {marketType === "SPREAD" ? (
+              <>
+                <div
+                  className={`odd_n ${getCellColor(
+                    `${index}-homeSpread`,
+                    game.homeSpread
+                  )}`}
+                >
+                  {game.homeSpread}
+                </div>
+                <div
+                  className={`odd_n ${getCellColor(
+                    `${index}-awaySpread`,
+                    game.awaySpread
+                  )}`}
+                >
+                  {game.awaySpread}
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  className={`odd_n ${getCellColor(
+                    `${index}-overValue`,
+                    game.overValue
+                  )}`}
+                >
+                  O {game.overValue || "0"}
+                </div>
+                <div
+                  className={`odd_n ${getCellColor(
+                    `${index}-underValue`,
+                    game.underValue
+                  )}`}
+                >
+                  U {game.underValue || "0"}
+                </div>
+              </>
+            )}
+          </td>
+        )}
+        <td>
+          {/* FIXED: Check for NBA spread and MLB moneyline to display in correct order */}
+          {(sport === "NBA" && marketType === "SPREAD") || (sport === "MLB" && marketType === "MONEYLINE") ? (
+            <>
+              <div
+                className={`odd_${
+                  isPositiveOdds(game.awayOpen) ? "y" : "g"
+                } ${getCellColor(
+                  `${index}-awayOpen`,
+                  game.awayOpen
+                )}`}
+              >
+                {game.awayOpen || "0"}
+              </div>
+              <div
+                className={`odd_${
+                  isPositiveOdds(game.homeOpen) ? "y" : "n"
+                } ${getCellColor(
+                  `${index}-homeOpen`,
+                  game.homeOpen
+                )}`}
+              >
+                {game.homeOpen || "-"}
+              </div>
+            </>
+          ) : (
+            <>
+              <div
+                className={`odd_${
+                  isPositiveOdds(game.homeOpen) ? "y" : "n"
+                } ${getCellColor(
+                  `${index}-homeOpen`,
+                  game.homeOpen
+                )}`}
+              >
+                {game.homeOpen || "-"}
+              </div>
+              <div
+                className={`odd_${
+                  isPositiveOdds(game.awayOpen) ? "y" : "g"
+                } ${getCellColor(
+                  `${index}-awayOpen`,
+                  game.awayOpen
+                )}`}
+              >
+                {game.awayOpen || "0"}
+              </div>
+            </>
+          )}
+        </td>
+        <td>
+          {/* FIXED: Check for NBA spread and MLB moneyline to display in correct order */}
+          {(sport === "NBA" && marketType === "SPREAD") || (sport === "MLB" && marketType === "MONEYLINE") ? (
+            <>
+              <div
+                className={`odd_${
+                  isPositiveOdds(game.awayBestOdds) ? "y" : "n"
+                } ${getCellColor(
+                  `${index}-awayBestOdds`,
+                  game.awayBestOdds
+                )}`}
+              >
+                {game.awayBestOdds || "0"}
+              </div>
+              <div
+                className={`odd_${
+                  isPositiveOdds(game.homeBestOdds) ? "y" : "n"
+                } ${getCellColor(
+                  `${index}-homeBestOdds`,
+                  game.homeBestOdds
+                )}`}
+              >
+                {game.homeBestOdds || "0"}
+              </div>
+            </>
+          ) : (
+            <>
+              <div
+                className={`odd_${
+                  isPositiveOdds(game.homeBestOdds) ? "y" : "n"
+                } ${getCellColor(
+                  `${index}-homeBestOdds`,
+                  game.homeBestOdds
+                )}`}
+              >
+                {game.homeBestOdds || "0"}
+              </div>
+              <div
+                className={`odd_${
+                  isPositiveOdds(game.awayBestOdds) ? "y" : "n"
+                } ${getCellColor(
+                  `${index}-awayBestOdds`,
+                  game.awayBestOdds
+                )}`}
+              >
+                {game.awayBestOdds || "0"}
+              </div>
+            </>
+          )}
+        </td>
+        
+        {/* NEW AI PICKS COLUMN - ADD THIS TD */}
+        <td>
+          <button 
+            className="ai-picks-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAiPicksClick(index);
+            }}
+            style={{
+              background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: '600',
+              transition: 'all 0.3s ease',
+              textTransform: 'uppercase'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = 'none';
+            }}
+          >
+            Click Here
+          </button>
+        </td>
+
+        {Object.keys(BOOKMAKER_LOGOS).map(
+          (bookmaker, i) => {
+            const bookmakerKey = bookmaker.toLowerCase();
+            const homeOddsKey = `${bookmakerKey}HomeOdds`;
+            const awayOddsKey = `${bookmakerKey}AwayOdds`;
+            return (
+              <td key={i}>
+                {/* FIXED: Check for MLB moneyline to display in correct order */}
+                {sport === "MLB" && marketType === "MONEYLINE" ? (
+                  <>
+                    <div
+                      className={`odd ${
+                        isPositiveOdds(game[awayOddsKey])
+                          ? "positive odd_red"
+                          : "negative odd_n"
+                      } ${getCellColor(
+                        `${index}-${awayOddsKey}`,
+                        game[awayOddsKey]
+                      )}`}
+                    >
+                      {game[awayOddsKey] || "0"}
+                    </div>
+                    <div
+                      className={`odd ${
+                        isPositiveOdds(game[homeOddsKey])
+                          ? "positive odd_red"
+                          : "negative odd_n"
+                      } ${getCellColor(
+                        `${index}-${homeOddsKey}`,
+                        game[homeOddsKey]
+                      )}`}
+                    >
+                      {game[homeOddsKey] || "0"}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div
+                      className={`odd ${
+                        isPositiveOdds(game[homeOddsKey])
+                          ? "positive odd_red"
+                          : "negative odd_n"
+                      } ${getCellColor(
+                        `${index}-${homeOddsKey}`,
+                        game[homeOddsKey]
+                      )}`}
+                    >
+                      {game[homeOddsKey] || "0"}
+                    </div>
+                    <div
+                      className={`odd ${
+                        isPositiveOdds(game[awayOddsKey])
+                          ? "positive odd_red"
+                          : "negative odd_n"
+                      } ${getCellColor(
+                        `${index}-${awayOddsKey}`,
+                        game[awayOddsKey]
+                      )}`}
+                    >
+                      {game[awayOddsKey] || "0"}
+                    </div>
+                  </>
+                )}
+              </td>
+            );
+          }
+        )}
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td
+        colSpan={
+          3 +  // Changed from 2 to 3 to account for AI PICKS column
+          (sport === "MLB" ? 1 : 0) +
+          (marketType === "SPREAD" || marketType === "TOTAL"
+            ? 1
+            : 0) +
+          2 +
+          Object.keys(BOOKMAKER_LOGOS).length
+        }
+        className="text-center py-4"
+      >
+        {loading
+          ? "Loading..."
+          : "No games available. Try another sport or day."}
+      </td>
+    </tr>
+  )}
+</tbody>
                   </table>
                 )}
               </div>

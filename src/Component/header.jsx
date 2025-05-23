@@ -94,7 +94,6 @@ const Header = () => {
                 NEWS
               </Link>
             </li>
-            {isLoggedIn && (
               <li className="nav-item">
                 <Link
                   className={`nav-link ${location.pathname === "/aipicks" ? "active-link" : ""}`}
@@ -103,7 +102,6 @@ const Header = () => {
                   AI PICKS
                 </Link>
               </li>
-            )}
           </ul>
 
           <div className="header-content d-flex align-items-center gap-3">

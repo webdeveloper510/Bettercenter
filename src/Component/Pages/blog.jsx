@@ -32,8 +32,7 @@ const BlogList = () => {
     fetchBlogs();
   }, []);
 
-  const displayBlogs = blogs.length > 0 ? blogs : "";
-
+  const displayBlogs = blogs.length > 0 ? blogs : [];
   return (
     <section className="backgroung_image">
       <h2 className="text-center our_team_head pb-4 py-5 gap-3">Blog</h2>
