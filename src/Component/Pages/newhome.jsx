@@ -20,6 +20,7 @@ import PromoBanner from "./homebanner";
 import HomeBlog from "./homeblog";
 import StaticInfo from "./staticcontent";
 import { useNavigate } from "react-router-dom";
+import Teamstab from "./teamstab";
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
   DraftKings: { logo: draftkingsLogo },
@@ -849,7 +850,7 @@ const Games = () => {
                   <table className="betting-table">
                    <thead>
   <tr>
-    <th>MATCHUP</th>
+    <th className="matchup_td">MATCHUP</th>
     {sport === "MLB" && <th>PITCHERS</th>}
     {(marketType === "SPREAD" ||
       marketType === "TOTAL") && (
@@ -1192,7 +1193,7 @@ const Games = () => {
 
             {activeTab === "TEAMS" && (
               <div>
-                <TabsWithMatchups currentSport={sport} />
+                <Teamstab currentSport={sport} />
               </div>
             )}
             {activeTab === "SCHEDULE" && (

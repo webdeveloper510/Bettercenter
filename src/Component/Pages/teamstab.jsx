@@ -1,40 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import '../../Assets/css/teamtab.css';
-
-// ——— Data object renamed so it doesn’t clash with the component name ———
-const teamsData = {
-  Atlantic: [
-    { name: "Boston Celtics",      logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/bos.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Brooklyn Nets",       logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/bkn.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "New York Knicks",     logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/ny.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Philadelphia 76ers",  logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/phi.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Toronto Raptors",     logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/tor.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-  ],
-  Pacific: [
-    { name: "Golden State Warriors", logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/chi.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "LA Clippers",           logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/cle.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Los Angeles Lakers",    logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/det.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Phoenix Suns",          logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/ind.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Sacramento Kings",      logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/mil.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-  ],
-    Atlantic2: [
-    { name: "Boston Celtics",      logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/bos.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Brooklyn Nets",       logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/bkn.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "New York Knicks",     logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/ny.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Philadelphia 76ers",  logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/phi.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Toronto Raptors",     logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/tor.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-  ],
-  Pacific2: [
-    { name: "Golden State Warriors", logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/chi.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "LA Clippers",           logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/cle.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Los Angeles Lakers",    logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/det.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Phoenix Suns",          logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/ind.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-    { name: "Sacramento Kings",      logo: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/mil.png&scale=crop&cquality=40&location=origin&w=80&h=80" },
-  ],
-};
-
-// ——— Small reusable card for each team ———
+import api from '../../api';
 const NBATeamCard = ({ name, logo }) => (
   <div className="d-flex align-items-center mb-3">
     <Image
@@ -47,33 +14,129 @@ const NBATeamCard = ({ name, logo }) => (
     />
     <div>
       <strong>{name}</strong>
-      {/* <div className="links text-muted small">
-        <a href="#">Statistics</a> · <a href="#">Schedule</a> ·{" "}
-        <a href="#">Roster</a> · <a href="#">Depth Chart</a>
-      </div> */}
     </div>
   </div>
 );
 
-// ——— Your component, now correctly named Teamstab ———
-const Teamstab = () => (
-  <Container className="mt-4">
-    <h4 className="mb-4">NBA Teams</h4>
-    <Row>
-      <Col md={6}>
-        <h6 className="border-bottom pb-2">Atlantic</h6>
-        {teamsData.Atlantic.map((team, idx) => (
-          <NBATeamCard key={idx} {...team} />
+const Teamstab = ({ currentSport = 'NBA' }) => {
+  const [teamsData, setTeamsData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTeamsData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        let apiData;
+
+        switch (currentSport) {
+          case 'NBA':
+            apiData = await api.getNbaTeamsData();
+            break;
+          case 'NHL':
+            apiData = await api.getNhlTeamsData();
+            break;
+          case 'MLB':
+            apiData = await api.getMlbteamsData();
+            break;
+          default:
+            console.warn("Unknown sport selected:", currentSport);
+            return;
+        }
+
+        const processedData = processTeamsData(apiData);
+        setTeamsData(processedData);
+      } catch (err) {
+        console.error(`Error fetching ${currentSport} teams data:`, err);
+        setError(`Failed to fetch ${currentSport} teams data. Please try again later.`);
+        setTeamsData({});
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeamsData();
+  }, [currentSport]);
+
+  const processTeamsData = (apiData) => {
+    if (!apiData || !apiData.data || !Array.isArray(apiData.data) || apiData.data.length === 0) {
+      return {};
+    }
+
+    try {
+
+      const divisionsData = apiData.data[0];
+      const processedDivisions = {};
+      Object.entries(divisionsData).forEach(([divisionName, teams]) => {
+        if (Array.isArray(teams)) {
+          processedDivisions[divisionName] = teams.map(team => ({
+            name: team.team_name,
+            logo: team.logo_url
+          }));
+        }
+      });
+
+      return processedDivisions;
+
+    } catch (err) {
+      console.error("Error processing teams data:", err);
+      return {};
+    }
+  };
+
+
+
+  if (loading) {
+    return (
+      
+      <Container className="mt-4">
+        <div className="loader-container my-5">
+          <div className="loader spinner-border text-primary text-center"></div>
+          <p className="text-center mt-5">Loading {currentSport} teams...</p>
+        </div>
+        
+      </Container>
+      
+    );
+  }
+
+  if (error) {
+    return (
+      <Container className="mt-4">
+        <div className="error-message alert alert-danger">{error}</div>
+      </Container>
+    );
+  }
+
+  if (Object.keys(teamsData).length === 0) {
+    return (
+      <Container className="mt-4">
+        <div className="no-data-message alert alert-info">
+          No teams found for {currentSport}.
+        </div>
+      </Container>
+    );
+  }
+
+  return (
+    <Container className="mt-4" style ={{color: "white"}}>
+          <div className="outer_teamtab">
+      <h4 className="mb-4">{currentSport} Teams</h4>
+      <Row>
+        {Object.entries(teamsData).map(([divisionName, teams], divIndex) => (
+          <Col md={6} key={divIndex} className="mb-4">
+            <h6 className="border-bottom pb-2">{divisionName}</h6>
+            {teams.map((team, idx) => (
+              <NBATeamCard key={idx} name={team.name} logo={team.logo} />
+            ))}
+          </Col>
         ))}
-      </Col>
-      <Col md={6}>
-        <h6 className="border-bottom pb-2">Pacific</h6>
-        {teamsData.Pacific.map((team, idx) => (
-          <NBATeamCard key={idx} {...team} />
-        ))}
-      </Col>
-    </Row>
-  </Container>
-);
+      </Row>
+      </div>
+    </Container>
+  );
+};
 
 export default Teamstab;

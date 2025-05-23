@@ -566,6 +566,9 @@ h1, h2, h3, .nba_odds {
 
 
 
+th.matchup_td {
+    min-width: 150px;
+}
 /* --- Betting Table Container --- */
 .betting-container {
   width: 100%;
@@ -593,7 +596,7 @@ h1, h2, h3, .nba_odds {
   text-align: center;
   border: 1px solid #e0e0e0;
   white-space: nowrap;
-  overflow: hidden;
+  /* overflow: hidden; */
   text-overflow: ellipsis;
 }
 

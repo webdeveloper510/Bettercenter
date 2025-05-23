@@ -7,3 +7,13 @@
 .links a:hover {
   text-decoration: underline;
 }
+.outer_teamtab {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #1B1E3D;
+    border: 1px solid #1B1E3D;
+    margin-bottom: 20px;
+}
