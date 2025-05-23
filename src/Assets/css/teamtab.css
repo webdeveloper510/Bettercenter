@@ -1,0 +1,9 @@
+.links a {
+  margin-right: 8px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}

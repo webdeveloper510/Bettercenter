@@ -37,6 +37,7 @@ import GameSelector from "./Component/Pages/test";
 import ManageSubscription from "./Component/Pages/msubscription";
 import MProfile from "./Component/Pages/mprofile";
 
+
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("accessToken");
   if (!token) {
@@ -111,6 +112,7 @@ function Layout() {
           <Route path="GameSelector" element={<test />} />
           <Route path="/subscription" element={<ManageSubscription />} />
           <Route path="/profile" element={<MProfile />} />
+          {/* <Route path="/teamstab" element={<Teamstab />} /> */}
           
           <Route
             path="AIPicks"

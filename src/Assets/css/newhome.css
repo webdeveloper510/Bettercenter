@@ -559,3 +559,128 @@ h1, h2, h3, .nba_odds {
     font-size: 12px;
 }
 }
+
+
+
+
+
+
+
+/* --- Betting Table Container --- */
+.betting-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 8px;
+}
+
+/* --- Compact Table for Desktop --- */
+.betting-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: auto;
+  min-width: 600px;
+}
+
+.betting-table thead {
+  background-color: #f9f9f9;
+}
+
+.betting-table th,
+.betting-table td {
+  padding: 8px 6px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bookmaker logo size */
+.bookmaker-logo {
+  max-height: 20px;
+  max-width: 100%;
+}
+
+/* Highlight row if bookmarked */
+.bookmarked-row {
+  background-color: #fffbe6;
+}
+
+/* --- Mobile Card Layout --- */
+@media screen and (max-width: 768px) {
+  .betting-table,
+  .betting-table thead,
+  .betting-table tbody,
+  .betting-table th,
+  .betting-table td,
+  .betting-table tr {
+    display: block;
+  }
+
+  .betting-table thead {
+    display: none;
+  }
+
+  .betting-table tr {
+    /* background: #fff; */
+    border: 1px solid #ccc;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .betting-table td {
+    padding: 10px 10px 10px 30%;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    font-size: 13px;
+  }
+
+  .betting-table td:last-child {
+    border-bottom: none;
+  }
+
+  .betting-table td::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 40%;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  /* Dynamic labels using nth-child */
+  .betting-table td:nth-child(1)::before { content: "MATCHUP"; }
+  .betting-table td:nth-child(2)::before { content: "PITCHERS"; }
+  .betting-table td:nth-child(3)::before { content: "SPREAD / TOTAL / ODDS"; }
+  .betting-table td:nth-child(4)::before { content: "OPEN"; }
+  .betting-table td:nth-child(5)::before { content: "BEST ODDS"; }
+  .betting-table td:nth-child(6)::before { content: "Bookmaker 1"; }
+  .betting-table td:nth-child(7)::before { content: "Bookmaker 2"; }
+  
+  /* Add more labels as needed */
+
+  .odd_n {
+    text-align: left;
+}
+.odd_y {
+    text-align: left;
+}
+.odd {
+   text-align: left;
+}
+.game-time {
+    top: 0px;
+}
+}
+
+@media screen and (max-width: 480px) {
+
+}
