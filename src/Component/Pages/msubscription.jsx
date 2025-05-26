@@ -81,8 +81,6 @@ const ManageSubscription = () => {
       setHasActiveSubscription(false);
       
       const response = await api.getSubscriptionDetail();
-      console.log("🚀 ~ fetchSubscriptionData ~ response:", response);
-
       if (response && response.status === 200) {
         if (response.data && Array.isArray(response.data) && response.data.length > 0) {
           const formattedData = response.data.map((item) => ({
@@ -114,8 +112,6 @@ const ManageSubscription = () => {
   const handleCancelSubscription = async () => {
     try {
       const response = await api.cancelSubscription();
-      console.log("🚀 ~ handleCancelSubscription ~ response:", response);
-
       if (response && response.status === 200) {
         toast.success("Subscription cancelled successfully.");
         setSubscriptionData([]);

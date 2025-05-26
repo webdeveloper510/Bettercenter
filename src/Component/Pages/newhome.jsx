@@ -261,8 +261,6 @@ const updateChangeTimestamps = (newData, sportType = null) => {
       let apiData;
       let processedData = [];
       const formattedDate = formatDateForAPI(selectedDate);
-      console.log("🚀 ~ fetchData ~ formattedDate:", formattedDate)
-
       switch (sport) {
         case "NBA":
           switch (marketType) {
@@ -545,9 +543,6 @@ newSocket.onmessage = (event) => {
     if (!apiData || !apiData.data) return [];
 
     const processedGames = [];
-
-    console.log("Processing data for sport:", sport);
-
     Object.keys(apiData.data).forEach((spreadKey) => {
       const spreadArray = apiData.data[spreadKey];
 

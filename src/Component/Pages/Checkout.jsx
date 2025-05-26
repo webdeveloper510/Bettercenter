@@ -60,8 +60,6 @@ const CardPaymentForm = ({ handlePaymentSuccess }) => {
       return;
     }
 
-    console.log('Payment method created:', paymentMethod.id);
-  
     handlePaymentSuccess(paymentMethod.id);
     setLoading(false);
   };
@@ -446,7 +444,6 @@ const OrderReview = ({
           onApprove: function (data, actions) {
             return actions.order.capture().then(function (orderData) {
               const transactionId = orderData.id;
-              console.log("Transaction completed:", transactionId);
               if (paypalRef.current) {
                 paypalRef.current.innerHTML = "";
               }

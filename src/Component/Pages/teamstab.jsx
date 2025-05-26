@@ -34,7 +34,6 @@ const Teamstab = ({ currentSport = 'NBA' }) => {
         switch (currentSport) {
           case 'NBA':
             apiData = await api.getNbaTeamsData();
-            console.log("🚀 ~ fetchTeamsData ~ apiData:", apiData)
             break;
           case 'NHL':
             apiData = await api.getNhlTeamsData();
@@ -49,7 +48,6 @@ const Teamstab = ({ currentSport = 'NBA' }) => {
         }
 
         const processedData = processTeamsData(apiData);
-          console.log("🚀 ~ fetchTeamsData ~ processedData:", processedData)
         setTeamsData(processedData);
       } catch (err) {
         console.error(`Error fetching ${currentSport} teams data:`, err);
@@ -68,7 +66,6 @@ const Teamstab = ({ currentSport = 'NBA' }) => {
     try {
 
       const divisionsData = apiData.data;
-      console.log("🚀 ~ processTeamsData ~ divisionsData:", divisionsData)
       const processedDivisions = {};
       Object.entries(divisionsData).forEach(([divisionName, teams]) => {
         if (Array.isArray(teams)) {
