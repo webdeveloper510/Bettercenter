@@ -167,10 +167,11 @@ const api = {
         }
       },
       
-    getMoneyData: async (date) => {
+    getMoneyData: async (date,timezone) => {
         try {
             const formattedDate = date || ''; 
-            const response = await apiClient.get(`${API_URL}/nba-money-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || ''; 
+            const response = await apiClient.get(`${API_URL}/nba-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -179,10 +180,11 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
-    getSpreadData: async (date) => {
+    getSpreadData: async (date,timezone) => {
         try {
             const formattedDate = date || ''; 
-            const response = await apiClient.get(`${API_URL}/nba-spread-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nba-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -190,10 +192,11 @@ const api = {
         return error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
-    getOverUnderData: async (date) => {
+    getOverUnderData: async (date, timezone) => {
         try {
             const formattedDate = date || ''; 
-            const response = await apiClient.get(`${API_URL}/nba-over-under-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nba-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -201,10 +204,11 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
     },
-    getMlbMoneyData: async (date) => {
+    getMlbMoneyData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const response = await apiClient.get(`${API_URL}/mlb-money-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/mlb-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -213,10 +217,11 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
-    getMlbDefaultData: async (date) => {
+    getMlbDefaultData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const response = await apiClient.get(`${API_URL}/mlb-default-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/mlb-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -225,10 +230,11 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch default data" };
         }
     },
-     getNhlDefaultData: async (date) => {
+     getNhlDefaultData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const response = await apiClient.get(`${API_URL}/nhl-default-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nhl-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -236,11 +242,12 @@ const api = {
             console.error("Default data fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch default data" };
         }
-    }  ,
-     getNbaDefaultData: async (date) => {
+    },
+     getNbaDefaultData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const response = await apiClient.get(`${API_URL}/nba-default-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nba-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -248,11 +255,12 @@ const api = {
             console.error("Default data fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch default data" };
         }
-    }  ,
-    getMlbSpreadData: async (date) => {
+    },
+    getMlbSpreadData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const response = await apiClient.get(`${API_URL}/mlb-spread-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/mlb-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -260,10 +268,11 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
-    getMlbOverUnderData: async (date) => {
+    getMlbOverUnderData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const response = await apiClient.get(`${API_URL}/mlb-over-under-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/mlb-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -271,10 +280,11 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
     },
-    getNhlMoneyData: async (date) => {
+    getNhlMoneyData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const response = await apiClient.get(`${API_URL}/nhl-money-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nhl-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -283,10 +293,11 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
-    getNhlSpreadData: async (date) => {
+    getNhlSpreadData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const response = await apiClient.get(`${API_URL}/nhl-spread-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nhl-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -294,10 +305,11 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
-    getNhlOverUnderData: async (date) => {
+    getNhlOverUnderData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const response = await apiClient.get(`${API_URL}/nhl-over-under-data/?date=${formattedDate}`, {
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nhl-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;

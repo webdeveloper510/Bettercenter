@@ -21,6 +21,7 @@ import HomeBlog from "./homeblog";
 import StaticInfo from "./staticcontent";
 import { useNavigate } from "react-router-dom";
 import Teamstab from "./teamstab";
+import { format } from "date-fns";
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
   DraftKings: { logo: draftkingsLogo },
@@ -32,12 +33,13 @@ const BOOKMAKER_LOGOS = {
 };
 const formatDateForAPI = (date) => {
   if (!date) return "";
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    2,
-    "0"
-  )}-${String(date.getDate()).padStart(2, "0")}`;
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  return {
+    date: formattedDate,
+    timezone: timezone
+  };
 };
-
 const BOOKMAKER_MAP = {
   Betmgm: "BetMGM",
   Caesars: "Caesars",
@@ -65,13 +67,22 @@ const isValueChanged = (oldVal, newVal) => {
 };
 
 const Games = () => {
-  const [sport, setSport] = useState("NBA");
+  const [sport, setSport] = useState("ALL");
   const [marketType, setMarketType] = useState("DEFAULT");
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [allSportsData, setAllSportsData] = useState({
+    nbaSpread: [],
+    nhlMoneyline: [],
+    mlbMoneyline: [],
+  });
+
   const [activeTab, setActiveTab] = useState("OVERVIEW");
   const [socket, setSocket] = useState(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const initialDataFetchedRef = useRef(false);
+  const allSportsDataCache = useRef(null);
+const lastAllSportsFetchTime = useRef(null);
+
   const tabs = [
     "OVERVIEW",
     // "GAMES",
@@ -89,6 +100,7 @@ const Games = () => {
   const navigate = useNavigate();
   const [bookmarkedGames, setBookmarkedGames] = useState([]);
   const currentSportMarketRef = useRef("");
+  
   const totalPages = 4;
   const isCurrentDate = () => {
     const today = new Date();
@@ -100,8 +112,8 @@ const Games = () => {
     );
   };
   const handleAiPicksClick = (gameIndex) => {
-  navigate('/aipicks');
-};
+    navigate("/aipicks");
+  };
 
   const toggleBookmark = (gameIndex) => {
     setBookmarkedGames((prev) => {
@@ -140,30 +152,62 @@ const Games = () => {
 
     return () => clearInterval(interval);
   }, []);
-  const getCellColor = (key, value) => {
-    if (isFirstLoadRef.current) return "";
+const getCellColor = (key, value, sportType = null) => {
+  if (isFirstLoadRef.current) return "";
 
-    const changeKey = `${key}-${value}`;
-    const timestamp = changeTimestampsRef.current[changeKey];
+  let changeKey;
+  if (sport === "ALL" && sportType) {
+    changeKey = `${sportType}-${key}-${value}`;
+  } else {
+    changeKey = `${key}-${value}`;
+  }
+  
+  const timestamp = changeTimestampsRef.current[changeKey];
 
-    if (!timestamp) return "";
+  if (!timestamp) return "";
 
-    const secondsSinceChange = (Date.now() - timestamp) / 1000;
+  const secondsSinceChange = (Date.now() - timestamp) / 1000;
 
-    if (secondsSinceChange <= 20) {
-      return "changed-green";
-    } else if (secondsSinceChange <= 40) {
-      return "changed-yellow";
-    } else if (secondsSinceChange <= 60) {
-      return "changed-red";
-    }
+  if (secondsSinceChange <= 20) {
+    return "changed-green";
+  } else if (secondsSinceChange <= 40) {
+    return "changed-yellow";
+  } else if (secondsSinceChange <= 60) {
+    return "changed-red";
+  }
 
-    return "";
-  };
-  const updateChangeTimestamps = (newData) => {
-    const oldData = previousDataRef.current;
-    const newTimestamps = { ...changeTimestampsRef.current };
-    const now = Date.now();
+  return "";
+};
+
+const updateChangeTimestamps = (newData, sportType = null) => {
+  const oldData = previousDataRef.current;
+  const newTimestamps = { ...changeTimestampsRef.current };
+  const now = Date.now();
+  if (sport === "ALL" && sportType) {
+    const sportKey = sportType === 'nba' ? 'nbaSpread' : 
+                    sportType === 'nhl' ? 'nhlMoneyline' : 
+                    sportType === 'mlb' ? 'mlbMoneyline' : null;
+    
+    if (!sportKey || !oldData[sportKey]) return;
+    
+    const oldSportData = oldData[sportKey];
+    
+    newData.forEach((game, gameIndex) => {
+      if (!oldSportData[gameIndex]) return;
+
+      Object.keys(game).forEach((key) => {
+        const value = game[key];
+        if (value === undefined || value === null || value === "-") return;
+
+        const oldValue = oldSportData[gameIndex][key];
+
+        if (isValueChanged(oldValue, value)) {
+          const changeKey = `${sportType}-${gameIndex}-${key}-${value}`;
+          newTimestamps[changeKey] = now;
+        }
+      });
+    });
+  } else {
     newData.forEach((game, gameIndex) => {
       if (!oldData[gameIndex]) return;
 
@@ -179,16 +223,30 @@ const Games = () => {
         }
       });
     });
+  }
 
-    Object.keys(newTimestamps).forEach((key) => {
-      if ((now - newTimestamps[key]) / 1000 > 60) {
-        delete newTimestamps[key];
-      }
-    });
+  Object.keys(newTimestamps).forEach((key) => {
+    if ((now - newTimestamps[key]) / 1000 > 60) {
+      delete newTimestamps[key];
+    }
+  });
 
-    changeTimestampsRef.current = newTimestamps;
+  changeTimestampsRef.current = newTimestamps;
+  
+  if (sport === "ALL" && sportType) {
+    const sportKey = sportType === 'nba' ? 'nbaSpread' : 
+                    sportType === 'nhl' ? 'nhlMoneyline' : 
+                    sportType === 'mlb' ? 'mlbMoneyline' : null;
+    if (sportKey) {
+      previousDataRef.current = {
+        ...previousDataRef.current,
+        [sportKey]: JSON.parse(JSON.stringify(newData))
+      };
+    }
+  } else {
     previousDataRef.current = JSON.parse(JSON.stringify(newData));
-  };
+  }
+};
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -203,24 +261,25 @@ const Games = () => {
       let apiData;
       let processedData = [];
       const formattedDate = formatDateForAPI(selectedDate);
+      console.log("🚀 ~ fetchData ~ formattedDate:", formattedDate)
 
       switch (sport) {
         case "NBA":
           switch (marketType) {
             case "MONEYLINE":
-              apiData = await api.getMoneyData(formattedDate);
+              apiData = await api.getMoneyData(formattedDate.date,formattedDate.timezone);
               processedData = processMoneylineData(apiData);
               break;
             case "SPREAD":
-              apiData = await api.getSpreadData(formattedDate);
+              apiData = await api.getSpreadData(formattedDate.date,formattedDate.timezone);
               processedData = processSpreadData(apiData);
               break;
             case "TOTAL":
-              apiData = await api.getOverUnderData(formattedDate);
+              apiData = await api.getOverUnderData(formattedDate.date,formattedDate.timezone);
               processedData = processTotalData(apiData);
               break;
             case "DEFAULT":
-              apiData = await api.getNbaDefaultData(formattedDate);
+              apiData = await api.getNbaDefaultData(formattedDate.date,formattedDate.timezone);
               processedData = processDefaultData(apiData);
               break;
             default:
@@ -230,19 +289,19 @@ const Games = () => {
         case "MLB":
           switch (marketType) {
             case "MONEYLINE":
-              apiData = await api.getMlbMoneyData(formattedDate);
+              apiData = await api.getMlbMoneyData(formattedDate.date,formattedDate.timezone);
               processedData = processMoneylineData(apiData);
               break;
             case "SPREAD":
-              apiData = await api.getMlbSpreadData(formattedDate);
+              apiData = await api.getMlbSpreadData(formattedDate.date,formattedDate.timezone);
               processedData = processSpreadData(apiData);
               break;
             case "TOTAL":
-              apiData = await api.getMlbOverUnderData(formattedDate);
+              apiData = await api.getMlbOverUnderData(formattedDate.date,formattedDate.timezone);
               processedData = processTotalData(apiData);
               break;
             case "DEFAULT":
-              apiData = await api.getMlbDefaultData(formattedDate);
+              apiData = await api.getMlbDefaultData(formattedDate.date,formattedDate.timezone);
               processedData = processDefaultData(apiData);
               break;
             default:
@@ -252,19 +311,19 @@ const Games = () => {
         case "NHL":
           switch (marketType) {
             case "MONEYLINE":
-              apiData = await api.getNhlMoneyData(formattedDate);
+              apiData = await api.getNhlMoneyData(formattedDate.date,formattedDate.timezone);
               processedData = processMoneylineData(apiData);
               break;
             case "SPREAD":
-              apiData = await api.getNhlSpreadData(formattedDate);
+              apiData = await api.getNhlSpreadData(formattedDate.date,formattedDate.timezone);
               processedData = processSpreadData(apiData);
               break;
             case "TOTAL":
-              apiData = await api.getNhlOverUnderData(formattedDate);
+              apiData = await api.getNhlOverUnderData(formattedDate.date,formattedDate.timezone);
               processedData = processTotalData(apiData);
               break;
             case "DEFAULT":
-              apiData = await api.getNhlDefaultData(formattedDate);
+              apiData = await api.getNhlDefaultData(formattedDate.date,formattedDate.timezone);
               processedData = processDefaultData(apiData);
               break;
             default:
@@ -303,20 +362,30 @@ const Games = () => {
     }
   };
   useEffect(() => {
+      if (activeTab !== "OVERVIEW" && sport === "ALL") {
+    setSport("NBA");
+    return;
+  }
     isFirstLoadRef.current = true;
     changeTimestampsRef.current = {};
     previousDataRef.current = [];
     initialDataFetchedRef.current = false;
-    const fetchAndUpdateData = async () => {
-      setLoading(true);
-      try {
+
+     const fetchAndUpdateData = async () => {
+    setLoading(true);
+    try {
+      if (sport === "ALL" && activeTab === "OVERVIEW") {
+        await fetchAllSportsData();
+      } else if (sport !== "ALL") {
         await fetchData();
-      } finally {
-        setLoading(false);
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
     fetchAndUpdateData();
+
     let interval;
     if (!isCurrentDate()) {
       interval = setInterval(fetchAndUpdateData, 60000);
@@ -327,7 +396,7 @@ const Games = () => {
         clearInterval(interval);
       }
     };
-  }, [sport, marketType, selectedDate]);
+  }, [sport, marketType, selectedDate, activeTab]);
   useEffect(() => {
     if (!isCurrentDate()) {
       if (socket) {
@@ -353,64 +422,104 @@ const Games = () => {
         setIsSocketConnected(true);
       };
 
-      newSocket.onmessage = (event) => {
-        try {
-          console.log("Raw WebSocket message received:", event.data);
-          const data = JSON.parse(event.data);
-          console.log("WebSocket data received:", data);
-          let processedData = [];
-
-          if (sport === "NBA") {
-            if (data.nba_money_data && marketType === "MONEYLINE") {
-              processedData = processMoneylineData({
-                data: data.nba_money_data,
-              });
-            } else if (data.nba_spread_data && marketType === "SPREAD") {
-              processedData = processSpreadData({ data: data.nba_spread_data });
-            } else if (data.nba_total_data && marketType === "TOTAL") {
-              processedData = processTotalData({ data: data.nba_total_data });
-            } else if (data.nba_default_data && marketType === "DEFAULT") {
-              processedData = processDefaultData({
-                data: data.nba_default_data,
-              });
-            }
-          } else if (sport === "MLB") {
-            if (data.mlb_money_data && marketType === "MONEYLINE") {
-              processedData = processMoneylineData({
-                data: data.mlb_money_data,
-              });
-            } else if (data.mlb_spread_data && marketType === "SPREAD") {
-              processedData = processSpreadData({ data: data.mlb_spread_data });
-            } else if (data.mlb_total_data && marketType === "TOTAL") {
-              processedData = processTotalData({ data: data.mlb_total_data });
-            } else if (data.mlb_default_data && marketType === "DEFAULT") {
-              processedData = processDefaultData({
-                data: data.mlb_default_data,
-              });
-            }
-          } else if (sport === "NHL") {
-            if (data.nhl_money_data && marketType === "MONEYLINE") {
-              processedData = processMoneylineData({
-                data: data.nhl_money_data,
-              });
-            } else if (data.nhl_spread_data && marketType === "SPREAD") {
-              processedData = processSpreadData({ data: data.nhl_spread_data });
-            } else if (data.nhl_total_data && marketType === "TOTAL") {
-              processedData = processTotalData({ data: data.nhl_total_data });
-            } else if (data.nhl_default_data && marketType === "DEFAULT") {
-              processedData = processDefaultData({
-                data: data.nhl_default_data,
-              });
-            }
-          }
-          if (processedData && processedData.length > 0) {
-            updateChangeTimestamps(processedData);
-            setGamesData(processedData);
-          }
-        } catch (error) {
-          console.error("Error processing WebSocket data:", error);
+newSocket.onmessage = (event) => {
+  try {
+    console.log("Raw WebSocket message received:", event.data);
+    const data = JSON.parse(event.data);
+    console.log("WebSocket data received:", data);
+    if (sport === "ALL") {
+      const updatedAllSportsData = { ...allSportsData };
+      let hasUpdates = false;
+      if (data.nba_default_data) {
+        const processedNbaDefault = processDefaultData({
+          data: data.nba_default_data,
+        });
+        updatedAllSportsData.nbaSpread = processedNbaDefault;
+        if (!isFirstLoadRef.current) {
+          updateChangeTimestamps(processedNbaDefault, 'nba');
         }
-      };
+        hasUpdates = true;
+      }
+      if (data.nhl_default_data) {
+        const processedNhlDefault = processDefaultData({
+          data: data.nhl_default_data,
+        });
+        updatedAllSportsData.nhlMoneyline = processedNhlDefault;
+        if (!isFirstLoadRef.current) {
+          updateChangeTimestamps(processedNhlDefault, 'nhl');
+        }
+        hasUpdates = true;
+      }
+      if (data.mlb_default_data) {
+        const processedMlbDefault = processDefaultData({
+          data: data.mlb_default_data,
+        });
+        updatedAllSportsData.mlbMoneyline = processedMlbDefault;
+        if (!isFirstLoadRef.current) {
+          updateChangeTimestamps(processedMlbDefault, 'mlb');
+        }
+        hasUpdates = true;
+      }
+      
+      if (hasUpdates) {
+        setAllSportsData(updatedAllSportsData);
+      }
+      return; 
+    }
+    let processedData = [];
+
+    if (sport === "NBA") {
+      if (data.nba_money_data && marketType === "MONEYLINE") {
+        processedData = processMoneylineData({
+          data: data.nba_money_data,
+        });
+      } else if (data.nba_spread_data && marketType === "SPREAD") {
+        processedData = processSpreadData({ data: data.nba_spread_data });
+      } else if (data.nba_total_data && marketType === "TOTAL") {
+        processedData = processTotalData({ data: data.nba_total_data });
+      } else if (data.nba_default_data && marketType === "DEFAULT") {
+        processedData = processDefaultData({
+          data: data.nba_default_data,
+        });
+      }
+    } else if (sport === "MLB") {
+      if (data.mlb_money_data && marketType === "MONEYLINE") {
+        processedData = processMoneylineData({
+          data: data.mlb_money_data,
+        });
+      } else if (data.mlb_spread_data && marketType === "SPREAD") {
+        processedData = processSpreadData({ data: data.mlb_spread_data });
+      } else if (data.mlb_total_data && marketType === "TOTAL") {
+        processedData = processTotalData({ data: data.mlb_total_data });
+      } else if (data.mlb_default_data && marketType === "DEFAULT") {
+        processedData = processDefaultData({
+          data: data.mlb_default_data,
+        });
+      }
+    } else if (sport === "NHL") {
+      if (data.nhl_money_data && marketType === "MONEYLINE") {
+        processedData = processMoneylineData({
+          data: data.nhl_money_data,
+        });
+      } else if (data.nhl_spread_data && marketType === "SPREAD") {
+        processedData = processSpreadData({ data: data.nhl_spread_data });
+      } else if (data.nhl_total_data && marketType === "TOTAL") {
+        processedData = processTotalData({ data: data.nhl_total_data });
+      } else if (data.nhl_default_data && marketType === "DEFAULT") {
+        processedData = processDefaultData({
+          data: data.nhl_default_data,
+        });
+      }
+    }
+    
+    if (processedData && processedData.length > 0) {
+      updateChangeTimestamps(processedData);
+      setGamesData(processedData);
+    }
+  } catch (error) {
+    console.error("Error processing WebSocket data:", error);
+  }
+};
       newSocket.onerror = (error) => {
         console.error("WebSocket error:", error);
         setIsSocketConnected(false);
@@ -431,7 +540,7 @@ const Games = () => {
         socket.close();
       }
     };
-  }, [sport, marketType, selectedDate]);
+  }, [sport, marketType, selectedDate,activeTab]);
   const processSpreadData = (apiData, sport) => {
     if (!apiData || !apiData.data) return [];
 
@@ -468,8 +577,7 @@ const Games = () => {
             homeSpread = value2;
             awaySpread = value1;
           } else {
-          
-            return; 
+            return;
           }
           const game = {
             homeTeam: homeTeamData["Home Team"],
@@ -490,7 +598,7 @@ const Games = () => {
             const homeOddsKey = `Home ${apiBookmaker}`;
             const awayOddsKey = `Away ${apiBookmaker}`;
             const rawHomeOdds = homeTeamData[homeOddsKey];
-            const rawAwayOdds = awayTeamData[awayOddsKey]
+            const rawAwayOdds = awayTeamData[awayOddsKey];
             if (rawHomeOdds && rawHomeOdds !== 0) {
               game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
                 formatOdds(rawHomeOdds);
@@ -750,7 +858,36 @@ const Games = () => {
 
     return processedGames;
   };
+  const fetchAllSportsData = async () => {
+    setLoading(true);
+    setError(null);
 
+    try {
+      const formattedDate = formatDateForAPI(selectedDate);
+      const nbaDefaultData = await api.getNbaDefaultData(formattedDate.date,formattedDate.timezone);
+      const processedNbaDefault = processDefaultData(nbaDefaultData, "NBA");
+      const nhlDefaultData = await api.getNhlDefaultData(formattedDate.date,formattedDate.timezone);
+      const processedNhlDefault = processDefaultData(nhlDefaultData, "NHL");
+      const mlbDefaultData = await api.getMlbDefaultData(formattedDate.date,formattedDate.timezone);
+      const processedMlbDefault = processDefaultData(mlbDefaultData, "MLB");
+
+      setAllSportsData({
+        nbaSpread: processedNbaDefault,
+        nhlMoneyline: processedNhlDefault,
+        mlbMoneyline: processedMlbDefault,
+      });
+    } catch (err) {
+      console.error("Error fetching all sports data:", err);
+      setError("Failed to fetch all sports data. Please try again later.");
+      setAllSportsData({
+        nbaSpread: [],
+        nhlMoneyline: [],
+        mlbMoneyline: [],
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleSportChange = (e) => {
     setSport(e.target.value);
   };
@@ -766,7 +903,205 @@ const Games = () => {
     }
     return odds > 0;
   };
-
+const renderSportTable = (
+  sportName,
+  marketTypeName,
+  gamesData,
+  tableTitle
+) => {
+  const sportTypeKey = sportName.toLowerCase();
+  
+  return (
+    <div
+      key={`${sportName}-${marketTypeName}`}
+      className="sport-table-section mb-5"
+    >
+      <h2 className="sport-table-title mb-3">{tableTitle}</h2>
+      <div className="betting-table-wrapper table_flow">
+        <table className="betting-table">
+          <thead>
+            <tr>
+              <th className="matchup_td">MATCHUP</th>
+              {sportName === "MLB" && <th>PITCHERS</th>}
+              <th>OPEN</th>
+              <th>BEST ODDS</th>
+              <th>AI PICKS</th>
+              {Object.entries(BOOKMAKER_LOGOS).map(([name, { logo }], i) => (
+                <th key={i}>
+                  <div className="logo-header">
+                    <img src={logo} alt={name} className="bookmaker-logo" />
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {gamesData.length > 0 ? (
+              gamesData.map((game, index) => (
+                <tr 
+                  key={index}
+                  className={
+                    bookmarkedGames.includes(index)
+                      ? "bookmarked-row"
+                      : ""
+                  }
+                  onClick={() => toggleBookmark(index)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <td>
+                    <div className="game-time">
+                      {game.date} · {game.time} · {sportName}
+                    </div>
+                    <div className="team-name">{game.awayTeam}</div>
+                    <div className="team-name">{game.homeTeam}</div>
+                  </td>
+                  {sportName === "MLB" && (
+                    <td>
+                      <div className="pitcher-name">
+                        {game.awayPitcher || "N/A"}
+                      </div>
+                      <div className="pitcher-name">
+                        {game.homePitcher || "N/A"}
+                      </div>
+                    </td>
+                  )}
+                  <td>
+                    <div
+                      className={`odd_${
+                        isPositiveOdds(game.awayOpen) ? "y" : "g"
+                      } ${getCellColor(
+                        `${index}-awayOpen`,
+                        game.awayOpen,
+                        sportTypeKey
+                      )}`}
+                    >
+                      {game.awayOpen || "0"}
+                    </div>
+                    <div
+                      className={`odd_${
+                        isPositiveOdds(game.homeOpen) ? "y" : "n"
+                      } ${getCellColor(
+                        `${index}-homeOpen`,
+                        game.homeOpen,
+                        sportTypeKey
+                      )}`}
+                    >
+                      {game.homeOpen || "0"}
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      className={`odd_${
+                        isPositiveOdds(game.awayBestOdds) ? "y" : "n"
+                      } ${getCellColor(
+                        `${index}-awayBestOdds`,
+                        game.awayBestOdds,
+                        sportTypeKey
+                      )}`}
+                    >
+                      {game.awayBestOdds || "0"}
+                    </div>
+                    <div
+                      className={`odd_${
+                        isPositiveOdds(game.homeBestOdds) ? "y" : "n"
+                      } ${getCellColor(
+                        `${index}-homeBestOdds`,
+                        game.homeBestOdds,
+                        sportTypeKey
+                      )}`}
+                    >
+                      {game.homeBestOdds || "0"}
+                    </div>
+                  </td>
+                  <td>
+                    <button
+                      className="ai-picks-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAiPicksClick(index);
+                      }}
+                      style={{
+                        background:
+                          "linear-gradient(45deg, #667eea 0%, #764ba2 100%)",
+                        color: "white",
+                        border: "none",
+                        padding: "8px 16px",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        fontSize: "12px",
+                        fontWeight: "600",
+                        textTransform: "uppercase",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseOver={(e) => {
+                        e.target.style.transform = "translateY(-2px)";
+                        e.target.style.boxShadow = "0 4px 12px rgba(102, 126, 234, 0.4)";
+                      }}
+                      onMouseOut={(e) => {
+                        e.target.style.transform = "translateY(0)";
+                        e.target.style.boxShadow = "none";
+                      }}
+                    >
+                      Click Here
+                    </button>
+                  </td>
+                  {Object.keys(BOOKMAKER_LOGOS).map((bookmaker, i) => {
+                    const bookmakerKey = bookmaker.toLowerCase();
+                    const homeOddsKey = `${bookmakerKey}HomeOdds`;
+                    const awayOddsKey = `${bookmakerKey}AwayOdds`;
+                    return (
+                      <td key={i}>
+                        <div
+                          className={`odd ${
+                            isPositiveOdds(game[awayOddsKey])
+                              ? "positive odd_red"
+                              : "negative odd_n"
+                          } ${getCellColor(
+                            `${index}-${awayOddsKey}`,
+                            game[awayOddsKey],
+                            sportTypeKey
+                          )}`}
+                        >
+                          {game[awayOddsKey] || "0"}
+                        </div>
+                        <div
+                          className={`odd ${
+                            isPositiveOdds(game[homeOddsKey])
+                              ? "positive odd_red"
+                              : "negative odd_n"
+                          } ${getCellColor(
+                            `${index}-${homeOddsKey}`,
+                            game[homeOddsKey],
+                            sportTypeKey
+                          )}`}
+                        >
+                          {game[homeOddsKey] || "0"}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={
+                    6 +
+                    (sportName === "MLB" ? 1 : 0) +
+                    Object.keys(BOOKMAKER_LOGOS).length
+                  }
+                  className="text-center py-4"
+                >
+                  No games available for {tableTitle}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
   return (
     <section className="backgroung_image">
       <div className="container">
@@ -780,12 +1115,13 @@ const Games = () => {
             <div className="nfl-games-container">
               <div className="selectors">
                 <select value={sport} onChange={handleSportChange}>
+               {activeTab === "OVERVIEW" && <option value="ALL">ALL SPORTS</option>}
                   <option value="NBA">NBA</option>
                   <option value="NHL">NHL</option>
                   <option value="MLB">MLB</option>
                 </select>
-
-                {activeTab !== "INJURIES" &&
+                {sport !== "ALL" &&
+                  activeTab !== "INJURIES" &&
                   activeTab !== "SCHEDULE" &&
                   activeTab !== "TEAMS" &&
                   activeTab !== "FUTURES" && (
@@ -794,8 +1130,7 @@ const Games = () => {
                       onChange={handleMarketTypeChange}
                     >
                       <option value="DEFAULT">
-                        (
-                        {sport === "NBA" ? "Spread/Total" : "Moneyline/Total"})
+                        ({sport === "NBA" ? "Spread/Total" : "Moneyline/Total"})
                       </option>
                       <option value="SPREAD">SPREAD</option>
                       <option value="MONEYLINE">MONEYLINE</option>
@@ -838,345 +1173,426 @@ const Games = () => {
             {/* Table: Only show when active tab is OVERVIEW */}
             {activeTab === "OVERVIEW" && (
               <div className="betting-table-wrapper table_flow">
-                <h1 className="nba_odds">Upcoming {sport} Games</h1>
-                {loading ? (
-                  <div className="loader-container my-5">
-                    <div className="loader spinner-border text-primary text-center"></div>
-                    <p className="text-center mt-5 "></p>
+                {sport === "ALL" ? (
+                  <div className="all-sports-container">
+                    <h1 className="nba_odds mb-4">All Sports Overview</h1>
+                    {loading ? (
+                      <div className="loader-container my-5">
+                        <div className="loader spinner-border text-primary text-center"></div>
+                      </div>
+                    ) : error ? (
+                      <div className="text-center py-4 text-danger">
+                        {error}
+                      </div>
+                    ) : (
+                      <>
+                        {renderSportTable(
+                          "NBA",
+                          "SPREAD",
+                          allSportsData.nbaSpread,
+                          "NBA Spread/Total"
+                        )}
+                        {renderSportTable(
+                          "NHL",
+                          "MONEYLINE",
+                          allSportsData.nhlMoneyline,
+                          "NHL Moneyline/Total"
+                        )}
+                        {renderSportTable(
+                          "MLB",
+                          "MONEYLINE",
+                          allSportsData.mlbMoneyline,
+                          "MLB Moneyline/Total"
+                        )}
+                      </>
+                    )}
                   </div>
-                ) : error ? (
-                  <div className="text-center py-4 text-danger">{error}</div>
-                ) : (
-                  <table className="betting-table">
-                   <thead>
-  <tr>
-    <th className="matchup_td">MATCHUP</th>
-    {sport === "MLB" && <th>PITCHERS</th>}
-    {(marketType === "SPREAD" ||
-      marketType === "TOTAL") && (
-      <th>
-        {marketType === "SPREAD" ? "SPREAD" : "TOTAL"}
-      </th>
-    )}
-    <th>OPEN</th>
-    <th>BEST ODDS</th>
-    <th>AI PICKS</th>
-    {Object.entries(BOOKMAKER_LOGOS).map(
-      ([name, { logo }], i) => (
-        <th key={i}>
-          <div className="logo-header">
-            <img
-              src={logo}
-              alt={name}
-              className="bookmaker-logo"
-            />
-          </div>
-        </th>
-      )
-    )}
-  </tr>
-</thead>
-         {/* Table tbody section - replace your existing tbody */}
-<tbody>
-  {gamesData.length > 0 ? (
-    gamesData.map((game, index) => (
-      <tr
-        key={index}
-        className={
-          bookmarkedGames.includes(index)
-            ? "bookmarked-row"
-            : ""
-        }
-        onClick={() => toggleBookmark(index)}
-        style={{ cursor: "pointer" }}
-      >
-        <td>
-          <div className="game-time">
-            {game.date} · {game.time} · {sport}
-          </div>
-          <div className="team-name">{game.homeTeam}</div>
-          <div className="team-name">{game.awayTeam}</div>
-        </td>
-        {sport === "MLB" && (
-          <td>
-            <div className="pitcher-name">
-              {game.homePitcher || "N/A"}
-            </div>
-            <div className="pitcher-name">
-              {game.awayPitcher || "N/A"}
-            </div>
-          </td>
-        )}
-
-        {(marketType === "SPREAD" ||
-          marketType === "TOTAL") && (
-          <td>
-            {marketType === "SPREAD" ? (
-              <>
-                <div
-                  className={`odd_n ${getCellColor(
-                    `${index}-homeSpread`,
-                    game.homeSpread
-                  )}`}
-                >
-                  {game.homeSpread}
-                </div>
-                <div
-                  className={`odd_n ${getCellColor(
-                    `${index}-awaySpread`,
-                    game.awaySpread
-                  )}`}
-                >
-                  {game.awaySpread}
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  className={`odd_n ${getCellColor(
-                    `${index}-overValue`,
-                    game.overValue
-                  )}`}
-                >
-                  O {game.overValue || "0"}
-                </div>
-                <div
-                  className={`odd_n ${getCellColor(
-                    `${index}-underValue`,
-                    game.underValue
-                  )}`}
-                >
-                  U {game.underValue || "0"}
-                </div>
-              </>
-            )}
-          </td>
-        )}
-        <td>
-          {/* FIXED: Check for NBA spread and MLB moneyline to display in correct order */}
-          {(sport === "NBA" && marketType === "SPREAD") || (sport === "MLB" && marketType === "MONEYLINE") ? (
-            <>
-              <div
-                className={`odd_${
-                  isPositiveOdds(game.awayOpen) ? "y" : "g"
-                } ${getCellColor(
-                  `${index}-awayOpen`,
-                  game.awayOpen
-                )}`}
-              >
-                {game.awayOpen || "0"}
-              </div>
-              <div
-                className={`odd_${
-                  isPositiveOdds(game.homeOpen) ? "y" : "n"
-                } ${getCellColor(
-                  `${index}-homeOpen`,
-                  game.homeOpen
-                )}`}
-              >
-                {game.homeOpen || "-"}
-              </div>
-            </>
-          ) : (
-            <>
-              <div
-                className={`odd_${
-                  isPositiveOdds(game.homeOpen) ? "y" : "n"
-                } ${getCellColor(
-                  `${index}-homeOpen`,
-                  game.homeOpen
-                )}`}
-              >
-                {game.homeOpen || "-"}
-              </div>
-              <div
-                className={`odd_${
-                  isPositiveOdds(game.awayOpen) ? "y" : "g"
-                } ${getCellColor(
-                  `${index}-awayOpen`,
-                  game.awayOpen
-                )}`}
-              >
-                {game.awayOpen || "0"}
-              </div>
-            </>
-          )}
-        </td>
-        <td>
-          {/* FIXED: Check for NBA spread and MLB moneyline to display in correct order */}
-          {(sport === "NBA" && marketType === "SPREAD") || (sport === "MLB" && marketType === "MONEYLINE") ? (
-            <>
-              <div
-                className={`odd_${
-                  isPositiveOdds(game.awayBestOdds) ? "y" : "n"
-                } ${getCellColor(
-                  `${index}-awayBestOdds`,
-                  game.awayBestOdds
-                )}`}
-              >
-                {game.awayBestOdds || "0"}
-              </div>
-              <div
-                className={`odd_${
-                  isPositiveOdds(game.homeBestOdds) ? "y" : "n"
-                } ${getCellColor(
-                  `${index}-homeBestOdds`,
-                  game.homeBestOdds
-                )}`}
-              >
-                {game.homeBestOdds || "0"}
-              </div>
-            </>
-          ) : (
-            <>
-              <div
-                className={`odd_${
-                  isPositiveOdds(game.homeBestOdds) ? "y" : "n"
-                } ${getCellColor(
-                  `${index}-homeBestOdds`,
-                  game.homeBestOdds
-                )}`}
-              >
-                {game.homeBestOdds || "0"}
-              </div>
-              <div
-                className={`odd_${
-                  isPositiveOdds(game.awayBestOdds) ? "y" : "n"
-                } ${getCellColor(
-                  `${index}-awayBestOdds`,
-                  game.awayBestOdds
-                )}`}
-              >
-                {game.awayBestOdds || "0"}
-              </div>
-            </>
-          )}
-        </td>
-        
-        {/* NEW AI PICKS COLUMN - ADD THIS TD */}
-        <td>
-          <button 
-            className="ai-picks-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleAiPicksClick(index);
-            }}
-            style={{
-              background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
-              color: 'white',
-              border: 'none',
-              padding: '8px 16px',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '12px',
-              fontWeight: '600',
-              transition: 'all 0.3s ease',
-              textTransform: 'uppercase'
-            }}
-            onMouseOver={(e) => {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = 'none';
-            }}
-          >
-            Click Here
-          </button>
-        </td>
-
-        {Object.keys(BOOKMAKER_LOGOS).map(
-          (bookmaker, i) => {
-            const bookmakerKey = bookmaker.toLowerCase();
-            const homeOddsKey = `${bookmakerKey}HomeOdds`;
-            const awayOddsKey = `${bookmakerKey}AwayOdds`;
-            return (
-              <td key={i}>
-                {/* FIXED: Check for MLB moneyline to display in correct order */}
-                {sport === "MLB" && marketType === "MONEYLINE" ? (
-                  <>
-                    <div
-                      className={`odd ${
-                        isPositiveOdds(game[awayOddsKey])
-                          ? "positive odd_red"
-                          : "negative odd_n"
-                      } ${getCellColor(
-                        `${index}-${awayOddsKey}`,
-                        game[awayOddsKey]
-                      )}`}
-                    >
-                      {game[awayOddsKey] || "0"}
-                    </div>
-                    <div
-                      className={`odd ${
-                        isPositiveOdds(game[homeOddsKey])
-                          ? "positive odd_red"
-                          : "negative odd_n"
-                      } ${getCellColor(
-                        `${index}-${homeOddsKey}`,
-                        game[homeOddsKey]
-                      )}`}
-                    >
-                      {game[homeOddsKey] || "0"}
-                    </div>
-                  </>
                 ) : (
                   <>
-                    <div
-                      className={`odd ${
-                        isPositiveOdds(game[homeOddsKey])
-                          ? "positive odd_red"
-                          : "negative odd_n"
-                      } ${getCellColor(
-                        `${index}-${homeOddsKey}`,
-                        game[homeOddsKey]
-                      )}`}
-                    >
-                      {game[homeOddsKey] || "0"}
-                    </div>
-                    <div
-                      className={`odd ${
-                        isPositiveOdds(game[awayOddsKey])
-                          ? "positive odd_red"
-                          : "negative odd_n"
-                      } ${getCellColor(
-                        `${index}-${awayOddsKey}`,
-                        game[awayOddsKey]
-                      )}`}
-                    >
-                      {game[awayOddsKey] || "0"}
-                    </div>
+                    <h1 className="nba_odds">Upcoming {sport} Games</h1>
+                    {loading ? (
+                      <div className="loader-container my-5">
+                        <div className="loader spinner-border text-primary text-center"></div>
+                        <p className="text-center mt-5 "></p>
+                      </div>
+                    ) : error ? (
+                      <div className="text-center py-4 text-danger">
+                        {error}
+                      </div>
+                    ) : (
+                      <table className="betting-table">
+                        <thead>
+                          <tr>
+                            <th className="matchup_td">MATCHUP</th>
+                            {sport === "MLB" && <th>PITCHERS</th>}
+                            {(marketType === "SPREAD" ||
+                              marketType === "TOTAL") && (
+                              <th>
+                                {marketType === "SPREAD" ? "SPREAD" : "TOTAL"}
+                              </th>
+                            )}
+                            <th>OPEN</th>
+                            <th>BEST ODDS</th>
+                            <th>AI PICKS</th>
+                            {Object.entries(BOOKMAKER_LOGOS).map(
+                              ([name, { logo }], i) => (
+                                <th key={i}>
+                                  <div className="logo-header">
+                                    <img
+                                      src={logo}
+                                      alt={name}
+                                      className="bookmaker-logo"
+                                    />
+                                  </div>
+                                </th>
+                              )
+                            )}
+                          </tr>
+                        </thead>
+                        {/* Table tbody section - replace your existing tbody */}
+                        <tbody>
+                          {gamesData.length > 0 ? (
+                            gamesData.map((game, index) => (
+                              <tr
+                                key={index}
+                                className={
+                                  bookmarkedGames.includes(index)
+                                    ? "bookmarked-row"
+                                    : ""
+                                }
+                                onClick={() => toggleBookmark(index)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <td>
+                                  <div className="game-time">
+                                    {game.date} · {game.time} · {sport}
+                                  </div>
+                                  <div className="team-name">
+                                    {game.homeTeam}
+                                  </div>
+                                  <div className="team-name">
+                                    {game.awayTeam}
+                                  </div>
+                                </td>
+                                {sport === "MLB" && (
+                                  <td>
+                                    <div className="pitcher-name">
+                                      {game.homePitcher || "N/A"}
+                                    </div>
+                                    <div className="pitcher-name">
+                                      {game.awayPitcher || "N/A"}
+                                    </div>
+                                  </td>
+                                )}
+
+                                {(marketType === "SPREAD" ||
+                                  marketType === "TOTAL") && (
+                                  <td>
+                                    {marketType === "SPREAD" ? (
+                                      <>
+                                        <div
+                                          className={`odd_n ${getCellColor(
+                                            `${index}-homeSpread`,
+                                            game.homeSpread
+                                          )}`}
+                                        >
+                                          {game.homeSpread}
+                                        </div>
+                                        <div
+                                          className={`odd_n ${getCellColor(
+                                            `${index}-awaySpread`,
+                                            game.awaySpread
+                                          )}`}
+                                        >
+                                          {game.awaySpread}
+                                        </div>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div
+                                          className={`odd_n ${getCellColor(
+                                            `${index}-overValue`,
+                                            game.overValue
+                                          )}`}
+                                        >
+                                           {game.overValue || "0"} O
+                                        </div>
+                                        <div
+                                          className={`odd_n ${getCellColor(
+                                            `${index}-underValue`,
+                                            game.underValue
+                                          )}`}
+                                        >
+                                          {game.underValue || "0"} U
+                                        </div>
+                                      </>
+                                    )}
+                                  </td>
+                                )}
+                                <td>
+                                  {/* FIXED: Check for NBA spread and MLB moneyline to display in correct order */}
+                                  {(sport === "NBA" &&
+                                    marketType === "SPREAD") ||
+                                  (sport === "MLB" &&
+                                    marketType === "MONEYLINE") ? (
+                                    <>
+                                      <div
+                                        className={`odd_${
+                                          isPositiveOdds(game.awayOpen)
+                                            ? "y"
+                                            : "g"
+                                        } ${getCellColor(
+                                          `${index}-awayOpen`,
+                                          game.awayOpen
+                                        )}`}
+                                      >
+                                        {game.awayOpen || "0"}
+                                      </div>
+                                      <div
+                                        className={`odd_${
+                                          isPositiveOdds(game.homeOpen)
+                                            ? "y"
+                                            : "n"
+                                        } ${getCellColor(
+                                          `${index}-homeOpen`,
+                                          game.homeOpen
+                                        )}`}
+                                      >
+                                        {game.homeOpen || "-"}
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div
+                                        className={`odd_${
+                                          isPositiveOdds(game.homeOpen)
+                                            ? "y"
+                                            : "n"
+                                        } ${getCellColor(
+                                          `${index}-homeOpen`,
+                                          game.homeOpen
+                                        )}`}
+                                      >
+                                        {game.homeOpen || "-"}
+                                      </div>
+                                      <div
+                                        className={`odd_${
+                                          isPositiveOdds(game.awayOpen)
+                                            ? "y"
+                                            : "g"
+                                        } ${getCellColor(
+                                          `${index}-awayOpen`,
+                                          game.awayOpen
+                                        )}`}
+                                      >
+                                        {game.awayOpen || "0"}
+                                      </div>
+                                    </>
+                                  )}
+                                </td>
+                                <td>
+                                  {/* FIXED: Check for NBA spread and MLB moneyline to display in correct order */}
+                                  {(sport === "NBA" &&
+                                    marketType === "SPREAD") ||
+                                  (sport === "MLB" &&
+                                    marketType === "MONEYLINE") ? (
+                                    <>
+                                      <div
+                                        className={`odd_${
+                                          isPositiveOdds(game.awayBestOdds)
+                                            ? "y"
+                                            : "n"
+                                        } ${getCellColor(
+                                          `${index}-awayBestOdds`,
+                                          game.awayBestOdds
+                                        )}`}
+                                      >
+                                        {game.awayBestOdds || "0"}
+                                      </div>
+                                      <div
+                                        className={`odd_${
+                                          isPositiveOdds(game.homeBestOdds)
+                                            ? "y"
+                                            : "n"
+                                        } ${getCellColor(
+                                          `${index}-homeBestOdds`,
+                                          game.homeBestOdds
+                                        )}`}
+                                      >
+                                        {game.homeBestOdds || "0"}
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div
+                                        className={`odd_${
+                                          isPositiveOdds(game.homeBestOdds)
+                                            ? "y"
+                                            : "n"
+                                        } ${getCellColor(
+                                          `${index}-homeBestOdds`,
+                                          game.homeBestOdds
+                                        )}`}
+                                      >
+                                        {game.homeBestOdds || "0"}
+                                      </div>
+                                      <div
+                                        className={`odd_${
+                                          isPositiveOdds(game.awayBestOdds)
+                                            ? "y"
+                                            : "n"
+                                        } ${getCellColor(
+                                          `${index}-awayBestOdds`,
+                                          game.awayBestOdds
+                                        )}`}
+                                      >
+                                        {game.awayBestOdds || "0"}
+                                      </div>
+                                    </>
+                                  )}
+                                </td>
+
+                                {/* NEW AI PICKS COLUMN - ADD THIS TD */}
+                                <td>
+                                  <button
+                                    className="ai-picks-btn"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleAiPicksClick(index);
+                                    }}
+                                    style={{
+                                      background:
+                                        "linear-gradient(45deg, #667eea 0%, #764ba2 100%)",
+                                      color: "white",
+                                      border: "none",
+                                      padding: "8px 16px",
+                                      borderRadius: "6px",
+                                      cursor: "pointer",
+                                      fontSize: "12px",
+                                      fontWeight: "600",
+                                      transition: "all 0.3s ease",
+                                      textTransform: "uppercase",
+                                    }}
+                                    onMouseOver={(e) => {
+                                      e.target.style.transform =
+                                        "translateY(-2px)";
+                                      e.target.style.boxShadow =
+                                        "0 4px 12px rgba(102, 126, 234, 0.4)";
+                                    }}
+                                    onMouseOut={(e) => {
+                                      e.target.style.transform =
+                                        "translateY(0)";
+                                      e.target.style.boxShadow = "none";
+                                    }}
+                                  >
+                                    Click Here
+                                  </button>
+                                </td>
+
+                                {Object.keys(BOOKMAKER_LOGOS).map(
+                                  (bookmaker, i) => {
+                                    const bookmakerKey =
+                                      bookmaker.toLowerCase();
+                                    const homeOddsKey = `${bookmakerKey}HomeOdds`;
+                                    const awayOddsKey = `${bookmakerKey}AwayOdds`;
+                                    return (
+                                      <td key={i}>
+                                        {/* FIXED: Check for MLB moneyline to display in correct order */}
+                                        {sport === "MLB" &&
+                                        marketType === "MONEYLINE" ? (
+                                          <>
+                                            <div
+                                              className={`odd ${
+                                                isPositiveOdds(
+                                                  game[awayOddsKey]
+                                                )
+                                                  ? "positive odd_red"
+                                                  : "negative odd_n"
+                                              } ${getCellColor(
+                                                `${index}-${awayOddsKey}`,
+                                                game[awayOddsKey]
+                                              )}`}
+                                            >
+                                              {game[awayOddsKey] || "0"}
+                                            </div>
+                                            <div
+                                              className={`odd ${
+                                                isPositiveOdds(
+                                                  game[homeOddsKey]
+                                                )
+                                                  ? "positive odd_red"
+                                                  : "negative odd_n"
+                                              } ${getCellColor(
+                                                `${index}-${homeOddsKey}`,
+                                                game[homeOddsKey]
+                                              )}`}
+                                            >
+                                              {game[homeOddsKey] || "0"}
+                                            </div>
+                                          </>
+                                        ) : (
+                                          <>
+                                            <div
+                                              className={`odd ${
+                                                isPositiveOdds(
+                                                  game[homeOddsKey]
+                                                )
+                                                  ? "positive odd_red"
+                                                  : "negative odd_n"
+                                              } ${getCellColor(
+                                                `${index}-${homeOddsKey}`,
+                                                game[homeOddsKey]
+                                              )}`}
+                                            >
+                                              {game[homeOddsKey] || "0"}
+                                            </div>
+                                            <div
+                                              className={`odd ${
+                                                isPositiveOdds(
+                                                  game[awayOddsKey]
+                                                )
+                                                  ? "positive odd_red"
+                                                  : "negative odd_n"
+                                              } ${getCellColor(
+                                                `${index}-${awayOddsKey}`,
+                                                game[awayOddsKey]
+                                              )}`}
+                                            >
+                                              {game[awayOddsKey] || "0"}
+                                            </div>
+                                          </>
+                                        )}
+                                      </td>
+                                    );
+                                  }
+                                )}
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                colSpan={
+                                  3 + // Changed from 2 to 3 to account for AI PICKS column
+                                  (sport === "MLB" ? 1 : 0) +
+                                  (marketType === "SPREAD" ||
+                                  marketType === "TOTAL"
+                                    ? 1
+                                    : 0) +
+                                  2 +
+                                  Object.keys(BOOKMAKER_LOGOS).length
+                                }
+                                className="text-center py-4"
+                              >
+                                {loading
+                                  ? "Loading..."
+                                  : "No games available. Try another sport or day."}
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    )}
                   </>
-                )}
-              </td>
-            );
-          }
-        )}
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td
-        colSpan={
-          3 +  // Changed from 2 to 3 to account for AI PICKS column
-          (sport === "MLB" ? 1 : 0) +
-          (marketType === "SPREAD" || marketType === "TOTAL"
-            ? 1
-            : 0) +
-          2 +
-          Object.keys(BOOKMAKER_LOGOS).length
-        }
-        className="text-center py-4"
-      >
-        {loading
-          ? "Loading..."
-          : "No games available. Try another sport or day."}
-      </td>
-    </tr>
-  )}
-</tbody>
-                  </table>
                 )}
               </div>
             )}

@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../../Assets/css/injury.css';
-import api from '../../api'; // Assuming this is where your API functions are defined
+import api from '../../api';
 
-const InjuryTable = ({ teamName, data }) => {
-  // Check if we have valid data for this team
-  if (!data || !data.name || data.name.length === 0) {
-    return null;
-  }
-
+const InjuryTable = ({ data }) => {
   return (
-    <div className="injury-container">
-      <div className="team-header">
-        <h3>{teamName}</h3>
-      </div>
-      <div className='outer_injurytable'>
+    <div className="outer_injurytable">
       <table className="injury-table">
         <thead>
           <tr>
@@ -26,7 +17,6 @@ const InjuryTable = ({ teamName, data }) => {
         </thead>
         <tbody>
           {data.name.map((playerName, index) => {
-            // Map status to status color
             let statusColor = 'green';
             if (data.state[index] === 'Out' || data.state[index] === 'Injured Reserve') {
               statusColor = 'red';
@@ -49,7 +39,6 @@ const InjuryTable = ({ teamName, data }) => {
           })}
         </tbody>
       </table>
-      </div>
     </div>
   );
 };
@@ -58,15 +47,16 @@ const SportsInjuryTable = ({ currentSport }) => {
   const [injuryData, setInjuryData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedTeam, setExpandedTeam] = useState(null); // Track which team is open
 
   useEffect(() => {
     const fetchInjuryData = async () => {
       setLoading(true);
       setError(null);
-      
+      setExpandedTeam(null); // Reset the expanded state when fetching new data
+
       try {
         let data;
-
         switch (currentSport) {
           case 'NBA':
             data = await api.getNbaInjuriesData();
@@ -80,8 +70,11 @@ const SportsInjuryTable = ({ currentSport }) => {
           default:
             data = await api.getNbaInjuriesData(); // Default to NBA
         }
-        
+
         setInjuryData(data);
+
+        // Open the first team by default (index 0)
+        setExpandedTeam(0);
       } catch (err) {
         console.error(`Error fetching ${currentSport} injury data:`, err);
         setError(`Failed to load ${currentSport.toUpperCase()} injury data. Please try again later.`);
@@ -93,11 +86,16 @@ const SportsInjuryTable = ({ currentSport }) => {
     fetchInjuryData();
   }, [currentSport]);
 
+  const toggleAccordion = (index) => {
+    setExpandedTeam(prev => (prev === index ? null : index)); // Toggle the accordion
+  };
+
   if (loading) {
-    return    <div className="loader-container my-5">
-    <div className="loader spinner-border text-primary text-center"></div>
-    <p className="text-center mt-5 "></p>
-  </div>;
+    return (
+      <div className="loader-container my-5">
+        <div className="loader spinner-border text-primary text-center"></div>
+      </div>
+    );
   }
 
   if (error) {
@@ -111,14 +109,20 @@ const SportsInjuryTable = ({ currentSport }) => {
   return (
     <>
       <h2 className="injury-title">{currentSport.toUpperCase()} Injuries</h2>
-      
-      {injuryData.map((teamData, index) => (
-        <InjuryTable
-          key={index}
-          teamName={teamData.teams_name}
-          data={teamData}
-        />
-      ))}
+      <div className="accordion-container">
+        {injuryData.map((teamData, index) => (
+          <div className="accordion-item" key={index}>
+            <div
+              className="accordion-header"
+              onClick={() => toggleAccordion(index)}
+            >
+              <h3>{teamData.teams_name}</h3>
+              <span>{expandedTeam === index ? '-' : '+'}</span>
+            </div>
+            {expandedTeam === index && <InjuryTable data={teamData} />}
+          </div>
+        ))}
+      </div>
     </>
   );
 };

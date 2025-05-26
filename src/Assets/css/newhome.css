@@ -605,12 +605,6 @@ th.matchup_td {
   max-height: 20px;
   max-width: 100%;
 }
-
-/* Highlight row if bookmarked */
-.bookmarked-row {
-  background-color: #fffbe6;
-}
-
 /* --- Mobile Card Layout --- */
 @media screen and (max-width: 768px) {
   .betting-table,

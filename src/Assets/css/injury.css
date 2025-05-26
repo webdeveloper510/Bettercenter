@@ -105,7 +105,7 @@ th.name_th {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 
 .injury-table th {
@@ -116,6 +116,36 @@ th.name_th {
 
 .name_th {
   min-width: 150px;
+}
+.accordion-header {
+    background-color: transparent;
+    position: relative;
+}
+.accordion-header span {
+    position: absolute;
+    right: 20px;
+    top: 0px;
+    font-size: 20px;
+    color: #fff;
+}
+
+.outer_injurytable {
+    padding: 0px 20px;
+}
+
+.accordion-header h3 {
+    font-size: 21px;
+    color: #fff
+    ;
+}
+.accordion-container {
+    padding: 20px;
+    background: #0a0228;
+}
+.accordion-item {
+    background: transparent;
+    border-bottom: 1px solid #cccccc30 !important;
+    border-radius: unset !important;
 }
 
 /* Responsive Design */
