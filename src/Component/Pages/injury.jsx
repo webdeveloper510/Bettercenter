@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../../Assets/css/injury.css';
-import api from '../../api'; // Assuming this is where your API functions are defined
+import api from '../../api';
+import { Accordion } from 'react-bootstrap'; // Import Accordion
 
-const InjuryTable = ({ teamName, data }) => {
-  // Check if we have valid data for this team
-  if (!data || !data.name || data.name.length === 0) {
-    return null;
-  }
-
+const InjuryTable = ({ data }) => {
   return (
-    <div className="injury-container">
-      <div className="team-header">
-        <h3>{teamName}</h3>
-      </div>
-      <div className='outer_injurytable'>
+    <div className='outer_injurytable'>
       <table className="injury-table">
         <thead>
           <tr>
@@ -26,7 +18,6 @@ const InjuryTable = ({ teamName, data }) => {
         </thead>
         <tbody>
           {data.name.map((playerName, index) => {
-            // Map status to status color
             let statusColor = 'green';
             if (data.state[index] === 'Out' || data.state[index] === 'Injured Reserve') {
               statusColor = 'red';
@@ -49,7 +40,6 @@ const InjuryTable = ({ teamName, data }) => {
           })}
         </tbody>
       </table>
-      </div>
     </div>
   );
 };
@@ -94,10 +84,11 @@ const SportsInjuryTable = ({ currentSport }) => {
   }, [currentSport]);
 
   if (loading) {
-    return    <div className="loader-container my-5">
-    <div className="loader spinner-border text-primary text-center"></div>
-    <p className="text-center mt-5 "></p>
-  </div>;
+    return (
+      <div className="loader-container my-5">
+        <div className="loader spinner-border text-primary text-center"></div>
+      </div>
+    );
   }
 
   if (error) {
@@ -111,14 +102,17 @@ const SportsInjuryTable = ({ currentSport }) => {
   return (
     <>
       <h2 className="injury-title">{currentSport.toUpperCase()} Injuries</h2>
-      
-      {injuryData.map((teamData, index) => (
-        <InjuryTable
-          key={index}
-          teamName={teamData.teams_name}
-          data={teamData}
-        />
-      ))}
+
+      <Accordion defaultActiveKey="0">
+        {injuryData.map((teamData, index) => (
+          <Accordion.Item eventKey={index.toString()} key={index}>
+            <Accordion.Header>{teamData.teams_name}</Accordion.Header>
+            <Accordion.Body>
+              <InjuryTable data={teamData} />
+            </Accordion.Body>
+          </Accordion.Item>
+        ))}
+      </Accordion>
     </>
   );
 };
