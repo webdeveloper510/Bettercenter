@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../../Assets/css/injury.css';
 import api from '../../api';
-import { Accordion } from 'react-bootstrap'; // Import Accordion
-
+import { Accordion } from 'react-bootstrap';
 const InjuryTable = ({ data }) => {
   return (
-    <div className='outer_injurytable'>
+    <div className="outer_injurytable">
       <table className="injury-table">
         <thead>
           <tr>
@@ -48,15 +47,16 @@ const SportsInjuryTable = ({ currentSport }) => {
   const [injuryData, setInjuryData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedTeam, setExpandedTeam] = useState(null); // Track which team is open
 
   useEffect(() => {
     const fetchInjuryData = async () => {
       setLoading(true);
       setError(null);
-      
+      setExpandedTeam(null); // Reset the expanded state when fetching new data
+
       try {
         let data;
-
         switch (currentSport) {
           case 'NBA':
             data = await api.getNbaInjuriesData();
@@ -70,8 +70,11 @@ const SportsInjuryTable = ({ currentSport }) => {
           default:
             data = await api.getNbaInjuriesData(); // Default to NBA
         }
-        
+
         setInjuryData(data);
+
+        // Open the first team by default (index 0)
+        setExpandedTeam(0);
       } catch (err) {
         console.error(`Error fetching ${currentSport} injury data:`, err);
         setError(`Failed to load ${currentSport.toUpperCase()} injury data. Please try again later.`);
@@ -82,6 +85,10 @@ const SportsInjuryTable = ({ currentSport }) => {
 
     fetchInjuryData();
   }, [currentSport]);
+
+  const toggleAccordion = (index) => {
+    setExpandedTeam(prev => (prev === index ? null : index)); // Toggle the accordion
+  };
 
   if (loading) {
     return (
@@ -113,6 +120,20 @@ const SportsInjuryTable = ({ currentSport }) => {
           </Accordion.Item>
         ))}
       </Accordion>
+      <div className="accordion-container">
+        {injuryData.map((teamData, index) => (
+          <div className="accordion-item" key={index}>
+            <div
+              className="accordion-header"
+              onClick={() => toggleAccordion(index)}
+            >
+              <h3>{teamData.teams_name}</h3>
+              <span>{expandedTeam === index ? '-' : '+'}</span>
+            </div>
+            {expandedTeam === index && <InjuryTable data={teamData} />}
+          </div>
+        ))}
+      </div>
     </>
   );
 };

@@ -43,6 +43,7 @@ const Teamstab = ({ currentSport = 'NBA' }) => {
             break;
           default:
             console.warn("Unknown sport selected:", currentSport);
+          
             return;
         }
 
@@ -61,13 +62,10 @@ const Teamstab = ({ currentSport = 'NBA' }) => {
   }, [currentSport]);
 
   const processTeamsData = (apiData) => {
-    if (!apiData || !apiData.data || !Array.isArray(apiData.data) || apiData.data.length === 0) {
-      return {};
-    }
-
+  
     try {
 
-      const divisionsData = apiData.data[0];
+      const divisionsData = apiData.data;
       const processedDivisions = {};
       Object.entries(divisionsData).forEach(([divisionName, teams]) => {
         if (Array.isArray(teams)) {

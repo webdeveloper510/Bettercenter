@@ -79,8 +79,6 @@ const MProfile = () => {
 
   try {
     const profileResponse = await api.updateUserProfile(updateData);
-    console.log("🚀 ~ handleSubmit ~ profileResponse:", profileResponse)
-
     if (profileResponse.status === 200) {
       toast.success("Profile updated successfully");
       await fetchUserProfile();

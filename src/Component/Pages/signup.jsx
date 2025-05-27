@@ -69,8 +69,6 @@ const handleSubmit = async (values, { setSubmitting, resetForm, setStatus }) => 
         };
         
         const response = await api.register(userData);
-        console.log("🚀 ~ handleSubmit ~ response:", response)
-
         if (response.status === 200) {
             toast.success("Registration successful!");
             resetForm();

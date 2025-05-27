@@ -84,11 +84,37 @@
 th.name_th {
     min-width: 170px;
 }
-  
 
+.injury_model {
+    background-color: #1b1e3d !important;
+    border: 1px solid #1b1e3d !important;
+}
 
+.injury_model h3 {
+    color: #fff !important;
+}
 
+.injury_model h4 {
+    color: #fff !important;
+}
+ .injury_model::-webkit-scrollbar {
+    width: 10px; 
+  }
 
+  .injury_model::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 4px; 
+  }
+
+  .injury_model::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 4px; 
+  }
+
+  .injury_model {
+        scrollbar-color: #007bfff2 #252952;
+    scrollbar-width: thin;
+  }
 
 /* Base table styling */
 .outer_injurytable {
