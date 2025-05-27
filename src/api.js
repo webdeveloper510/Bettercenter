@@ -170,8 +170,7 @@ const api = {
     getMoneyData: async (date,timezone) => {
         try {
             const formattedDate = date || ''; 
-            const formattedTimezone = timezone || ''; 
-            const response = await apiClient.get(`${API_URL}/nba-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/nba-money-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -183,8 +182,8 @@ const api = {
     getSpreadData: async (date,timezone) => {
         try {
             const formattedDate = date || ''; 
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/nba-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+
+            const response = await apiClient.get(`${API_URL}/nba-spread-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -195,8 +194,7 @@ const api = {
     getOverUnderData: async (date, timezone) => {
         try {
             const formattedDate = date || ''; 
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/nba-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/nba-over-under-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -207,8 +205,7 @@ const api = {
     getMlbMoneyData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/mlb-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/mlb-money-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -220,8 +217,7 @@ const api = {
     getMlbDefaultData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/mlb-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/mlb-default-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -233,8 +229,7 @@ const api = {
      getNhlDefaultData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/nhl-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/nhl-default-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -246,8 +241,7 @@ const api = {
      getNbaDefaultData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/nba-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/nba-default-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -259,8 +253,7 @@ const api = {
     getMlbSpreadData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/mlb-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/mlb-spread-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -271,8 +264,7 @@ const api = {
     getMlbOverUnderData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/mlb-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/mlb-over-under-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -283,8 +275,7 @@ const api = {
     getNhlMoneyData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/nhl-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/nhl-money-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -296,8 +287,7 @@ const api = {
     getNhlSpreadData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/nhl-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/nhl-spread-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
@@ -308,8 +298,7 @@ const api = {
     getNhlOverUnderData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/nhl-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+            const response = await apiClient.get(`${API_URL}/nhl-over-under-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;
