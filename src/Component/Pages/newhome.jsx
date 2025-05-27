@@ -26,6 +26,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
 import InjuryModal from "./injuryModal";
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
   DraftKings: { logo: draftkingsLogo },
@@ -1095,7 +1097,7 @@ const renderSportTable = (
                     
                     <div className="team-name">{game.homeTeam}
                        <FontAwesomeIcon
-                                    icon={faEye}
+                                    icon={faInfoCircle}
                                     title="View Injuries"
                                     style={{
                                      cursor: "pointer",
@@ -1438,7 +1440,8 @@ const renderSportTable = (
                                   <div className="team-name">
                                     {game.awayTeam}
                                     <FontAwesomeIcon
-                                      icon={faEye}
+                                      // icon={faEye}
+                                      icon={faInfoCircle}
                                       title="View Injuries"
                                       style={{
                                         cursor: "pointer",
