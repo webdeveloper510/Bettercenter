@@ -1098,15 +1098,16 @@ const renderSportTable = (
                                     icon={faEye}
                                     title="View Injuries"
                                     style={{
-                                      marginLeft: "60px",
-                                      cursor: "pointer",
-                                      color: "#007bff",
+                                     cursor: "pointer",
+                                        color: "#007bff",
+                                        position: "absolute",
+                                        right: "15px",
                                     }}
                                     onClick={(e) =>
                                       handleEyeIconClick(
                                         game.homeTeam,
                                         game.awayTeam,
-                                        sportName, // Changed from 'sport' to 'sportName'
+                                        sportName, 
                                         e
                                       )
                                     }
