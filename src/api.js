@@ -663,7 +663,47 @@ const api = {
               console.error("Subscription status fetch error:", error);
               return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
-    }
+    },
+    getNbaSortedInjury :async(data)=>{
+        try {
+            const response = await axios.post(`${API_URL}/nba-sorted-injuries-data`,data,{
+            headers: {
+                'Content-Type': 'application/json',
+        }});
+        
+            return response.data
+        } catch (error) {
+              console.error("Subscription status fetch error:", error);
+              return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
+        }
+    },
+     getNhlSortedInjury :async(data)=>{
+        try {
+            const response = await axios.post(`${API_URL}/nhl-sorted-injuries-data`,data,{
+            headers: {
+                'Content-Type': 'application/json',
+        }});
+        
+            return response.data
+        } catch (error) {
+              console.error("Subscription status fetch error:", error);
+              return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
+        }
+    },
+      getMlbSortedInjury :async(data)=>{
+        try {
+            const response = await axios.post(`${API_URL}/mlb-sorted-injuries-data`,data,{
+            headers: {
+                'Content-Type': 'application/json',
+        }});
+        
+            return response.data
+        } catch (error) {
+              console.error("Subscription status fetch error:", error);
+              return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
+        }
+    },
 };
+
 
 export default api;
