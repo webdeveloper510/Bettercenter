@@ -14,8 +14,10 @@ h1, h2, h3, .nba_odds {
     font-family: var(--body-font);
   }
   .betting-table {
-    font-family: "Open Sans", sans-serif;
-    font-size: 14px;
+    /* font-family: "Open Sans", sans-serif;
+    font-size: 14px; */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8rem;
 }
 .nfl-games-container {
     color: white;
@@ -262,7 +264,7 @@ h1, h2, h3, .nba_odds {
   }
   
   .game-time {
-    font-size: 12px;
+    font-size: 10px;
     color: #ebd10f9e;
     margin-bottom: 4px;
     background: #23274A;
@@ -334,7 +336,7 @@ h1, h2, h3, .nba_odds {
   
   .betting-table th {
     background-color: #1a1a2e;
-    font-size: 15px;
+    font-size: 12px;
     text-transform: uppercase;
   }
   
@@ -368,7 +370,7 @@ h1, h2, h3, .nba_odds {
 .odd_n {
     /* background: #23274A; */
     color: white;
-    padding: 0px 6px;
+    padding: 0px 3px;
     /* width: 50px; */
     border-radius: 4px;
     color: white;
@@ -505,7 +507,9 @@ h1, h2, h3, .nba_odds {
     color: #fff;
 }
 
-
+.container.new_container {
+    max-width: 90%;
+}
 
 
 
@@ -679,5 +683,12 @@ th.matchup_td {
 }
 
 @media screen and (max-width: 480px) {
-
+.game-time {
+        top: -8px;
+        left: 0px !important;
+        margin: inherit;
+    }
+       .tabs button {
+        width: 46%;
+    } 
 }

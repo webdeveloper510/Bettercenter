@@ -1267,7 +1267,7 @@ const renderSportTable = (
 };
   return (
     <section className="backgroung_image">
-      <div className="container">
+      <div className="container new_container">
         <div className="row">
           <div className="top_banner mt-5">
             <PromoBanner />
