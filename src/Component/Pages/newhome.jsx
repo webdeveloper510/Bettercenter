@@ -220,20 +220,24 @@ const handleEyeIconClick = async (homeTeam, awayTeam, sportType, e) => {
       loading: false,
     });
   };
-  const formatOdds = (odds) => {
-    if (odds === null || odds === undefined) return "0";
-    if (typeof odds !== "string") odds = String(odds);
+const formatOdds = (odds) => {
+  if (odds === null || odds === undefined) return "0";
+  if (typeof odds !== "string") odds = String(odds);
 
-    odds = odds.trim();
-    if (odds === "0 / 0" || odds === "-") return "0";
-    if (odds.includes("/")) {
-      return odds;
-    }
-    const numeric = parseFloat(odds);
-    if (isNaN(numeric)) return odds;
+  odds = odds.trim();
+  if (odds === "0 / 0" || odds === "-") return "0";
+  if (odds.includes("/")) {
+    return odds;
+  }
 
-    return numeric > 0 ? `+${numeric}` : `${numeric}`;
-  };
+  // ✅ Just this one line added:
+  if (/^[-+]?\d{2,}$/.test(odds)) return odds;
+
+  const numeric = parseFloat(odds);
+  if (isNaN(numeric)) return odds;
+
+  return numeric > 0 ? `+${numeric}` : `${numeric}`;
+};
 
   const [colorRefreshTrigger, setColorRefreshTrigger] = useState(0);
   useEffect(() => {
