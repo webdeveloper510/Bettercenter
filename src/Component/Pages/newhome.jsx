@@ -230,7 +230,7 @@ const handleEyeIconClick = async (homeTeam, awayTeam, sportType, e) => {
       return odds;
     }
     const numeric = parseFloat(odds);
-    if (isNaN(numeric)) return "0";
+    if (isNaN(numeric)) return odds;
 
     return numeric > 0 ? `+${numeric}` : `${numeric}`;
   };
@@ -496,11 +496,20 @@ const handleEyeIconClick = async (homeTeam, awayTeam, sportType, e) => {
       setLoading(false);
     }
   };
+  const previousTabRef = useRef(activeTab);
   useEffect(() => {
-    if (activeTab !== "OVERVIEW" && sport === "ALL") {
-      setSport("NBA");
-      return;
-    }
+    if (activeTab === "OVERVIEW" && previousTabRef.current !== "OVERVIEW") {
+    setSport("ALL");
+    previousTabRef.current = activeTab;
+    return;
+  }
+  if (activeTab !== "OVERVIEW" && sport === "ALL") {
+    setSport("NBA");
+    previousTabRef.current = activeTab;
+    return;
+  }
+
+  previousTabRef.current = activeTab;
     isFirstLoadRef.current = true;
     changeTimestampsRef.current = {};
     previousDataRef.current = [];
@@ -522,9 +531,9 @@ const handleEyeIconClick = async (homeTeam, awayTeam, sportType, e) => {
     fetchAndUpdateData();
 
     let interval;
-    if (!isCurrentDate()) {
-      interval = setInterval(fetchAndUpdateData, 60000);
-    }
+    // if (!isCurrentDate()) {
+    //   interval = setInterval(fetchAndUpdateData, 60000);
+    // }
 
     return () => {
       if (interval) {
@@ -676,78 +685,83 @@ const handleEyeIconClick = async (homeTeam, awayTeam, sportType, e) => {
       }
     };
   }, [sport, marketType, selectedDate, activeTab]);
-  const processSpreadData = (apiData, sport) => {
-    if (!apiData || !apiData.data) return [];
+const processSpreadData = (apiData, sport) => {
+  if (!apiData || !apiData.data) return [];
 
-    const processedGames = [];
-    Object.keys(apiData.data).forEach((spreadKey) => {
-      const spreadArray = apiData.data[spreadKey];
+  const processedGames = [];
 
-      if (Array.isArray(spreadArray) && spreadArray.length > 0) {
-        const spreadEntry = spreadArray[0];
-        const spreadValues = Object.keys(spreadEntry);
+  Object.keys(apiData.data).forEach((spreadKey) => {
+    const spreadObject = apiData.data[spreadKey];
+    if (
+      spreadObject &&
+      typeof spreadObject === "object" &&
+      Object.keys(spreadObject).length === 2
+    ) {
+      const [value1, value2] = Object.keys(spreadObject);
+      const data1 = spreadObject[value1];
+      const data2 = spreadObject[value2];
 
-        if (spreadValues.length === 2) {
-          const value1 = spreadValues[0];
-          const value2 = spreadValues[1];
+      let homeTeamData, awayTeamData, homeSpread, awaySpread;
+      const isData1Home = !!data1["Home Team"];
+      const isData2Home = !!data2["Home Team"];
 
-          const data1 = spreadEntry[value1];
-          const data2 = spreadEntry[value2];
-
-          let homeTeamData, awayTeamData, homeSpread, awaySpread;
-          const isData1Home = !!data1["Home Team"];
-          const isData2Home = !!data2["Home Team"];
-
-          if (isData1Home && !isData2Home) {
-            homeTeamData = data1;
-            awayTeamData = data2;
-            homeSpread = value1;
-            awaySpread = value2;
-          } else if (!isData1Home && isData2Home) {
-            homeTeamData = data2;
-            awayTeamData = data1;
-            homeSpread = value2;
-            awaySpread = value1;
-          } else {
-            return;
-          }
-          const game = {
-            homeTeam: homeTeamData["Home Team"],
-            awayTeam: awayTeamData["Away Team"],
-            homeSpread: homeSpread,
-            awaySpread: awaySpread,
-            homePitcher: homeTeamData["Home Pitcher"] || "N/A",
-            awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
-            homeOpen: formatOdds(homeTeamData["Home Open"]),
-            awayOpen: formatOdds(awayTeamData["Away Open"]),
-            homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
-            awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
-            date: homeTeamData?.Date || awayTeamData?.Date || "",
-          };
-          Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
-            const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
-
-            const homeOddsKey = `Home ${apiBookmaker}`;
-            const awayOddsKey = `Away ${apiBookmaker}`;
-            const rawHomeOdds = homeTeamData[homeOddsKey];
-            const rawAwayOdds = awayTeamData[awayOddsKey];
-            if (rawHomeOdds && rawHomeOdds !== 0) {
-              game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
-                formatOdds(rawHomeOdds);
-            }
-
-            if (rawAwayOdds && rawAwayOdds !== 0) {
-              game[`${componentBookmaker.toLowerCase()}AwayOdds`] =
-                formatOdds(rawAwayOdds);
-            }
-          });
-          processedGames.push(game);
-        }
+      if (isData1Home && !isData2Home) {
+        homeTeamData = data1;
+        awayTeamData = data2;
+        homeSpread = value1;
+        awaySpread = value2;
+      } else if (!isData1Home && isData2Home) {
+        homeTeamData = data2;
+        awayTeamData = data1;
+        homeSpread = value2;
+        awaySpread = value1;
+      } else if (data1["Home Team"] && data2["Home Team"]) {
+        homeTeamData = data1;
+        awayTeamData = data2;
+        homeSpread = value1;
+        awaySpread = value2;
+      } else {
+        return;
       }
-    });
 
-    return processedGames;
-  };
+      const game = {
+        homeTeam: homeTeamData["Home Team"] || "",
+        awayTeam: awayTeamData["Away Team"] || "",
+        homeSpread,
+        awaySpread,
+        homePitcher: homeTeamData["Home Pitcher"] || "N/A",
+        awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
+        homeOpen: formatOdds(homeTeamData["Home Open"]),
+        awayOpen: formatOdds(awayTeamData["Away Open"]),
+        homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
+        awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
+        date: homeTeamData?.Date || awayTeamData?.Date || "",
+      };
+
+      Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
+        const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+
+        const homeOddsKey = `Home ${apiBookmaker}`;
+        const awayOddsKey = `Away ${apiBookmaker}`;
+        const rawHomeOdds = homeTeamData[homeOddsKey];
+        const rawAwayOdds = awayTeamData[awayOddsKey];
+
+        if (rawHomeOdds && rawHomeOdds !== 0) {
+          game[`${componentBookmaker.toLowerCase()}HomeOdds`] = formatOdds(rawHomeOdds);
+        }
+
+        if (rawAwayOdds && rawAwayOdds !== 0) {
+          game[`${componentBookmaker.toLowerCase()}AwayOdds`] = formatOdds(rawAwayOdds);
+        }
+      });
+
+      processedGames.push(game);
+    }
+  });
+
+  return processedGames;
+};
+
   const processMoneylineData = (apiData) => {
     if (!apiData || !apiData.data) return [];
 
@@ -845,99 +859,93 @@ const handleEyeIconClick = async (homeTeam, awayTeam, sportType, e) => {
 
     return processedGames;
   };
-  const processTotalData = (apiData) => {
-    if (!apiData || !apiData.data) return [];
+const processTotalData = (apiData) => {
+  if (!apiData || !apiData.data) return [];
 
-    const processedGames = [];
-    const gameMap = {};
+  const processedGames = [];
 
-    Object.keys(apiData.data).forEach((gameKey) => {
-      if (
-        gameKey.startsWith("over_under") &&
-        Array.isArray(apiData.data[gameKey]) &&
-        apiData.data[gameKey].length > 0
-      ) {
-        const gameEntry = apiData.data[gameKey][0];
-        const lineKeys = Object.keys(gameEntry);
-        if (lineKeys.length === 2) {
-          let overKey, underKey, overData, underData;
+  Object.keys(apiData.data).forEach((gameKey) => {
+    if (
+      gameKey.includes("over_under") &&
+      typeof apiData.data[gameKey] === "object"
+    ) {
+      const gameEntry = apiData.data[gameKey];
+      const lineKeys = Object.keys(gameEntry);
+      
+      if (lineKeys.length === 2) {
+        const overKey = lineKeys.find((key) => key.includes("o"));
+        const underKey = lineKeys.find((key) => key.includes("u"));
 
-          overKey = lineKeys.find((key) => key.includes("o"));
-          underKey = lineKeys.find((key) => key.includes("u"));
-          console.log("🚀 ~ Object.keys ~ underKey:", underKey);
+        if (overKey && underKey) {
+          const overData = gameEntry[overKey];
+          const underData = gameEntry[underKey];
 
-          if (overKey && underKey) {
-            overData = gameEntry[overKey];
-            underData = gameEntry[underKey];
+          let homeTeamData, awayTeamData;
 
-            let homeTeamData, awayTeamData;
-
-            if (overData["Home Team"] && underData["Away Team"]) {
-              homeTeamData = overData;
-              awayTeamData = underData;
-            } else {
-              homeTeamData = underData;
-              awayTeamData = overData;
-            }
-
-            const awayTeam = awayTeamData["Away Team"];
-            const homeTeam = homeTeamData["Home Team"];
-            const totalValue = underKey;
-            let totalValue1 = overKey;
-
-            const matchupKey = `${awayTeam}-${homeTeam}`;
-
-            if (!gameMap[matchupKey]) {
-              gameMap[matchupKey] = {
-                homeTeam: homeTeam,
-                awayTeam: awayTeam,
-                overValue: totalValue,
-                homePitcher: homeTeamData["Home Pitcher"] || "N/A",
-                awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
-                homeOpen: formatOdds(homeTeamData["Home Open"]),
-                awayOpen: formatOdds(awayTeamData["Away Open"]),
-                homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
-                awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
-                underValue: totalValue1,
-                date: homeTeamData?.Date || awayTeamData?.Date || "",
-                // time: "7:30PM",
-              };
-            }
-
-            const game = gameMap[matchupKey];
-
-            Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
-              const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
-
-              const awayOddsKey = `Away ${apiBookmaker}`;
-              if (
-                awayTeamData[awayOddsKey] !== undefined &&
-                awayTeamData[awayOddsKey] !== 0
-              ) {
-                game[`${componentBookmaker.toLowerCase()}AwayOdds`] =
-                  formatOdds(awayTeamData[awayOddsKey]);
-              }
-
-              const homeOddsKey = `Home ${apiBookmaker}`;
-              if (
-                homeTeamData[homeOddsKey] !== undefined &&
-                homeTeamData[homeOddsKey] !== 0
-              ) {
-                game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
-                  formatOdds(homeTeamData[homeOddsKey]);
-              }
-            });
+          if (overData["Home Team"] && underData["Away Team"]) {
+            homeTeamData = overData;
+            awayTeamData = underData;
+          } else {
+            homeTeamData = underData;
+            awayTeamData = overData;
           }
+
+          const awayTeam = awayTeamData["Away Team"];
+          const homeTeam = homeTeamData["Home Team"];
+          const overValue = overKey;
+          const underValue = underKey;
+
+          // Create a unique game object for each total line
+          const game = {
+            homeTeam: homeTeam,
+            awayTeam: awayTeam,
+            overValue: overValue,
+            underValue: underValue,
+            homePitcher: homeTeamData["Home Pitcher"] || "N/A",
+            awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
+            homeOpen: formatOdds(homeTeamData["Home Open"]),
+            awayOpen: formatOdds(awayTeamData["Away Open"]),
+            homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
+            awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
+            date: homeTeamData?.Date || awayTeamData?.Date || "",
+          };
+
+          // Add bookmaker odds
+          Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
+            const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+
+            const awayOddsKey = `Away ${apiBookmaker}`;
+            const homeOddsKey = `Home ${apiBookmaker}`;
+
+            if (
+              awayTeamData[awayOddsKey] !== undefined &&
+              awayTeamData[awayOddsKey] !== 0 &&
+              awayTeamData[awayOddsKey] !== "0"
+            ) {
+              game[`${componentBookmaker.toLowerCase()}AwayOdds`] =
+                formatOdds(awayTeamData[awayOddsKey]);
+            }
+
+            if (
+              homeTeamData[homeOddsKey] !== undefined &&
+              homeTeamData[homeOddsKey] !== 0 &&
+              homeTeamData[homeOddsKey] !== "0"
+            ) {
+              game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
+                formatOdds(homeTeamData[homeOddsKey]);
+            }
+          });
+
+          // Push each game as a separate entry
+          processedGames.push(game);
         }
       }
-    });
+    }
+  });
 
-    Object.values(gameMap).forEach((game) => {
-      processedGames.push(game);
-    });
+  return processedGames;
+};
 
-    return processedGames;
-  };
   const processDefaultData = (apiData) => {
     if (!apiData || !Array.isArray(apiData.data)) return [];
 
@@ -1295,7 +1303,7 @@ const renderSportTable = (
                       onChange={handleMarketTypeChange}
                     >
                       <option value="DEFAULT">
-                        ({sport === "NBA" ? "Spread/Total" : "Moneyline/Total"})
+                        {sport === "NBA" ? "Spread/Total" : "Moneyline/Total"}
                       </option>
                       <option value="SPREAD">SPREAD</option>
                       <option value="MONEYLINE">MONEYLINE</option>
