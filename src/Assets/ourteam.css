@@ -104,9 +104,8 @@ p.text-center.team-subtitle {
     box-shadow: none;
     border-radius: 30px;
     color: #fff !important;
-    font-size: 15px;
     font-family: 'Gilroy-Regular', sans-serif;
-    font-size: 15px;
+    font-size: 16px;
 }
   
   .accordion-button::after {
@@ -117,6 +116,7 @@ p.text-center.team-subtitle {
     color: #c3b8b8;
     padding: 15px 60px;
     background: linear-gradient(90deg, #0A0228 0%, #221B3D 43.5%, #221B3D 57%, #0A0228 100%);
+    font-size: 14px;
   }
   .faq-section.accordion {
     padding-bottom: 100px;
