@@ -12,7 +12,7 @@ import Team3 from "../../Assets/images/team3.png";
 import Team4 from "../../Assets/images/team4.png";
 
 // Array of fallback images
-const fallbackImages = [Team1, Team2, Team3, Team4];
+const fallbackImages = [ Team2, Team3, Team4];
 
 const Ourteam = () => {
   const navigate = useNavigate();
