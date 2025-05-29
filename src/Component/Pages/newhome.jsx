@@ -35,7 +35,7 @@ const BOOKMAKER_LOGOS = {
   Caesars: { logo: caesarsLogo },
   BetRivers: { logo: betriversLogo },
   Bet365: { logo: bet365Logo },
-  Unibet: { logo: unibetLogo },
+  // Unibet: { logo: unibetLogo },
 };
 const getTimezoneFromIP = async () => {
   try {
@@ -52,12 +52,8 @@ const formatDateForAPI = async (date) => {
   if (!date) return "";
 
   const timezone = await getTimezoneFromIP();
-  console.log("🚀 ~ IP-based timezone:", timezone);
-
   const momentDate = moment(date).tz(timezone);
   const formattedDate = momentDate.format("YYYY-MM-DD");
-  console.log("🚀 ~ formatDateForAPI ~ formattedDate:", formattedDate);
-
   return {
     date: formattedDate,
     timezone: timezone,
@@ -116,9 +112,9 @@ const Games = () => {
     "OVERVIEW",
     // "GAMES",
     "FUTURES",
-    "TEAMS",
-    "SCHEDULE",
-    "INJURIES",
+    // "TEAMS",
+    // "SCHEDULE",
+    // "INJURIES",
   ];
   const [gamesData, setGamesData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -1077,9 +1073,10 @@ const renderSportTable = (
             <tr>
               <th className="matchup_td">MATCHUP</th>
               {sportName === "MLB" && <th>PITCHERS</th>}
+              {/* COMMENTED OUT - OPEN, BEST ODDS, AI PICKS COLUMNS */}
               <th>OPEN</th>
               <th>BEST ODDS</th>
-              <th>AI PICKS</th>
+              {/* <th>AI PICKS</th> */}
               {Object.entries(BOOKMAKER_LOGOS).map(([name, { logo }], i) => (
                 <th key={i}>
                   <div className="logo-header">
@@ -1139,6 +1136,7 @@ const renderSportTable = (
                       </div>
                     </td>
                   )}
+                  {/* COMMENTED OUT - OPEN ODDS COLUMN */}
                   <td>
                     <div
                       className={`odd_${
@@ -1163,6 +1161,7 @@ const renderSportTable = (
                       {game.homeOpen || "0"}
                     </div>
                   </td>
+                  {/* COMMENTED OUT - BEST ODDS COLUMN */}
                   <td>
                     <div
                       className={`odd_${
@@ -1187,7 +1186,8 @@ const renderSportTable = (
                       {game.homeBestOdds || "0"}
                     </div>
                   </td>
-                  <td>
+                  {/* COMMENTED OUT - AI PICKS COLUMN */}
+                  {/* <td>
                     <button
                       className="ai-picks-btn"
                       onClick={(e) => {
@@ -1219,7 +1219,7 @@ const renderSportTable = (
                     >
                       Click Here
                     </button>
-                  </td>
+                  </td> */}
                   {Object.keys(BOOKMAKER_LOGOS).map((bookmaker, i) => {
                     const bookmakerKey = bookmaker.toLowerCase();
                     const homeOddsKey = `${bookmakerKey}HomeOdds`;
@@ -1261,7 +1261,7 @@ const renderSportTable = (
               <tr>
                 <td
                   colSpan={
-                    6 +
+                    5 + // UPDATED: Changed from 6 to 2 since we removed OPEN, BEST ODDS, AI PICKS columns
                     (sportName === "MLB" ? 1 : 0) +
                     Object.keys(BOOKMAKER_LOGOS).length
                   }
@@ -1408,9 +1408,10 @@ const renderSportTable = (
                                 {marketType === "SPREAD" ? "SPREAD" : "TOTAL"}
                               </th>
                             )}
+                            {/* COMMENTED OUT - OPEN, BEST ODDS, AI PICKS HEADERS */}
                             <th>OPEN</th>
                             <th>BEST ODDS</th>
-                            <th>AI PICKS</th>
+                            {/* <th>AI PICKS</th> */}
                             {Object.entries(BOOKMAKER_LOGOS).map(
                               ([name, { logo }], i) => (
                                 <th key={i}>
@@ -1527,8 +1528,8 @@ const renderSportTable = (
                                     )}
                                   </td>
                                 )}
+                                {/* COMMENTED OUT - OPEN ODDS COLUMN */}
                                 <td>
-                                  {/* FIXED: Check for NBA spread and MLB moneyline to display in correct order */}
                                   {(sport === "NBA" &&
                                     marketType === "SPREAD") ||
                                   (sport === "MLB" &&
@@ -1588,8 +1589,8 @@ const renderSportTable = (
                                     </>
                                   )}
                                 </td>
+                                {/* COMMENTED OUT - BEST ODDS COLUMN */}
                                 <td>
-                                  {/* FIXED: Check for NBA spread and MLB moneyline to display in correct order */}
                                   {(sport === "NBA" &&
                                     marketType === "SPREAD") ||
                                   (sport === "MLB" &&
@@ -1650,8 +1651,8 @@ const renderSportTable = (
                                   )}
                                 </td>
 
-                                {/* NEW AI PICKS COLUMN - ADD THIS TD */}
-                                <td>
+                                {/* COMMENTED OUT - AI PICKS COLUMN */}
+                                {/* <td>
                                   <button
                                     className="ai-picks-btn"
                                     onClick={(e) => {
@@ -1685,7 +1686,7 @@ const renderSportTable = (
                                   >
                                     Click Here
                                   </button>
-                                </td>
+                                </td> */}
 
                                 {Object.keys(BOOKMAKER_LOGOS).map(
                                   (bookmaker, i) => {
@@ -1770,13 +1771,12 @@ const renderSportTable = (
                             <tr>
                               <td
                                 colSpan={
-                                  3 + // Changed from 2 to 3 to account for AI PICKS column
+                                  5 + // UPDATED: Changed from 5 to 2 since we removed OPEN, BEST ODDS, AI PICKS columns
                                   (sport === "MLB" ? 1 : 0) +
                                   (marketType === "SPREAD" ||
                                   marketType === "TOTAL"
                                     ? 1
                                     : 0) +
-                                  2 +
                                   Object.keys(BOOKMAKER_LOGOS).length
                                 }
                                 className="text-center py-4"

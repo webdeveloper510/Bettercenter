@@ -554,21 +554,20 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to place order" };
         }
     },
-    placeOrder: async (orderData) => {
-        try {
-            const token = getAccessToken();
-            
-            if (token) {
-                return await apiClient.placeOrderAuth(orderData);
-            } else {
-
-                return await apiClient.placeOrderPublic(orderData);
-            }
-        } catch (error) {
-            console.error("Order placement error:", error);
-            return error;
+   placeOrder: async function(orderData) {
+    try {
+        const token = getAccessToken();
+        
+        if (token) {
+            return await this.placeOrderAuth(orderData);
+        } else {
+            return await this.placeOrderPublic(orderData);
         }
-    },
+    } catch (error) {
+        console.error("Order placement error:", error);
+        return error;
+    }
+},
     purchaseOrderAuth: async (orderDetails) => {
         try {
             const token = getAccessToken();
@@ -605,15 +604,15 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to place order" };
         }
     },
-    purchaseOrder: async (orderDetails) => {
+    purchaseOrder: async function (orderDetails){
         try {
             const token = getAccessToken();
             
             if (token) {
-                return await apiClient.purchaseOrderAuth(orderDetails);
+                return await this.purchaseOrderAuth(orderDetails);
             } else {
 
-                return await apiClient.purchaseOrderPublic(orderDetails);
+                return await this.purchaseOrderPublic(orderDetails);
             }
         } catch (error) {
             console.error("Order placement error:", error);
