@@ -1,5 +1,6 @@
 .main_suscription {
-  background-image: url(http://localhost:3000/static/media/page-bg.2dbc9d6a163cecf58a41.png);
+  /* background-image: url(http://localhost:3000/static/media/page-bg.2dbc9d6a163cecf58a41.png); */
+  background-image: url('../images/page-bg.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
