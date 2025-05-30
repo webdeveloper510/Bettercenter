@@ -57,7 +57,29 @@ tr {
 font-size: 67px !important;
     font-weight: 900 !important;
 }
-
+.same_sus {
+    padding: 14px;
+    width: 48%;
+    border-radius: 10px;
+    background: #1a1d3b;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px #0006;
+;
+    overflow: hidden;
+}
+.outer_row {
+      justify-content: space-between;
+}
+.outer_row .text-dark.fw-bold {
+    color: #fff !important;
+}
+.same_sus .d-flex.align-items-center.mb-2 {
+    color: #667eea !important;
+    font-weight: 600 !important;
+}
+button.cancel-button.px-5.py-3.me-3.btn.btn-outline-danger.btn-md {
+    padding: 10px 30px !important;
+}
   @media (max-width: 480px) {     
 .status_table tr th, .status_table tbody tr td {
     background: #222648;

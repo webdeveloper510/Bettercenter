@@ -15,7 +15,9 @@ import { Link } from "react-router-dom";
 
 const ManageSubscription = () => {
   const [subscriptionData, setSubscriptionData] = useState([]);
+  const [planData, setPlanData] = useState([]);
   console.log("🚀 ~ ManageSubscription ~ subscriptionData:", subscriptionData)
+  console.log("🚀 ~ ManageSubscription ~ planData:", planData)
   const [loading, setLoading] = useState(true);
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
 
@@ -27,21 +29,30 @@ const ManageSubscription = () => {
     try {
       setLoading(true);
       setSubscriptionData([]);
+      setPlanData([]);
       setHasActiveSubscription(false);
 
       const response = await api.getSubscriptionDetail();
       console.log("🚀 ~ fetchSubscriptionData ~ response:", response)
       if (response && response.status === 200) {
+        // Store plan data
+        if (response.data && response.data.plans && Array.isArray(response.data.plans)) {
+          setPlanData(response.data.plans);
+        }
+
+        // Updated: Check for active_subscriptions in the nested data structure
         if (
           response.data &&
-          Array.isArray(response.data) &&
-          response.data.length > 0
+          response.data.active_subscriptions &&
+          Array.isArray(response.data.active_subscriptions) &&
+          response.data.active_subscriptions.length > 0
         ) {
-          const formattedData = response.data.map((item) => ({
+          const formattedData = response.data.active_subscriptions.map((item) => ({
             id: item.id,
             date: item.date.split(" ")[0],
-            amount: `$${item.amount}`,
+            amount: `${item.amount}`,
             status: item.subscription_status,
+            subscription_id: item.subscription_id, // Added subscription_id from API
           }));
           setSubscriptionData(formattedData);
           setHasActiveSubscription(true);
@@ -52,11 +63,13 @@ const ManageSubscription = () => {
         }
       } else {
         setSubscriptionData([]);
+        setPlanData([]);
         setHasActiveSubscription(false);
       }
     } catch (err) {
       console.error("Error fetching subscription data:", err);
       setSubscriptionData([]);
+      setPlanData([]);
       setHasActiveSubscription(false);
     } finally {
       setLoading(false);
@@ -69,6 +82,7 @@ const ManageSubscription = () => {
       if (response && response.status === 200) {
         toast.success("Subscription cancelled successfully.");
         setSubscriptionData([]);
+        setPlanData([]);
         setHasActiveSubscription(false);
         fetchSubscriptionData();
       } else {
@@ -80,7 +94,6 @@ const ManageSubscription = () => {
     }
   };
 
-  // Helper function to get status display
   const getStatusDisplay = (status) => {
     if (status === true || status === "active" || status === "Active") {
       return { text: "Active", color: "#28a745", bgColor: "#d4edda" };
@@ -178,7 +191,7 @@ const ManageSubscription = () => {
                             No Active Subscription
                           </h3>
                           <p
-                            className="text-dark mb-5"
+                            className="text-white mb-5"
                             style={{
                               fontSize: "1.1rem",
                               lineHeight: "1.7",
@@ -239,33 +252,60 @@ const ManageSubscription = () => {
                               </svg>
                             </div>
                             <h3
-                              className="text-dark mb-4"
+                              className="text-white mb-2"
                               style={{ 
                                 fontSize: "2.2rem", 
                                 fontWeight: "600",
-                                color: "#2c3e50"
+                                color: "#fff"
                               }}
                             >
                               Current Subscription
                             </h3>
+                            {/* Plan Title and Amount */}
+                            {planData.length > 0 && (
+                              <div className="mb-4">
+                                <h4 
+                                  className="text-white mb-2"
+                                  style={{ 
+                                    fontSize: "1.8rem", 
+                                    fontWeight: "500",
+                                    color: "#fff"
+                                  }}
+                                >
+                                  {planData[0].title} - ${planData[0].amount}
+                                </h4>
+                                <p 
+                                  className="text-white mb-0"
+                                  style={{
+                                    fontSize: "1rem",
+                                    lineHeight: "1.6",
+                                    maxWidth: "600px",
+                                    margin: "0 auto",
+                                    opacity: "0.9"
+                                  }}
+                                >
+                                  {planData[0].description}
+                                </p>
+                              </div>
+                            )}
                           </div>
                           
                           {/* Enhanced Subscription Details */}
                           <div 
                             className="mb-3 p-4" 
-                            style={{ 
-                              background: "linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%)",
-                              borderRadius: "16px", 
-                              border: "1px solid rgba(102, 126, 234, 0.1)",
-                              boxShadow: "0 4px 15px rgba(0,0,0,0.05)"
-                            }}
+                            // style={{ 
+                            //   background: "linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%)",
+                            //   borderRadius: "16px", 
+                            //   border: "1px solid rgba(102, 126, 234, 0.1)",
+                            //   boxShadow: "0 4px 15px rgba(0,0,0,0.05)"
+                            // }}
                           >
-                            <div className="row">
-                              <div className="col-md-6">
+                            <div className="row outer_row">
+                              <div className="col-md-6 same_sus" >
                                 <div className="mb-4">
                                   <div 
                                     className="d-flex align-items-center mb-2"
-                                    style={{ color: "#667eea", fontWeight: "600" }}
+                                    style={{ color: "#fff", fontWeight: "600" }}
                                   >
                                     <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" className="me-2">
                                       <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
@@ -273,10 +313,10 @@ const ManageSubscription = () => {
                                     Subscription ID
                                   </div>
                                   <div 
-                                    className="text-white fw-bold"
+                                    className="text-dark fw-bold"
                                     style={{ fontSize: "1.1rem" }}
                                   >
-                                    #{subscriptionData[0]?.id || 'N/A'}
+                                    #{subscriptionData[0]?.subscription_id || 'N/A'}
                                   </div>
                                 </div>
                                 <div className="mb-4">
@@ -297,11 +337,11 @@ const ManageSubscription = () => {
                                   </div>
                                 </div>
                               </div>
-                              <div className="col-md-6">
+                              <div className="col-md-6 same_sus">
                                 <div className="mb-4">
                                   <div 
                                     className="d-flex align-items-center mb-2"
-                                    style={{ color: "#667eea", fontWeight: "600" }}
+                                    style={{ color: "#fff", fontWeight: "600" }}
                                   >
                                     <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" className="me-2">
                                       <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z"/>
@@ -358,7 +398,7 @@ const ManageSubscription = () => {
 
                           <div className="text-center">
                             <p
-                              className="text-muted mb-4"
+                              className="text-white mb-4"
                               style={{ 
                                 fontSize: "1.1rem", 
                                 lineHeight: "1.6"
@@ -368,19 +408,20 @@ const ManageSubscription = () => {
                             </p>
 
                             {/* Cancel Button */}
-                            <Button
+                            
+                            <Button 
                               variant="outline-danger"
-                              size="lg"
+                              size="md"
                               onClick={handleCancelSubscription}
-                              className="px-5 py-3 me-3"
+                              className=" cancel-button px-5 py-3 me-3"
                               style={{
-                                borderRadius: "12px",
-                                fontWeight: "600",
-                                fontSize: "1.1rem",
-                                borderColor: "#dc3545",
-                                color: "#dc3545",
-                                borderWidth: "2px",
-                                transition: "all 0.3s ease"
+                           borderRadius: "12px",
+                              fontWeight: "600",
+                              fontSize: "1.05rem", // slightly reduced for md
+                              borderColor: "#dc3545",
+                              color: "#dc3545",
+                              borderWidth: "2px",
+                              transition: "all 0.3s ease"
                               }}
                               onMouseEnter={(e) => {
                                 e.target.style.backgroundColor = "#dc3545";
