@@ -92,15 +92,8 @@ const ManageSubscription = () => {
 
   return (
     <div className="main">
-      <div
-        className="main_subscription"
-        style={{ minHeight: "100vh" }}
-      >
-        <Container className="py-5">
-          {/* Header Section */}
-          <div className="text-center mb-5">
-            <h1
-              className="text-white mb-4"
+                  <h2
+              className="text-center our_team_head py-4 gap-3"
               style={{ 
                 fontSize: "3.5rem", 
                 fontWeight: "300",
@@ -108,9 +101,13 @@ const ManageSubscription = () => {
               }}
             >
                  Your subscription and billing information
-            </h1>
-          </div>
-
+            </h2>
+      <div
+        className="main_subscription"
+        style={{ minHeight: "100vh" }}
+      >
+        <Container className="">
+          {/* Header Section */}
           {loading ? (
             <div className="text-center text-white">
               {/* Enhanced Blue Loader */}
@@ -132,15 +129,15 @@ const ManageSubscription = () => {
             <>
               {/* Main Subscription Card */}
               <Row className="justify-content-center">
-                <Col lg={8} md={10}>
+                <Col lg={12} md={12}>
                   <Card
                     className="border-0 shadow-lg"
                     style={{
-                      backgroundColor: "rgba(255, 255, 255, 0.95)",
-                      backdropFilter: "blur(20px)",
-                      borderRadius: "20px",
-                      transition: "all 0.3s ease-in-out",
-                      border: "1px solid rgba(255, 255, 255, 0.2)"
+                    backgroundColor: "#1b1e3d",
+                    backdropFilter: "blur(20px)",
+                    borderRadius: "20px",
+                    transition: "all 0.3s ease-in-out",
+                    border: "1px solid rgba(255, 255, 255, 0.2)"
                     }}
                   >
                     <Card.Body className="p-5">
@@ -170,11 +167,11 @@ const ManageSubscription = () => {
                             </div>
                           </div>
                           <h3
-                            className="text-dark mb-3"
+                            className="text-white mb-3"
                             style={{ 
                               fontSize: "2.2rem", 
                               fontWeight: "600",
-                              color: "#2c3e50"
+                              color: "#fff"
                             }}
                           >
                             No Active Subscription
@@ -276,7 +273,7 @@ const ManageSubscription = () => {
                                     Subscription ID
                                   </div>
                                   <div 
-                                    className="text-dark fw-bold"
+                                    className="text-white fw-bold"
                                     style={{ fontSize: "1.1rem" }}
                                   >
                                     #{subscriptionData[0]?.id || 'N/A'}

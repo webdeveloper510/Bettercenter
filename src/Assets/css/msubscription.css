@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/zuume');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
 .main_suscription {
   /* background-image: url(http://localhost:3000/static/media/page-bg.2dbc9d6a163cecf58a41.png); */
   background-image: url('../images/page-bg.png');
@@ -49,6 +51,12 @@ tr {
   border: 1px solid #36395c;
   border-color: #36395c;
 }
+.our_team_head {
+    color: #fff;
+    font-family: 'Zuume', sans-serif;
+font-size: 67px !important;
+    font-weight: 900 !important;
+}
 
   @media (max-width: 480px) {     
 .status_table tr th, .status_table tbody tr td {
@@ -56,4 +64,11 @@ tr {
     color: #fff;
     text-align: center;
     font-size: 12px;
-}}
+}
+.our_team_head {
+    color: #fff;
+    font-family: 'Zuume', sans-serif;
+    font-size: 40px !important;
+    font-weight: 900 !important;
+}
+}
