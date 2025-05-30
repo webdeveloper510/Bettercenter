@@ -30,6 +30,7 @@ const ManageSubscription = () => {
       setHasActiveSubscription(false);
 
       const response = await api.getSubscriptionDetail();
+      console.log("🚀 ~ fetchSubscriptionData ~ response:", response)
       if (response && response.status === 200) {
         if (
           response.data &&
@@ -177,7 +178,7 @@ const ManageSubscription = () => {
                             No Active Subscription
                           </h3>
                           <p
-                            className="text-muted mb-5"
+                            className="text-dark mb-5"
                             style={{
                               fontSize: "1.1rem",
                               lineHeight: "1.7",
@@ -216,7 +217,6 @@ const ManageSubscription = () => {
                           </Link>
                         </div>
                       ) : (
-                        // Active Subscription View
                         <>
                           <div className="text-center mb-4">
                             <div
