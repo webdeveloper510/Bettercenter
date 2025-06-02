@@ -10,6 +10,7 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import api, { apiClient } from '../../api';
 import { toast } from 'react-toastify';
+import AIContent from './aicontent';
 
 const stripePromise = loadStripe(process.env.REACT_APP_Stripe);
 
@@ -115,6 +116,8 @@ const AIPicks = () => {
               </Button>
             </div>
           )}
+
+          <AIContent />
         </Container>
       </div>
 

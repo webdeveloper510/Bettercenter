@@ -7,33 +7,48 @@ const StaticInfo = () => {
     <section className="odds-info-section py-5">
       <Container>
         <h5 className="section-title text-uppercase mb-3">
-          Betting Odds Comparison – OddsChecker US
+          Real-Time Odds Comparison with BettorCenter AI
         </h5>
         <p className="section-description mb-5">
-          Launched in 1999 in the UK, oddschecker is now a leading betting odds comparison site serving millions of users globally.
-          With the legalization of sports betting in the United States, oddschecker provides industry-leading picks and insights,
-          AI-powered tools, and education to help you be the best bettor you can be.
+          Stay ahead of the market by seeing every line from our roster of top legal sportsbooks—so you never miss the best price on your bets.
         </p>
 
-        <h6 className="section-heading">The Original Odds Comparison Site</h6>
+        <h6 className="section-heading">Our Partners & Coverage</h6>
         <p className="section-description mb-4">
-          We partner with the best legal sportsbooks in the industry, giving our users access to real-time odds comparison across a huge range of US and global sports,
-          including: NFL Odds, College Football Odds, NBA Odds, College Basketball Odds, WNBA Odds, NHL Odds, MLB Odds, and Global Soccer Odds. Our integrated betslip technology
-          tracks your best selections & automatically displays the sportsbook(s) with the best odds for your selections, making it simple for you to place those bets when the time comes.
-          If you prefer to bet with a chosen sportsbook – you can access those odds from the betslip tool. If you are new to the site or just need a helping hand – we created a handy guide
-          on how to place a bet on oddschecker.
+          We’ve teamed up with leading, licensed U.S. sportsbooks to deliver side-by-side odds for every major league and event, including:
         </p>
-
-        <h6 className="section-heading">Free Betting Picks & Insights</h6>
+        <ul className="section-description mb-4">
+          <li>NFL & College Football</li>
+          <li>NBA & College Basketball</li>
+          <li>MLB & NHL</li>
+          <li>Global Soccer & More</li>
+        </ul>
         <p className="section-description mb-4">
-          Our expert handicappers provide a multitude of free picks & parlays throughout the sporting calendar & our team of staff writers also provide you with the latest odds-focused
-          insights across a vast range of popular sports to help you try and place that winning bet.
+          Whether you’re hunting the sharpest moneyline, the juiciest spread, or an over/under edge, BettorCenter brings you the full spectrum of available odds in one place.
         </p>
 
-        <h6 className="section-heading">The Latest Sportsbook and Casino Promotions</h6>
+        <h6 className="section-heading">Seamless Betslip Integration</h6>
+        <p className="section-description mb-4">
+          Build your ticket right in our web dashboard:
+        </p>
+        <ul className="section-description mb-4">
+          <li><strong>Auto-Populate Best Odds:</strong> Add selections to your betslip and instantly see which sportsbook offers the top price.</li>
+          <li><strong>One-Click Navigation:</strong> Jump straight to your chosen book to place the wager at peak value.</li>
+        </ul>
+        <p className="section-description mb-4">
+          No manual line-shopping—our betslip does the heavy lifting so you can focus on strategy.
+        </p>
+
+        <h6 className="section-heading">Free Expert Picks & Insights</h6>
+        <p className="section-description mb-4">
+          Tap into our team of professional handicappers and in-house data scientists:
+        </p>
+        <ul className="section-description mb-4">
+          <li><strong>Daily Free Picks & Parlays:</strong> Curated by our experts and updated throughout the season.</li>
+          <li><strong>In-Depth Analysis:</strong> Staff-written breakdowns, trend reports, and matchup previews help you understand why a line moves.</li>
+        </ul>
         <p className="section-description">
-          Whether you're new to sports betting or online casinos, or simply looking to access multiple platforms for the best odds and bonuses, then you should visit our sportsbook promotions
-          and casino promotions pages – where the very latest signup offers are available to claim in your state.
+          All insights are delivered alongside our AI recommendations, giving you the best of both worlds.
         </p>
       </Container>
     </section>
