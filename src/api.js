@@ -318,9 +318,10 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
     },
-    getNewsData: async () => {
+    getNewsData: async (date) => {
         try {
-            const response = await apiClient.get(`${API_URL}/news-data`, {
+            const formattedDate = date || '';
+            const response = await apiClient.get(`${API_URL}/news-data/?date=${formattedDate}`, {
                 headers: { 'Content-Type': 'application/json' } 
             });
             return response.data;

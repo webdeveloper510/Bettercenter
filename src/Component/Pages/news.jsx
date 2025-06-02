@@ -8,11 +8,16 @@ const News = () => {
   const [newsData, setNewsData] = useState(null);
   const location = useLocation();
   const newsIndex = location.state?.newsIndex;
+  const getCurrentDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.getNewsData();
+        const currentDate = getCurrentDate();
+        const response = await api.getNewsData(currentDate);
         setNewsData(response.data[newsIndex]);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -44,7 +49,7 @@ const News = () => {
           <div className="row">
             <div className="col-12">
               <h1 className="text-center py-5 our_team_head">
-                {newsData.article_title}
+                {newsData.title}
               </h1>
             </div>
           </div>
@@ -52,16 +57,16 @@ const News = () => {
         <div className="container">
           <div className="row">
             <div className="col-12">
-            <div className="outer_top_img">
+              <div className="outer_top_img">
                 <img
-                  src={newsData.image_url}
+                  src={newsData.home_file_url}
                   className="macbook my-3"
                   alt=""
                   srcset=""
                   width={900}
                 />
-                </div>
-                <div className="outer_content">
+              </div>
+              <div className="outer_content">
                 <p
                   className="pt-5 started_page"
                   dangerouslySetInnerHTML={{ __html: newsData.news_text }}
