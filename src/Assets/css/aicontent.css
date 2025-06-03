@@ -20,3 +20,12 @@
     background-color: #1b1e3d !important;
     border: 1px solid #1b1e3d;
 }
+.outer_gameimg {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.outer_gameimg img {
+    width: 100%;
+    border-radius: 20px
+}

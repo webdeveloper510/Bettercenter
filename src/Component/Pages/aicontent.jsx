@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import "../../Assets/css/aicontent.css"
+import inner_bg from "../../Assets/images/bg-aigame.png";
 
 const AIContent = () => {
   return (
@@ -12,7 +13,9 @@ const AIContent = () => {
         <p className="lead text-center mb-5">
           Empower your wagers with our state-of-the-art AI Predictive Modeling Platform, designed by veteran data scientists and sports analysts to give you the inside track on every game.
         </p>
-
+        <div className='outer_gameimg'>
+          <img src={inner_bg} alt='' />
+        </div>
         <h4 className="mb-3">Why BettorCenter AI Stands Out</h4>
 
         <ol className="mb-5">
