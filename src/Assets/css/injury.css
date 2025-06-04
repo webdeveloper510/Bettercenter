@@ -229,10 +229,12 @@ th.name_th {
     font-weight: bold;
     text-align: left;
   }
-td.comment {
+
+  td.comment {
     white-space: normal;
     word-wrap: break-word;
     max-width: 100%;
 }
 }
+
 
