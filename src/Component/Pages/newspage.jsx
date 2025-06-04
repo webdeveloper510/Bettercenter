@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../../Assets/css/newspage.css";
-import Laptop from "../../Assets/images/laptop-4906312_640.jpg";
-import rocket from "../../Assets/images/rockets-6847181_640.jpg";
-import vr from "../../Assets/images/augmented-reality-1853592_640.jpg";
-import game from "../../Assets/images/gaming-4061103_640.jpg";
-import axios from "axios";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +9,7 @@ const Newspage = () => {
   console.log("🚀 ~ Newspage ~ newsData:", newsData);
   const navigate = useNavigate();
   const getCurrentDate = () => {
-    const today = new Date();
+    const today = new Date(); 
     return today.toISOString().split("T")[0];
   };
 
@@ -43,9 +38,6 @@ const Newspage = () => {
     );
   }
 
-  if (!newsData) {
-    return <p className="text-center py-5">No news available.</p>;
-  }
 
   return (
     <>
