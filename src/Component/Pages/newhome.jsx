@@ -40,7 +40,6 @@ const BOOKMAKER_LOGOS = {
 const getTimezoneFromIP = async () => {
   try {
     const response = await fetch("https://ipapi.co/timezone/");
-    console.log("🚀 ~ getTimezoneFromIP ~ response:", response);
     const timezone = await response.text();
     return timezone.trim();
   } catch (error) {
@@ -243,111 +242,124 @@ const formatOdds = (odds) => {
 
     return () => clearInterval(interval);
   }, []);
-  const getCellColor = (key, value, sportType = null) => {
-    if (isFirstLoadRef.current) return "";
-
-    let changeKey;
-    if (sport === "ALL" && sportType) {
-      changeKey = `${sportType}-${key}-${value}`;
-    } else {
-      changeKey = `${key}-${value}`;
-    }
-
-    const timestamp = changeTimestampsRef.current[changeKey];
-
-    if (!timestamp) return "";
-
-    const secondsSinceChange = (Date.now() - timestamp) / 1000;
-
-    if (secondsSinceChange <= 20) {
-      return "changed-green";
-    } else if (secondsSinceChange <= 40) {
-      return "changed-yellow";
-    } else if (secondsSinceChange <= 60) {
-      return "changed-red";
-    }
-
+const getCellColor = (key, value, sportType = null) => {
+  if (isFirstLoadRef.current) {
     return "";
-  };
+  }
 
-  const updateChangeTimestamps = (newData, sportType = null) => {
-    const oldData = previousDataRef.current;
-    const newTimestamps = { ...changeTimestampsRef.current };
-    const now = Date.now();
-    if (sport === "ALL" && sportType) {
-      const sportKey =
-        sportType === "nba"
-          ? "nbaSpread"
-          : sportType === "nhl"
-          ? "nhlMoneyline"
-          : sportType === "mlb"
-          ? "mlbMoneyline"
-          : null;
+  let changeKey;
+  if (sport === "ALL" && sportType) {
+    const keyParts = key.split('-');
+    const gameIndex = keyParts[0];
+    const fieldName = keyParts.slice(1).join('-');  
+    changeKey = `${sportType}-${gameIndex}-${fieldName}-${value}`
+  } else {
+    changeKey = `${key}-${value}`;
+  }
+  
+  const timestamp = changeTimestampsRef.current[changeKey];
+ 
+  if (!timestamp) return "";
 
-      if (!sportKey || !oldData[sportKey]) return;
+  const secondsSinceChange = (Date.now() - timestamp) / 1000;
 
-      const oldSportData = oldData[sportKey];
 
-      newData.forEach((game, gameIndex) => {
-        if (!oldSportData[gameIndex]) return;
+  if (secondsSinceChange <= 20) {
+    return "changed-green";
+  } else if (secondsSinceChange <= 40) {
+    return "changed-yellow";
+  } else if (secondsSinceChange <= 60) {
+    return "changed-red";
+  }
 
-        Object.keys(game).forEach((key) => {
-          const value = game[key];
-          if (value === undefined || value === null || value === "-") return;
+  return "";
+};
+const updateChangeTimestamps = (newData, sportType = null) => {
 
-          const oldValue = oldSportData[gameIndex][key];
+  const oldData = previousDataRef.current;
+  const newTimestamps = { ...changeTimestampsRef.current };
+  const now = Date.now();
+  
+  if (sport === "ALL" && sportType) {
+    const sportKey =
+      sportType === "nba"
+        ? "nbaSpread"
+        : sportType === "nhl"
+        ? "nhlMoneyline"
+        : sportType === "mlb"
+        ? "mlbMoneyline"
+        : null;
 
-          if (isValueChanged(oldValue, value)) {
-            const changeKey = `${sportType}-${gameIndex}-${key}-${value}`;
-            newTimestamps[changeKey] = now;
-          }
-        });
-      });
-    } else {
-      newData.forEach((game, gameIndex) => {
-        if (!oldData[gameIndex]) return;
-
-        Object.keys(game).forEach((key) => {
-          const value = game[key];
-          if (value === undefined || value === null || value === "-") return;
-
-          const oldValue = oldData[gameIndex][key];
-
-          if (isValueChanged(oldValue, value)) {
-            const changeKey = `${gameIndex}-${key}-${value}`;
-            newTimestamps[changeKey] = now;
-          }
-        });
-      });
+    if (!sportKey || !oldData || !oldData[sportKey]) {
+      return;
     }
 
-    Object.keys(newTimestamps).forEach((key) => {
-      if ((now - newTimestamps[key]) / 1000 > 60) {
-        delete newTimestamps[key];
+    const oldSportData = oldData[sportKey];
+    newData.forEach((game, gameIndex) => {
+      if (!oldSportData[gameIndex]) {
+        return;
       }
+
+      Object.keys(game).forEach((key) => {
+        const value = game[key];
+        if (value === undefined || value === null || value === "-") return;
+
+        const oldValue = oldSportData[gameIndex][key];
+
+        if (isValueChanged(oldValue, value)) {
+          const changeKey = `${sportType}-${gameIndex}-${key}-${value}`;
+          newTimestamps[changeKey] = now;
+        }
+      });
     });
-
-    changeTimestampsRef.current = newTimestamps;
-
-    if (sport === "ALL" && sportType) {
-      const sportKey =
-        sportType === "nba"
-          ? "nbaSpread"
-          : sportType === "nhl"
-          ? "nhlMoneyline"
-          : sportType === "mlb"
-          ? "mlbMoneyline"
-          : null;
-      if (sportKey) {
-        previousDataRef.current = {
-          ...previousDataRef.current,
-          [sportKey]: JSON.parse(JSON.stringify(newData)),
-        };
-      }
-    } else {
-      previousDataRef.current = JSON.parse(JSON.stringify(newData));
+  } else {
+    if (!Array.isArray(oldData)) {
+      return;
     }
-  };
+
+    newData.forEach((game, gameIndex) => {
+      if (!oldData[gameIndex]) return;
+
+      Object.keys(game).forEach((key) => {
+        const value = game[key];
+        if (value === undefined || value === null || value === "-") return;
+
+        const oldValue = oldData[gameIndex][key];
+
+        if (isValueChanged(oldValue, value)) {
+          const changeKey = `${gameIndex}-${key}-${value}`;
+          newTimestamps[changeKey] = now;
+        }
+      });
+    });
+  }
+
+  Object.keys(newTimestamps).forEach((key) => {
+    if ((now - newTimestamps[key]) / 1000 > 60) {
+      delete newTimestamps[key];
+    }
+  });
+  changeTimestampsRef.current = newTimestamps;
+  if (sport === "ALL" && sportType) {
+    const sportKey =
+      sportType === "nba"
+        ? "nbaSpread"
+        : sportType === "nhl"
+        ? "nhlMoneyline"
+        : sportType === "mlb"
+        ? "mlbMoneyline"
+        : null;
+    if (sportKey) {
+      if (!previousDataRef.current) {
+        previousDataRef.current = {};
+      }
+      previousDataRef.current[sportKey] = JSON.parse(JSON.stringify(newData));
+    }
+  } else {
+    previousDataRef.current = JSON.parse(JSON.stringify(newData));
+  }
+};
+
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -566,50 +578,59 @@ const formatOdds = (odds) => {
         setIsSocketConnected(true);
       };
 
-      newSocket.onmessage = (event) => {
-        try {
-          console.log("Raw WebSocket message received:", event.data);
-          const data = JSON.parse(event.data);
-          console.log("WebSocket data received:", data);
-          if (sport === "ALL") {
-            const updatedAllSportsData = { ...allSportsData };
-            let hasUpdates = false;
-            if (data.nba_default_data) {
-              const processedNbaDefault = processDefaultData({
-                data: data.nba_default_data,
-              });
-              updatedAllSportsData.nbaSpread = processedNbaDefault;
-              if (!isFirstLoadRef.current) {
-                updateChangeTimestamps(processedNbaDefault, "nba");
-              }
-              hasUpdates = true;
-            }
-            if (data.nhl_default_data) {
-              const processedNhlDefault = processDefaultData({
-                data: data.nhl_default_data,
-              });
-              updatedAllSportsData.nhlMoneyline = processedNhlDefault;
-              if (!isFirstLoadRef.current) {
-                updateChangeTimestamps(processedNhlDefault, "nhl");
-              }
-              hasUpdates = true;
-            }
-            if (data.mlb_default_data) {
-              const processedMlbDefault = processDefaultData({
-                data: data.mlb_default_data,
-              });
-              updatedAllSportsData.mlbMoneyline = processedMlbDefault;
-              if (!isFirstLoadRef.current) {
-                updateChangeTimestamps(processedMlbDefault, "mlb");
-              }
-              hasUpdates = true;
-            }
+     newSocket.onmessage = (event) => {
+  try {
+    console.log("📡 Raw WebSocket message received:", event.data);
+    const data = JSON.parse(event.data);
+    console.log("📡 WebSocket data received:", data);
+    
+    if (sport === "ALL") {
+      console.log("🌐 Processing ALL sports WebSocket data");
+      const updatedAllSportsData = { ...allSportsData };
+      let hasUpdates = false;
+      
+      if (data.nba_default_data) {
+        console.log("🏀 Processing NBA WebSocket data");
+        const processedNbaDefault = processDefaultData({
+          data: data.nba_default_data,
+        });
+        updatedAllSportsData.nbaSpread = processedNbaDefault;
+        if (!isFirstLoadRef.current) {
+          updateChangeTimestamps(processedNbaDefault, "nba");
+        }
+        hasUpdates = true;
+      }
+      
+      if (data.nhl_default_data) {
+        console.log("🏒 Processing NHL WebSocket data");
+        const processedNhlDefault = processDefaultData({
+          data: data.nhl_default_data,
+        });
+        updatedAllSportsData.nhlMoneyline = processedNhlDefault;
+        if (!isFirstLoadRef.current) {
+          updateChangeTimestamps(processedNhlDefault, "nhl");
+        }
+        hasUpdates = true;
+      }
+      
+      if (data.mlb_default_data) {
+        console.log("⚾ Processing MLB WebSocket data");
+        const processedMlbDefault = processDefaultData({
+          data: data.mlb_default_data,
+        });
+        updatedAllSportsData.mlbMoneyline = processedMlbDefault;
+        if (!isFirstLoadRef.current) {
+          updateChangeTimestamps(processedMlbDefault, "mlb");
+        }
+        hasUpdates = true;
+      }
 
-            if (hasUpdates) {
-              setAllSportsData(updatedAllSportsData);
-            }
-            return;
-          }
+      if (hasUpdates) {
+        console.log("✅ Updating allSportsData state");
+        setAllSportsData(updatedAllSportsData);
+      }
+      return;
+    }
           let processedData = [];
 
           if (sport === "NBA") {
@@ -999,45 +1020,77 @@ const processTotalData = (apiData) => {
 
     return processedGames;
   };
-  const fetchAllSportsData = async () => {
-    setLoading(true);
-    setError(null);
+const fetchAllSportsData = async () => {
+  console.log("🚀 fetchAllSportsData called, isFirstLoad:", isFirstLoadRef.current);
+  
+  setLoading(true);
+  setError(null);
 
-    try {
-      const formattedDate = await formatDateForAPI(selectedDate);
-      const nbaDefaultData = await api.getNbaDefaultData(
-        formattedDate.date,
-        formattedDate.timezone
-      );
-      const processedNbaDefault = processDefaultData(nbaDefaultData, "NBA");
-      const nhlDefaultData = await api.getNhlDefaultData(
-        formattedDate.date,
-        formattedDate.timezone
-      );
-      const processedNhlDefault = processDefaultData(nhlDefaultData, "NHL");
-      const mlbDefaultData = await api.getMlbDefaultData(
-        formattedDate.date,
-        formattedDate.timezone
-      );
-      const processedMlbDefault = processDefaultData(mlbDefaultData, "MLB");
+  try {
+    const formattedDate = await formatDateForAPI(selectedDate);
+    
+    const nbaDefaultData = await api.getNbaDefaultData(
+      formattedDate.date,
+      formattedDate.timezone
+    );
+    const processedNbaDefault = processDefaultData(nbaDefaultData, "NBA");
+    
+    const nhlDefaultData = await api.getNhlDefaultData(
+      formattedDate.date,
+      formattedDate.timezone
+    );
+    const processedNhlDefault = processDefaultData(nhlDefaultData, "NHL");
+    
+    const mlbDefaultData = await api.getMlbDefaultData(
+      formattedDate.date,
+      formattedDate.timezone
+    );
+    const processedMlbDefault = processDefaultData(mlbDefaultData, "MLB");
 
-      setAllSportsData({
-        nbaSpread: processedNbaDefault,
-        nhlMoneyline: processedNhlDefault,
-        mlbMoneyline: processedMlbDefault,
-      });
-    } catch (err) {
-      console.error("Error fetching all sports data:", err);
-      setError("Failed to fetch all sports data. Please try again later.");
-      setAllSportsData({
-        nbaSpread: [],
-        nhlMoneyline: [],
-        mlbMoneyline: [],
-      });
-    } finally {
-      setLoading(false);
+    console.log("📊 Processed data lengths:", {
+      nba: processedNbaDefault?.length,
+      nhl: processedNhlDefault?.length,
+      mlb: processedMlbDefault?.length,
+      isFirstLoad: isFirstLoadRef.current
+    });
+
+    // Initialize previousDataRef for first load
+    if (isFirstLoadRef.current) {
+      previousDataRef.current = {
+        nbaSpread: JSON.parse(JSON.stringify(processedNbaDefault)),
+        nhlMoneyline: JSON.parse(JSON.stringify(processedNhlDefault)),
+        mlbMoneyline: JSON.parse(JSON.stringify(processedMlbDefault)),
+      };
+      console.log("🏁 First load - initialized previousDataRef");
+      isFirstLoadRef.current = false;
+    } else {
+      // Update change timestamps for each sport if not first load
+      console.log("🔄 Not first load - updating timestamps");
+      updateChangeTimestamps(processedNbaDefault, "nba");
+      updateChangeTimestamps(processedNhlDefault, "nhl");
+      updateChangeTimestamps(processedMlbDefault, "mlb");
     }
-  };
+
+    const newAllSportsData = {
+      nbaSpread: processedNbaDefault,
+      nhlMoneyline: processedNhlDefault,
+      mlbMoneyline: processedMlbDefault,
+    };
+
+    setAllSportsData(newAllSportsData);
+    
+  } catch (err) {
+    console.error("❌ Error fetching all sports data:", err);
+    setError("Failed to fetch all sports data. Please try again later.");
+    setAllSportsData({
+      nbaSpread: [],
+      nhlMoneyline: [],
+      mlbMoneyline: [],
+    });
+  } finally {
+    setLoading(false);
+  }
+};
   const handleSportChange = (e) => {
     setSport(e.target.value);
   };
