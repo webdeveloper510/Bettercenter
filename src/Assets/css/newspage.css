@@ -5,9 +5,15 @@
     background-size: cover;
     height: 520px;
     padding-top: 30%;
-   
 }
-
+.news_background {
+    background-image: url("../images/page-bg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+        height: 100vh;
+}
 .news_page_heading {
     color: #ffff;
 }

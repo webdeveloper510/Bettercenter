@@ -49,7 +49,7 @@ const Newspage = () => {
 
   return (
     <>
-      <section className="backgroung_image">
+      <section className="backgroung_image news_background">
         <div className="container">
           <div className="row py-5 gap-3"></div>
         </div>
