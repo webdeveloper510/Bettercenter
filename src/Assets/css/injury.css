@@ -147,6 +147,48 @@ th.name_th {
   min-width: 150px;
 }
 
+.injury_model {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 0;
+  max-width: 800px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.injury_model .modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  background: #1a1d3b !important;
+}
+
+
+.injury_model .modal-header button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666666;
+}
+
+.injury_model .modal-body {
+  padding: 20px;
+  color: #444444;
+  line-height: 1.6;
+}
+.modal-content.injury_model {
+    padding: 0px 20px !important;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .injury-table {
