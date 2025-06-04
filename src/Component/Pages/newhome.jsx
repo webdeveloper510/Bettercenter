@@ -585,12 +585,10 @@ const updateChangeTimestamps = (newData, sportType = null) => {
     console.log("📡 WebSocket data received:", data);
     
     if (sport === "ALL") {
-      console.log("🌐 Processing ALL sports WebSocket data");
       const updatedAllSportsData = { ...allSportsData };
       let hasUpdates = false;
       
       if (data.nba_default_data) {
-        console.log("🏀 Processing NBA WebSocket data");
         const processedNbaDefault = processDefaultData({
           data: data.nba_default_data,
         });
@@ -602,7 +600,6 @@ const updateChangeTimestamps = (newData, sportType = null) => {
       }
       
       if (data.nhl_default_data) {
-        console.log("🏒 Processing NHL WebSocket data");
         const processedNhlDefault = processDefaultData({
           data: data.nhl_default_data,
         });
@@ -614,7 +611,6 @@ const updateChangeTimestamps = (newData, sportType = null) => {
       }
       
       if (data.mlb_default_data) {
-        console.log("⚾ Processing MLB WebSocket data");
         const processedMlbDefault = processDefaultData({
           data: data.mlb_default_data,
         });
@@ -626,7 +622,6 @@ const updateChangeTimestamps = (newData, sportType = null) => {
       }
 
       if (hasUpdates) {
-        console.log("✅ Updating allSportsData state");
         setAllSportsData(updatedAllSportsData);
       }
       return;

@@ -15,9 +15,7 @@ import { Link } from "react-router-dom";
 
 const ManageSubscription = () => {
   const [subscriptionData, setSubscriptionData] = useState([]);
-  const [planData, setPlanData] = useState([]);
-  console.log("🚀 ~ ManageSubscription ~ subscriptionData:", subscriptionData)
-  console.log("🚀 ~ ManageSubscription ~ planData:", planData)
+  const [planData, setPlanData] = useState([])
   const [loading, setLoading] = useState(true);
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
 
@@ -32,15 +30,12 @@ const ManageSubscription = () => {
       setPlanData([]);
       setHasActiveSubscription(false);
 
-      const response = await api.getSubscriptionDetail();
-      console.log("🚀 ~ fetchSubscriptionData ~ response:", response)
+      const response = await api.getSubscriptionDetail()
       if (response && response.status === 200) {
-        // Store plan data
+
         if (response.data && response.data.plans && Array.isArray(response.data.plans)) {
           setPlanData(response.data.plans);
         }
-
-        // Updated: Check for active_subscriptions in the nested data structure
         if (
           response.data &&
           response.data.active_subscriptions &&
@@ -52,7 +47,8 @@ const ManageSubscription = () => {
             date: item.date.split(" ")[0],
             amount: `${item.amount}`,
             status: item.subscription_status,
-            subscription_id: item.subscription_id, // Added subscription_id from API
+            subscription_id: item.subscription_id,
+            end_date: item.end_date ? item.end_date : 'N/A',
           }));
           setSubscriptionData(formattedData);
           setHasActiveSubscription(true);
@@ -335,7 +331,25 @@ const ManageSubscription = () => {
                                   >
                                     {subscriptionData[0]?.date || 'N/A'}
                                   </div>
+                                  
                                 </div>
+                                <div className="mb-4">
+  <div 
+    className="d-flex align-items-center mb-2"
+    style={{ color: "#fff", fontWeight: "600" }}
+  >
+    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" className="me-2">
+      <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+    </svg>
+    End Date
+  </div>
+  <div 
+    className="text-dark fw-bold"
+    style={{ fontSize: "1.1rem" }}
+  >
+    {subscriptionData[0]?.end_date || 'N/A'}
+  </div>
+</div>
                               </div>
                               <div className="col-md-6 same_sus">
                                 <div className="mb-4">
