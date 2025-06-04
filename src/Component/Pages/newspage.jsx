@@ -83,7 +83,7 @@ const Newspage = () => {
                           <h6 className="sub_heading_news">
                             <p className="sub_heading_news">{res.subtitle}</p>
                           </h6>
-                          <span className="started_page">{res.timestamp}</span>
+                         <p className="started_page">{res.timestamp}</p>
                         </div>
                       </div>
                     ))
