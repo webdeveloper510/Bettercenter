@@ -578,108 +578,107 @@ const updateChangeTimestamps = (newData, sportType = null) => {
         setIsSocketConnected(true);
       };
 
-     newSocket.onmessage = (event) => {
+newSocket.onmessage = (event) => {
   try {
-    console.log("📡 Raw WebSocket message received:", event.data);
     const data = JSON.parse(event.data);
     console.log("📡 WebSocket data received:", data);
     
     if (sport === "ALL") {
-      const updatedAllSportsData = { ...allSportsData };
-      let hasUpdates = false;
-      
-      if (data.nba_default_data) {
-        const processedNbaDefault = processDefaultData({
-          data: data.nba_default_data,
-        });
-        updatedAllSportsData.nbaSpread = processedNbaDefault;
-        if (!isFirstLoadRef.current) {
-          updateChangeTimestamps(processedNbaDefault, "nba");
+      setAllSportsData(prevAllSportsData => {
+        const updatedAllSportsData = { ...prevAllSportsData };
+        let hasUpdates = false;
+        
+        if (data.nba_default_data) {
+          const processedNbaDefault = processDefaultData({
+            data: data.nba_default_data,
+          });
+          updatedAllSportsData.nbaSpread = processedNbaDefault;
+          if (!isFirstLoadRef.current) {
+            updateChangeTimestamps(processedNbaDefault, "nba");
+          }
+          hasUpdates = true;
         }
-        hasUpdates = true;
-      }
-      
-      if (data.nhl_default_data) {
-        const processedNhlDefault = processDefaultData({
-          data: data.nhl_default_data,
-        });
-        updatedAllSportsData.nhlMoneyline = processedNhlDefault;
-        if (!isFirstLoadRef.current) {
-          updateChangeTimestamps(processedNhlDefault, "nhl");
+        
+        if (data.nhl_default_data) {
+          const processedNhlDefault = processDefaultData({
+            data: data.nhl_default_data,
+          });
+          updatedAllSportsData.nhlMoneyline = processedNhlDefault;
+          if (!isFirstLoadRef.current) {
+            updateChangeTimestamps(processedNhlDefault, "nhl");
+          }
+          hasUpdates = true;
         }
-        hasUpdates = true;
-      }
-      
-      if (data.mlb_default_data) {
-        const processedMlbDefault = processDefaultData({
-          data: data.mlb_default_data,
-        });
-        updatedAllSportsData.mlbMoneyline = processedMlbDefault;
-        if (!isFirstLoadRef.current) {
-          updateChangeTimestamps(processedMlbDefault, "mlb");
+        
+        if (data.mlb_default_data) {
+          const processedMlbDefault = processDefaultData({
+            data: data.mlb_default_data,
+          });
+          updatedAllSportsData.mlbMoneyline = processedMlbDefault;
+          if (!isFirstLoadRef.current) {
+            updateChangeTimestamps(processedMlbDefault, "mlb");
+          }
+          hasUpdates = true;
         }
-        hasUpdates = true;
-      }
-
-      if (hasUpdates) {
-        setAllSportsData(updatedAllSportsData);
-      }
+  
+        return hasUpdates ? updatedAllSportsData : prevAllSportsData;
+      });
       return;
     }
-          let processedData = [];
+    let processedData = [];
 
-          if (sport === "NBA") {
-            if (data.nba_money_data && marketType === "MONEYLINE") {
-              processedData = processMoneylineData({
-                data: data.nba_money_data,
-              });
-            } else if (data.nba_spread_data && marketType === "SPREAD") {
-              processedData = processSpreadData({ data: data.nba_spread_data });
-            } else if (data.nba_total_data && marketType === "TOTAL") {
-              processedData = processTotalData({ data: data.nba_total_data });
-            } else if (data.nba_default_data && marketType === "DEFAULT") {
-              processedData = processDefaultData({
-                data: data.nba_default_data,
-              });
-            }
-          } else if (sport === "MLB") {
-            if (data.mlb_money_data && marketType === "MONEYLINE") {
-              processedData = processMoneylineData({
-                data: data.mlb_money_data,
-              });
-            } else if (data.mlb_spread_data && marketType === "SPREAD") {
-              processedData = processSpreadData({ data: data.mlb_spread_data });
-            } else if (data.mlb_total_data && marketType === "TOTAL") {
-              processedData = processTotalData({ data: data.mlb_total_data });
-            } else if (data.mlb_default_data && marketType === "DEFAULT") {
-              processedData = processDefaultData({
-                data: data.mlb_default_data,
-              });
-            }
-          } else if (sport === "NHL") {
-            if (data.nhl_money_data && marketType === "MONEYLINE") {
-              processedData = processMoneylineData({
-                data: data.nhl_money_data,
-              });
-            } else if (data.nhl_spread_data && marketType === "SPREAD") {
-              processedData = processSpreadData({ data: data.nhl_spread_data });
-            } else if (data.nhl_total_data && marketType === "TOTAL") {
-              processedData = processTotalData({ data: data.nhl_total_data });
-            } else if (data.nhl_default_data && marketType === "DEFAULT") {
-              processedData = processDefaultData({
-                data: data.nhl_default_data,
-              });
-            }
-          }
+    if (sport === "NBA") {
+      if (data.nba_money_data && marketType === "MONEYLINE") {
+        processedData = processMoneylineData({
+          data: data.nba_money_data,
+        });
+      } else if (data.nba_spread_data && marketType === "SPREAD") {
+        processedData = processSpreadData({ data: data.nba_spread_data });
+      } else if (data.nba_total_data && marketType === "TOTAL") {
+        processedData = processTotalData({ data: data.nba_total_data });
+      } else if (data.nba_default_data && marketType === "DEFAULT") {
+        processedData = processDefaultData({
+          data: data.nba_default_data,
+        });
+      }
+    } else if (sport === "MLB") {
+      if (data.mlb_money_data && marketType === "MONEYLINE") {
+        processedData = processMoneylineData({
+          data: data.mlb_money_data,
+        });
+      } else if (data.mlb_spread_data && marketType === "SPREAD") {
+        processedData = processSpreadData({ data: data.mlb_spread_data });
+      } else if (data.mlb_total_data && marketType === "TOTAL") {
+        processedData = processTotalData({ data: data.mlb_total_data });
+      } else if (data.mlb_default_data && marketType === "DEFAULT") {
+        processedData = processDefaultData({
+          data: data.mlb_default_data,
+        });
+      }
+    } else if (sport === "NHL") {
+      if (data.nhl_money_data && marketType === "MONEYLINE") {
+        processedData = processMoneylineData({
+          data: data.nhl_money_data,
+        });
+      } else if (data.nhl_spread_data && marketType === "SPREAD") {
+        processedData = processSpreadData({ data: data.nhl_spread_data });
+      } else if (data.nhl_total_data && marketType === "TOTAL") {
+        processedData = processTotalData({ data: data.nhl_total_data });
+      } else if (data.nhl_default_data && marketType === "DEFAULT") {
+        processedData = processDefaultData({
+          data: data.nhl_default_data,
+        });
+      }
+    }
 
-          if (processedData && processedData.length > 0) {
-            updateChangeTimestamps(processedData);
-            setGamesData(processedData);
-          }
-        } catch (error) {
-          console.error("Error processing WebSocket data:", error);
-        }
-      };
+    if (processedData && processedData.length > 0) {
+      updateChangeTimestamps(processedData);
+      setGamesData(processedData);
+    }
+  } catch (error) {
+    console.error("Error processing WebSocket data:", error);
+  }
+};
       newSocket.onerror = (error) => {
         console.error("WebSocket error:", error);
         setIsSocketConnected(false);
@@ -1016,8 +1015,6 @@ const processTotalData = (apiData) => {
     return processedGames;
   };
 const fetchAllSportsData = async () => {
-  console.log("🚀 fetchAllSportsData called, isFirstLoad:", isFirstLoadRef.current);
-  
   setLoading(true);
   setError(null);
 
@@ -1041,14 +1038,6 @@ const fetchAllSportsData = async () => {
       formattedDate.timezone
     );
     const processedMlbDefault = processDefaultData(mlbDefaultData, "MLB");
-
-    console.log("📊 Processed data lengths:", {
-      nba: processedNbaDefault?.length,
-      nhl: processedNhlDefault?.length,
-      mlb: processedMlbDefault?.length,
-      isFirstLoad: isFirstLoadRef.current
-    });
-
     // Initialize previousDataRef for first load
     if (isFirstLoadRef.current) {
       previousDataRef.current = {
@@ -1056,11 +1045,8 @@ const fetchAllSportsData = async () => {
         nhlMoneyline: JSON.parse(JSON.stringify(processedNhlDefault)),
         mlbMoneyline: JSON.parse(JSON.stringify(processedMlbDefault)),
       };
-      console.log("🏁 First load - initialized previousDataRef");
       isFirstLoadRef.current = false;
     } else {
-      // Update change timestamps for each sport if not first load
-      console.log("🔄 Not first load - updating timestamps");
       updateChangeTimestamps(processedNbaDefault, "nba");
       updateChangeTimestamps(processedNhlDefault, "nhl");
       updateChangeTimestamps(processedMlbDefault, "mlb");
