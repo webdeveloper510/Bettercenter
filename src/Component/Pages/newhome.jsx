@@ -27,7 +27,8 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
 import InjuryModal from "./injuryModal";
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-
+import BlogList from "./blog";
+import Ourteam from "./ourteam";
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
   DraftKings: { logo: draftkingsLogo },
@@ -114,6 +115,8 @@ const Games = () => {
     // "TEAMS",
     // "SCHEDULE",
     // "INJURIES",
+    "BLOG",
+    "TEAM",
   ];
   const [gamesData, setGamesData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -1110,7 +1113,7 @@ const renderSportTable = (
               {/* COMMENTED OUT - OPEN, BEST ODDS, AI PICKS COLUMNS */}
               <th>OPEN</th>
               <th>BEST ODDS</th>
-              {/* <th>AI PICKS</th> */}
+              <th>AI PICKS</th>
               {Object.entries(BOOKMAKER_LOGOS).map(([name, { logo }], i) => (
                 <th key={i}>
                   <div className="logo-header">
@@ -1221,7 +1224,7 @@ const renderSportTable = (
                     </div>
                   </td>
                   {/* COMMENTED OUT - AI PICKS COLUMN */}
-                  {/* <td>
+                  <td>
                     <button
                       className="ai-picks-btn"
                       onClick={(e) => {
@@ -1253,7 +1256,7 @@ const renderSportTable = (
                     >
                       Click Here
                     </button>
-                  </td> */}
+                  </td>
                   {Object.keys(BOOKMAKER_LOGOS).map((bookmaker, i) => {
                     const bookmakerKey = bookmaker.toLowerCase();
                     const homeOddsKey = `${bookmakerKey}HomeOdds`;
@@ -1445,7 +1448,7 @@ const renderSportTable = (
                             {/* COMMENTED OUT - OPEN, BEST ODDS, AI PICKS HEADERS */}
                             <th>OPEN</th>
                             <th>BEST ODDS</th>
-                            {/* <th>AI PICKS</th> */}
+                            <th>AI PICKS</th>
                             {Object.entries(BOOKMAKER_LOGOS).map(
                               ([name, { logo }], i) => (
                                 <th key={i}>
@@ -1686,7 +1689,7 @@ const renderSportTable = (
                                 </td>
 
                                 {/* COMMENTED OUT - AI PICKS COLUMN */}
-                                {/* <td>
+                                <td>
                                   <button
                                     className="ai-picks-btn"
                                     onClick={(e) => {
@@ -1720,7 +1723,7 @@ const renderSportTable = (
                                   >
                                     Click Here
                                   </button>
-                                </td> */}
+                                </td>
 
                                 {Object.keys(BOOKMAKER_LOGOS).map(
                                   (bookmaker, i) => {
@@ -1838,7 +1841,16 @@ const renderSportTable = (
                 <Futures />
               </div>
             )}
-
+            {activeTab==="TEAM"&&(
+              <div>
+                <Ourteam/>
+              </div>
+            )}
+ {activeTab === "BLOG" && (
+              <div>
+                < BlogList/>
+              </div>
+            )}
             {activeTab === "TEAMS" && (
               <div>
                 <Teamstab currentSport={sport} />

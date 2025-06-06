@@ -70,22 +70,22 @@ const Header = () => {
                 ODDS
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link
                 className={`nav-link ${location.pathname === "/ourteam" ? "active-link" : ""}`}
                 to="/ourteam"
               >
                 TEAM
               </Link>
-            </li>
-            <li className="nav-item">
+            </li> */}
+            {/* <li className="nav-item">
               <Link
                 className={`nav-link ${location.pathname === "/blog" ? "active-link" : ""}`}
                 to="/blog"
               >
                 BLOG
               </Link>
-            </li>
+            </li> */}
             <li className="nav-item">
               <Link
                 className={`nav-link ${location.pathname === "/newspage" ? "active-link" : ""}`}
