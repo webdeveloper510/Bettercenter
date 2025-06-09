@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import api, { apiClient } from '../../api';
 import { toast } from 'react-toastify';
 import AIContent from './aicontent';
-
+import '../../Assets/css/aipicks.css'
 const stripePromise = loadStripe(process.env.REACT_APP_Stripe);
 
 const AIPicks = () => {
@@ -41,8 +41,7 @@ const AIPicks = () => {
   const fetchPlanDetails = async () => {
     setPlansLoading(true);
     try {
-      // Using your existing API method - please replace with the correct method name
-      const response = await api.getSubscriptionDetail(); // Update this to your actual API method name
+      const response = await api.getSubscriptionDetail();
       if (response.status === 200 && response.data) {
         setPlanDetails(response.data.plans || []);
       }
@@ -72,7 +71,6 @@ const AIPicks = () => {
             const hasSubscription = await checkSubscriptionStatus();
             if (!hasSubscription) {
               setShowIframe(false);
-              // Fetch plan details when user doesn't have subscription
               await fetchPlanDetails();
             }
           }
@@ -167,61 +165,6 @@ const AIPicks = () => {
 
   return (
     <>
-      <style jsx>{`
-        .pricing-card {
-          transition: all 0.3s ease;
-          border-radius: 15px;
-          overflow: hidden;
-        }
-        
-        .pricing-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
-        }
-        
-        .price-section {
-          position: relative;
-        }
-        
-        .price-amount {
-          font-size: 3rem;
-          font-weight: bold;
-          color: #333;
-          line-height: 1;
-        }
-        
-        .currency {
-          font-size: 1.5rem;
-          vertical-align: top;
-          margin-right: 5px;
-        }
-        
-        .period {
-          font-size: 1rem;
-          color: #666;
-          font-weight: normal;
-        }
-        
-        .feature-item {
-          display: flex;
-          align-items: center;
-          font-size: 0.95rem;
-          color: #555;
-        }
-        
-        .bg-gradient {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-        }
-        
-        .our_team_head {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: bold;
-          font-size: 2.5rem;
-        }
-      `}</style>
-      
       <section className="main">
         <div className="outer_custom">
           <h2 className="text-center our_team_head py-4 gap-3">AI Picks</h2>
@@ -332,7 +275,7 @@ const CheckoutModal = ({ show, onHide, selectedPackage, planDetails, checkSubscr
             const hasSubscription = await checkSubscriptionStatus();
             if (hasSubscription) {
               onHide();
-              window.location.reload(); // Refresh to show updated subscription status
+              window.location.reload(); 
             } else {
               toast.error('Payment processed but subscription not activated. Please contact support.');
             }
