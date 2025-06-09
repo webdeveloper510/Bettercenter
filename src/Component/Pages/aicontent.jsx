@@ -27,6 +27,7 @@ const AIContent = () => {
             </ul>
           </li>
           <li>
+            
             <strong>Always Fresh Insights</strong>
             <ul>
               <li><strong>What It Is:</strong> Continuous, market-adjusted forecasts that update every few hours.</li>
