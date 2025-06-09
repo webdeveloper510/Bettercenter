@@ -99,7 +99,7 @@ const Header = () => {
                   className={`nav-link ${location.pathname === "/aipicks" ? "active-link" : ""}`}
                   to="/aipicks"
                 >
-                  Bettor Ai
+                  Bettor AI
                 </Link>
               </li>
           </ul>
