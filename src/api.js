@@ -704,6 +704,123 @@ const api = {
               return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
     },
+      getNbaDropdownData: async (date) => {
+        try {
+            const formattedDate = date || new Date().toISOString().split('T')[0]; 
+            const response = await apiClient.get(`${API_URL}/nba-select-tab-data/?date=${formattedDate}`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+       
+            return response.data.data;
+        } catch (error) {
+            console.error("Schedule data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch schedule data" };
+        }
+    },
+     getNhlDropdownData: async (date) => {
+        try {
+            const formattedDate = date || new Date().toISOString().split('T')[0]; 
+            const response = await apiClient.get(`${API_URL}/nhl-select-tab-data/?date=${formattedDate}`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+       
+            return response.data.data;
+        } catch (error) {
+            console.error("Schedule data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch schedule data" };
+        }
+    },
+      getMlbDropdownData: async (date) => {
+        try {
+            const formattedDate = date || new Date().toISOString().split('T')[0];
+            const response = await apiClient.get(`${API_URL}/mlb-select-tab-data/?date=${formattedDate}`, {
+                headers: { 'Content-Type': 'application/json' } 
+            });
+       
+            return response.data.data;
+        } catch (error) {
+            console.error("Schedule data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch schedule data" };
+        }
+    },
+getNbaFutureData: async (date, location, pick_name) => {
+    try {
+        const formattedDate = date || new Date().toISOString().split('T')[0];
+        
+        const payload = {
+            date_str: formattedDate
+        };
+        
+        if (location) {
+            payload.location = location;
+        }
+        
+        if (pick_name) {
+            payload.pick_name = pick_name;
+        }
+        
+        const response = await apiClient.post(`${API_URL}/nba-future-data`, payload, {
+            headers: { 'Content-Type': 'application/json' } 
+        });
+   
+        return response.data.data;
+    } catch (error) {
+        console.error("NBA future data fetch error:", error);
+        return error.response ? error.response.data : { message: "Failed to fetch NBA future data" };
+    }
+},
+
+getNhlFutureData: async (date, location, pick_name) => {
+    try {
+        const formattedDate = date || new Date().toISOString().split('T')[0];
+        const payload = {
+            date_str: formattedDate
+        };
+        
+        if (location) {
+            payload.location = location;
+        }
+        
+        if (pick_name) {
+            payload.pick_name = pick_name;
+        }
+        
+        const response = await apiClient.post(`${API_URL}/nhl-future-data/`, payload, {
+            headers: { 'Content-Type': 'application/json' } 
+        });
+   
+        return response.data.data;
+    } catch (error) {
+        console.error("NHL future data fetch error:", error);
+        return error.response ? error.response.data : { message: "Failed to fetch NHL future data" };
+    }
+},
+
+getMlbFutureData: async (date, location, pick_name) => {
+    try {
+        const formattedDate = date || new Date().toISOString().split('T')[0];
+        const payload = {
+            date_str: formattedDate
+        };
+        
+        if (location) {
+            payload.location = location;
+        }
+        
+        if (pick_name) {
+            payload.pick_name = pick_name;
+        }
+        
+        const response = await apiClient.post(`${API_URL}/mlb-future-data/`, payload, {
+            headers: { 'Content-Type': 'application/json' } 
+        });
+   
+        return response.data.data;
+    } catch (error) {
+        console.error("MLB future data fetch error:", error);
+        return error.response ? error.response.data : { message: "Failed to fetch MLB future data" };
+    }
+}
 };
 
 

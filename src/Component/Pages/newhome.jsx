@@ -29,6 +29,7 @@ import InjuryModal from "./injuryModal";
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import BlogList from "./blog";
 import Ourteam from "./ourteam";
+import CalendarEmbed from "./monthly";
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
   DraftKings: { logo: draftkingsLogo },
@@ -112,11 +113,13 @@ const Games = () => {
     "OVERVIEW",
     // "GAMES",
     "FUTURES",
+     "BLOG",
+    "TEAM",
+    "MONTHLY PROFITS"
     // "TEAMS",
     // "SCHEDULE",
     // "INJURIES",
-    "BLOG",
-    "TEAM",
+   
   ];
   const [gamesData, setGamesData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -1338,6 +1341,8 @@ const renderSportTable = (
                   activeTab !== "INJURIES" &&
                   activeTab !== "SCHEDULE" &&
                   activeTab !== "TEAMS" &&
+                  activeTab!=="TEAM"&&
+                  activeTab!=="BLOG"&&
                   activeTab !== "FUTURES" && (
                     <select
                       value={marketType}
@@ -1352,22 +1357,25 @@ const renderSportTable = (
                     </select>
                   )}
 
-                {activeTab !== "TEAMS" &&
-                  activeTab !== "FUTURES" &&
-                  activeTab !== "INJURIES" && (
-                    <div className="date-picker-wrapper">
-                      <DatePicker
-                        selected={selectedDate}
-                        onChange={(date) => setSelectedDate(date)}
-                        dateFormat="EEE MMM dd"
-                        className="calendar-input"
-                        popperPlacement="bottom"
-                        maxDate={
-                          activeTab === "OVERVIEW" ? getTomorrowDate() : null
-                        }
-                      />
-                    </div>
-                  )}
+            {(activeTab !== "TEAMS" &&
+  activeTab !== "FUTURES" &&
+  activeTab !== "INJURIES" &&
+  activeTab!== "TEAM"&&
+  activeTab !== "BLOG") && (
+    <div className="date-picker-wrapper">
+      <DatePicker
+        selected={selectedDate}
+        onChange={(date) => setSelectedDate(date)}
+        dateFormat="EEE MMM dd"
+        className="calendar-input"
+        popperPlacement="bottom"
+        maxDate={
+          activeTab === "OVERVIEW" ? getTomorrowDate() : null
+        }
+      />
+    </div>
+)}
+
               </div>
             </div>
 
@@ -1838,7 +1846,7 @@ const renderSportTable = (
             )}
             {activeTab === "FUTURES" && (
               <div>
-                <Futures />
+                <Futures currentSport={sport}/>
               </div>
             )}
             {activeTab==="TEAM"&&(
@@ -1864,6 +1872,12 @@ const renderSportTable = (
             {activeTab === "INJURIES" && (
               <div>
                 <NBAInjuryTable currentSport={sport} />
+              </div>
+            )}
+               {activeTab === "MONTHLY PROFITS" && (
+              <div>
+                <CalendarEmbed />
+               
               </div>
             )}
           </div>
