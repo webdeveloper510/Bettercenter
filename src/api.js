@@ -785,7 +785,7 @@ getNhlFutureData: async (date, location, pick_name) => {
             payload.pick_name = pick_name;
         }
         
-        const response = await apiClient.post(`${API_URL}/nhl-future-data/`, payload, {
+        const response = await apiClient.post(`${API_URL}/nhl-future-data`, payload, {
             headers: { 'Content-Type': 'application/json' } 
         });
    
@@ -811,7 +811,7 @@ getMlbFutureData: async (date, location, pick_name) => {
             payload.pick_name = pick_name;
         }
         
-        const response = await apiClient.post(`${API_URL}/mlb-future-data/`, payload, {
+        const response = await apiClient.post(`${API_URL}/mlb-future-data`, payload, {
             headers: { 'Content-Type': 'application/json' } 
         });
    
