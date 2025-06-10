@@ -70,7 +70,8 @@ const Futures = ({ currentSport }) => {
       const locationData = futureData.find(item => item.location === selectedLocation);
       if (locationData) {
         setPicks(locationData.picks_name || []);
-        setSelectedPick(locationData.picks_name?.[0] || "");
+        const firstPick = locationData.picks_name?.[0] || "";
+        setSelectedPick(firstPick);
       } else {
         setPicks([]);
         setSelectedPick("");
@@ -81,6 +82,7 @@ const Futures = ({ currentSport }) => {
     }
     setTableData([]); 
   }, [selectedLocation, futureData]);
+
   useEffect(() => {
     if (selectedLocation && selectedPick) {
       fetchTableData();
@@ -105,14 +107,14 @@ const Futures = ({ currentSport }) => {
         setFutureData(response);
         const uniqueLocations = response.map(item => item.location);
         setLocations(uniqueLocations);
-        if (!selectedLocation && uniqueLocations.length > 0) {
+        if (uniqueLocations.length > 0) {
           setSelectedLocation(uniqueLocations[0]);
         }
       } else if (response && response.status === 200 && response.data && Array.isArray(response.data)) {
         setFutureData(response.data);
         const uniqueLocations = response.data.map(item => item.location);
         setLocations(uniqueLocations);
-        if (!selectedLocation && uniqueLocations.length > 0) {
+        if (uniqueLocations.length > 0) {
           setSelectedLocation(uniqueLocations[0]);
         }
       } else {
@@ -181,7 +183,6 @@ const Futures = ({ currentSport }) => {
 
   const handleLocationChange = (e) => {
     setSelectedLocation(e.target.value);
-    setSelectedPick("");
   };
 
   const handlePickChange = (e) => {
@@ -193,14 +194,6 @@ const Futures = ({ currentSport }) => {
       return (
         <tr>
           <td colSpan={2 + logos.length}>Loading table data...</td>
-        </tr>
-      );
-    }
-
-    if (!selectedLocation || !selectedPick) {
-      return (
-        <tr>
-          <td colSpan={2 + logos.length}>Please select location and pick type</td>
         </tr>
       );
     }
