@@ -3,6 +3,7 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import "../../Assets/css/aicontent.css"
 import inner_bg from "../../Assets/images/bg-aigame.jpg";
 
+
 const AIContent = () => {
   return (
     <section className="py-5 bg-blue">
@@ -27,6 +28,7 @@ const AIContent = () => {
             </ul>
           </li>
           <li>
+
 
             <strong>Always Fresh Insights</strong>
             <ul>
