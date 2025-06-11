@@ -36,8 +36,6 @@ import AIPicks from "./Component/Pages/aipicks";
 import GameSelector from "./Component/Pages/test";
 import ManageSubscription from "./Component/Pages/msubscription";
 import MProfile from "./Component/Pages/mprofile";
-
-
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("accessToken");
   if (!token) {
@@ -45,23 +43,17 @@ const ProtectedRoute = ({ children }) => {
   }
   return children;
 };
+
 const OrderProtectedRoute = ({ children }) => {
   const location = useLocation();
   if (!location.state?.orderDetails) {
     return <Navigate to="/" replace />;
   }
-
   return children;
 };
 
 function Layout() {
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    setIsAuthenticated(!!token);
-  }, [location]);
 
   const hideHeaderFooter =
     location.pathname === "/signup" || location.pathname === "/signin";
@@ -74,20 +66,39 @@ function Layout() {
           {/* Home as default route */}
           <Route path="/" element={<Games />} />
 
+          {/* Public routes - NO AUTHENTICATION REQUIRED */}
           <Route path="/ourteam" element={<Ourteam />} />
-
-          {/* Updated routes with parameters */}
           <Route path="/allpicks" element={<AllPicks />} />
           <Route path="/allpicks/:adminId" element={<AllPicks />} />
           <Route path="/pickdetail" element={<Pickdetail />} />
-          <Route path="/pickdetail" element={<Pickdetail />} />
-          {/* <Route path="/aipicks" element={<AIPicks />} /> */}
-          {/* <Route path="/checkout" element={
-            <ProtectedRoute>
-              <Checkout />
-            </ProtectedRoute>
-          } /> */}
           <Route path="/cart" element={<Cart />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/newhome" element={<NFLGames />} />
+          <Route path="/checkout" element={<CheckoutNew />} />
+          <Route path="/newspage" element={<Newspage />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/futures" element={<Futures />} />
+          <Route path="/gameteamtab" element={<MatchesPage />} />
+          <Route path="/blog" element={<BlogList />} />
+          <Route path="/blog/:id" element={<BlogDetail />} />
+          <Route path="/promobanner" element={<PromoBanner />} />
+          <Route path="/gameselector" element={<GameSelector />} />
+          <Route path="/subscription" element={<ManageSubscription />} />
+          <Route path="/profile" element={<MProfile />} />
+
+          {/* PROTECTED ROUTES - AUTHENTICATION REQUIRED */}
+          <Route
+            path="/aipicks"
+            element={
+              <ProtectedRoute>
+                <AIPicks />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Order confirmation - special protection */}
           <Route
             path="/order-confirmation"
             element={
@@ -96,36 +107,12 @@ function Layout() {
               </OrderProtectedRoute>
             }
           />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signin" element={<Signin />} />
-          {/* <Route path="/checkout" element={<Checkout />} /> */}
-          <Route path="/newhome" element={<NFLGames />} />
-          <Route path="/Checkout" element={<CheckoutNew />} />
-          <Route path="/newspage" element={<Newspage />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/futures" element={<Futures />} />
-          <Route path="/gameteamtab" element={<MatchesPage />} />
-          <Route path="/blog" element={<BlogList />} />
-          <Route path="/blog/:id" element={<BlogDetail />} />
-          <Route path="PromoBanner" element={<homebanner />} />
-          <Route path="GameSelector" element={<test />} />
-          <Route path="/subscription" element={<ManageSubscription />} />
-          <Route path="/profile" element={<MProfile />} />
-          {/* <Route path="/teamstab" element={<Teamstab />} /> */}
-          
-          <Route
-            path="AIPicks"
-            element={
-              <ProtectedRoute>
-                <AIPicks />
-              </ProtectedRoute>
-            }
-          />
+
           {/* Redirect to home for any unmatched routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+      
       {/* ToastContainer for notifications */}
       <ToastContainer position="top-right" autoClose={3000} />
     </>
