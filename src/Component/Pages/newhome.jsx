@@ -114,7 +114,7 @@ const Games = () => {
     // "GAMES",
     "FUTURES",
      "BLOG",
-    "TEAM",
+    // "TEAM",
     "MONTHLY PROFITS"
     // "TEAMS",
     // "SCHEDULE",
@@ -1849,11 +1849,11 @@ const renderSportTable = (
                 <Futures currentSport={sport}/>
               </div>
             )}
-            {activeTab==="TEAM"&&(
+            {/* {activeTab==="TEAM"&&(
               <div>
                 <Ourteam/>
               </div>
-            )}
+            )} */}
  {activeTab === "BLOG" && (
               <div>
                 < BlogList/>
