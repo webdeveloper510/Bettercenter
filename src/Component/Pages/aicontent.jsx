@@ -49,6 +49,7 @@ const AIContent = () => {
             </ul>
           </li>
           <li>
+            
             <strong>Actionable Analytics</strong>
             <ul>
               <li><strong>What It Is:</strong>
@@ -61,7 +62,6 @@ const AIContent = () => {
             </ul>
           </li>
         </ol>
-
         <h4 className="mb-3">Seamless, Secure Access</h4>
         <ul className="mb-4">
           <li>
