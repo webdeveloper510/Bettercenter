@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import "../../Assets/css/aicontent.css"
-import inner_bg from "../../Assets/images/bg-aigame.jpg";
+import inner_bg from "../../Assets/images/bg-aigame11.png";
 
 
 const AIContent = () => {
