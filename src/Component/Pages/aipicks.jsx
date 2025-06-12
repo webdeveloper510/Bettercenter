@@ -94,7 +94,6 @@ const AIPicks = () => {
     setSelectedPackage(planId);
     setShowCheckoutModal(true);
   };
-
   const renderPricingCards = () => {
     if (plansLoading) {
       return (
