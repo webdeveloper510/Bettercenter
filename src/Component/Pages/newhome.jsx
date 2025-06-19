@@ -46,6 +46,7 @@ const getTimezoneFromIP = async () => {
     return timezone.trim();
   } catch (error) {
     console.error("Failed to get timezone from IP:", error);
+    return "America/New_York";
     return moment.tz.guess();
   }
 };
