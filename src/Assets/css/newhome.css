@@ -570,8 +570,14 @@ h1, h2, h3, .nba_odds {
 .game-time {
     font-size: 8px;
 }
+   .tabs button {
+        margin-bottom: 11px;
+        margin-right: 10px;
+        width: fit-content;
+        font-size: 13px;
+        padding: 7px 27px;
+    }
 }
-
 
 
 
