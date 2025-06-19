@@ -42,12 +42,14 @@ const BOOKMAKER_LOGOS = {
 const getTimezoneFromIP = async () => {
   try {
     const response = await fetch("https://ipapi.co/timezone/");
+    console.log("🚀 ~ getTimezoneFromIP ~ response:", response)
     const timezone = await response.text();
+    console.log("🚀 ~ getTimezoneFromIP ~ timezone:", timezone)
     return timezone.trim();
   } catch (error) {
     console.error("Failed to get timezone from IP:", error);
     return "America/New_York";
-    return moment.tz.guess();
+  
   }
 };
 const formatDateForAPI = async (date) => {
@@ -575,7 +577,7 @@ const updateChangeTimestamps = (newData, sportType = null) => {
         socket.close();
       }
 
-      const wsUrl = `ws://54.209.247.111:8000/ws/chat/`;
+      const wsUrl = `wss://api.bettorcenter.com/ws/chat/`;
       console.log(`Connecting to WebSocket: ${wsUrl}`);
 
       const newSocket = new WebSocket(wsUrl);
