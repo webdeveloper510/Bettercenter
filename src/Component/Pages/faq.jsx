@@ -59,7 +59,7 @@ const faqList = [
       <Container>
         <h2 className="text-center mt-5 our_team_head">FREQUENTLY ASKED QUESTIONS</h2>
         <p className="text-center team-subtitle">
-          Learn more about how to use OddsJam and improve your betting strategy with these common questions.
+          Learn more about how to use BettorCenter and improve your betting strategy with these common questions.
         </p>
 
         <Accordion defaultActiveKey="0" className="faq-section my-4">

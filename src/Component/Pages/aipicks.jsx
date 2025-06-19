@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import AIContent from './aicontent';
 import '../../Assets/css/aipicks.css'
 const stripePromise = loadStripe(process.env.REACT_APP_Stripe);
+console.log("🚀 ~ stripePromise:", stripePromise)
 
 const AIPicks = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -227,6 +228,7 @@ const CheckoutModal = ({ show, onHide, selectedPackage, planDetails, checkSubscr
   const [selectedPlan, setSelectedPlan] = useState(null);
 
   const stripe = useStripe();
+  console.log("🚀 ~ CheckoutModal ~ stripe:", stripe)
   const elements = useElements();
 
   useEffect(() => {
