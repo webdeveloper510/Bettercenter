@@ -93,6 +93,34 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch user profile" };
         }
     },
+     getFAQDetail: async () => {
+        try {
+            const response = await apiClient.get('/faq-data-get', {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Profile fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch user profile" };
+        }
+    },
+      getFreePicksDetail: async () => {
+        try {
+            const response = await apiClient.get('/get-free-pick-data', {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            return response.data;
+        } catch (error) {
+            console.error("Profile fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch user profile" };
+        }
+    },
     updateUserProfile: async (profileData) => {
         try {
             const token = getAccessToken();

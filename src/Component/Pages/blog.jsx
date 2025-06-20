@@ -4,7 +4,7 @@ import "../../Assets/css/blog.css";
 import blog1 from "../../Assets/images/blog1.jpg"; 
 import api from "../../api"; 
 
-const BlogList = () => {
+const BlogList = ({ currentSport }) => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,11 @@ const BlogList = () => {
     fetchBlogs();
   }, []);
 
-  const displayBlogs = blogs.length > 0 ? blogs : [];
+  const filteredBlogs =
+    currentSport === "ALL"
+      ? blogs
+      : blogs.filter((blog) => blog.sports_type === currentSport);
+
   return (
     <section className="backgroung_image">
       <h2 className="text-center our_team_head pb-4 py-5 gap-3">Blog</h2>
@@ -41,9 +45,13 @@ const BlogList = () => {
           <div className="text-center py-5">Loading blog posts...</div>
         ) : error ? (
           <div className="text-center py-5 text-danger">{error}</div>
+        ) : filteredBlogs.length === 0 ? (
+          <div className="text-center py-5 text-muted">
+            No blogs available for this game type.
+          </div>
         ) : (
           <div className="blog-page">
-            {displayBlogs.map((blog) => (
+            {filteredBlogs.map((blog) => (
               <div key={blog.id} className="blog-card">
                 <div className="blog-image">
                   {blog.file_url ? (
@@ -60,7 +68,8 @@ const BlogList = () => {
                 </div>
                 <div className="blog-content">
                   <p className="blog-meta">
-                {blog.sports_type}. {new Date(blog.uploaded_at).toLocaleDateString()}
+                    {blog.sports_type}.{" "}
+                    {new Date(blog.uploaded_at).toLocaleDateString()}
                   </p>
                   <h2 className="blog-title">{blog.title}</h2>
 

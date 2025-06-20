@@ -102,6 +102,14 @@ const Header = () => {
                   Bettor AI
                 </Link>
               </li>
+               <li className="nav-item">
+                <Link
+                  className={`nav-link ${location.pathname === "/freepicks" ? "active-link" : ""}`}
+                  to="/freepicks"
+                >
+                  Free Picks
+                </Link>
+              </li>
           </ul>
 
           <div className="header-content d-flex align-items-center gap-3">

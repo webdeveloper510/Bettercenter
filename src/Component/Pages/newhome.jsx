@@ -26,7 +26,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
 import InjuryModal from "./injuryModal";
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import BlogList from "./blog";
 import Ourteam from "./ourteam";
 import CalendarEmbed from "./monthly";
@@ -42,14 +42,13 @@ const BOOKMAKER_LOGOS = {
 const getTimezoneFromIP = async () => {
   try {
     const response = await fetch("https://ipapi.co/timezone/");
-    console.log("🚀 ~ getTimezoneFromIP ~ response:", response)
+    console.log("🚀 ~ getTimezoneFromIP ~ response:", response);
     const timezone = await response.text();
-    console.log("🚀 ~ getTimezoneFromIP ~ timezone:", timezone)
+    console.log("🚀 ~ getTimezoneFromIP ~ timezone:", timezone);
     return timezone.trim();
   } catch (error) {
     console.error("Failed to get timezone from IP:", error);
     return "America/New_York";
-  
   }
 };
 const formatDateForAPI = async (date) => {
@@ -116,13 +115,12 @@ const Games = () => {
     "OVERVIEW",
     // "GAMES",
     "FUTURES",
-     "BLOG",
+    "BLOG",
     // "TEAM",
-    "MONTHLY PROFITS"
+    "MONTHLY PROFITS",
     // "TEAMS",
     // "SCHEDULE",
     // "INJURIES",
-   
   ];
   const [gamesData, setGamesData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -162,58 +160,57 @@ const Games = () => {
     setSelectedDate(today);
   }, []);
 
-const handleEyeIconClick = async (homeTeam, awayTeam, sportType, e) => {
-  e.stopPropagation();
-  
-  setModalState({
-    isOpen: true,
-    teamName: `${awayTeam} vs ${homeTeam}`,
-    sport: sportType,
-    injuryData: { home_team_data: [], away_team_data: [] },
-    loading: true
-  });
+  const handleEyeIconClick = async (homeTeam, awayTeam, sportType, e) => {
+    e.stopPropagation();
 
-  try {
-    let injuryResponse = null;
-    const payload = {
-      home_team: homeTeam,
-      away_team: awayTeam
-    };
-    
-    switch (sportType.toLowerCase()) {
-      case 'nba':
-        injuryResponse = await api.getNbaSortedInjury(payload);
-        break;
-      case 'nhl':
-        injuryResponse = await api.getNhlSortedInjury(payload);
-        break;
-      case 'mlb':
-        injuryResponse = await api.getMlbSortedInjury(payload);
-        break;
-      default:
-        console.error('Unknown sport type:', sportType);
-        injuryResponse = { home_team_data: [], away_team_data: [] };
-    }
-    
-    setModalState(prev => ({
-      ...prev,
-      injuryData: {
-        home_team_data: injuryResponse?.home_team_data || [],
-        away_team_data: injuryResponse?.away_team_data || []
-      },
-      loading: false
-    }));
-
-  } catch (error) {
-    console.error('Error fetching injury data:', error);
-    
-    setModalState(prev => ({
-      ...prev,
+    setModalState({
+      isOpen: true,
+      teamName: `${awayTeam} vs ${homeTeam}`,
+      sport: sportType,
       injuryData: { home_team_data: [], away_team_data: [] },
-      loading: false
-    }));
-  }
-};
+      loading: true,
+    });
+
+    try {
+      let injuryResponse = null;
+      const payload = {
+        home_team: homeTeam,
+        away_team: awayTeam,
+      };
+
+      switch (sportType.toLowerCase()) {
+        case "nba":
+          injuryResponse = await api.getNbaSortedInjury(payload);
+          break;
+        case "nhl":
+          injuryResponse = await api.getNhlSortedInjury(payload);
+          break;
+        case "mlb":
+          injuryResponse = await api.getMlbSortedInjury(payload);
+          break;
+        default:
+          console.error("Unknown sport type:", sportType);
+          injuryResponse = { home_team_data: [], away_team_data: [] };
+      }
+
+      setModalState((prev) => ({
+        ...prev,
+        injuryData: {
+          home_team_data: injuryResponse?.home_team_data || [],
+          away_team_data: injuryResponse?.away_team_data || [],
+        },
+        loading: false,
+      }));
+    } catch (error) {
+      console.error("Error fetching injury data:", error);
+
+      setModalState((prev) => ({
+        ...prev,
+        injuryData: { home_team_data: [], away_team_data: [] },
+        loading: false,
+      }));
+    }
+  };
 
   const closeModal = () => {
     setModalState({
@@ -224,24 +221,24 @@ const handleEyeIconClick = async (homeTeam, awayTeam, sportType, e) => {
       loading: false,
     });
   };
-const formatOdds = (odds) => {
-  if (odds === null || odds === undefined) return "0";
-  if (typeof odds !== "string") odds = String(odds);
+  const formatOdds = (odds) => {
+    if (odds === null || odds === undefined) return "0";
+    if (typeof odds !== "string") odds = String(odds);
 
-  odds = odds.trim();
-  if (odds === "0 / 0" || odds === "-") return "0";
-  if (odds.includes("/")) {
-    return odds;
-  }
+    odds = odds.trim();
+    if (odds === "0 / 0" || odds === "-") return "0";
+    if (odds.includes("/")) {
+      return odds;
+    }
 
-  // ✅ Just this one line added:
-  if (/^[-+]?\d{2,}$/.test(odds)) return odds;
+    // ✅ Just this one line added:
+    if (/^[-+]?\d{2,}$/.test(odds)) return odds;
 
-  const numeric = parseFloat(odds);
-  if (isNaN(numeric)) return odds;
+    const numeric = parseFloat(odds);
+    if (isNaN(numeric)) return odds;
 
-  return numeric > 0 ? `+${numeric}` : `${numeric}`;
-};
+    return numeric > 0 ? `+${numeric}` : `${numeric}`;
+  };
 
   const [colorRefreshTrigger, setColorRefreshTrigger] = useState(0);
   useEffect(() => {
@@ -251,123 +248,121 @@ const formatOdds = (odds) => {
 
     return () => clearInterval(interval);
   }, []);
-const getCellColor = (key, value, sportType = null) => {
-  if (isFirstLoadRef.current) {
-    return "";
-  }
-
-  let changeKey;
-  if (sport === "ALL" && sportType) {
-    const keyParts = key.split('-');
-    const gameIndex = keyParts[0];
-    const fieldName = keyParts.slice(1).join('-');  
-    changeKey = `${sportType}-${gameIndex}-${fieldName}-${value}`
-  } else {
-    changeKey = `${key}-${value}`;
-  }
-  
-  const timestamp = changeTimestampsRef.current[changeKey];
- 
-  if (!timestamp) return "";
-
-  const secondsSinceChange = (Date.now() - timestamp) / 1000;
-
-
-  if (secondsSinceChange <= 20) {
-    return "changed-green";
-  } else if (secondsSinceChange <= 40) {
-    return "changed-yellow";
-  } else if (secondsSinceChange <= 60) {
-    return "changed-red";
-  }
-
-  return "";
-};
-const updateChangeTimestamps = (newData, sportType = null) => {
-
-  const oldData = previousDataRef.current;
-  const newTimestamps = { ...changeTimestampsRef.current };
-  const now = Date.now();
-  
-  if (sport === "ALL" && sportType) {
-    const sportKey =
-      sportType === "nba"
-        ? "nbaSpread"
-        : sportType === "nhl"
-        ? "nhlMoneyline"
-        : sportType === "mlb"
-        ? "mlbMoneyline"
-        : null;
-
-    if (!sportKey || !oldData || !oldData[sportKey]) {
-      return;
+  const getCellColor = (key, value, sportType = null) => {
+    if (isFirstLoadRef.current) {
+      return "";
     }
 
-    const oldSportData = oldData[sportKey];
-    newData.forEach((game, gameIndex) => {
-      if (!oldSportData[gameIndex]) {
+    let changeKey;
+    if (sport === "ALL" && sportType) {
+      const keyParts = key.split("-");
+      const gameIndex = keyParts[0];
+      const fieldName = keyParts.slice(1).join("-");
+      changeKey = `${sportType}-${gameIndex}-${fieldName}-${value}`;
+    } else {
+      changeKey = `${key}-${value}`;
+    }
+
+    const timestamp = changeTimestampsRef.current[changeKey];
+
+    if (!timestamp) return "";
+
+    const secondsSinceChange = (Date.now() - timestamp) / 1000;
+
+    if (secondsSinceChange <= 20) {
+      return "changed-green";
+    } else if (secondsSinceChange <= 40) {
+      return "changed-yellow";
+    } else if (secondsSinceChange <= 60) {
+      return "changed-red";
+    }
+
+    return "";
+  };
+  const updateChangeTimestamps = (newData, sportType = null) => {
+    const oldData = previousDataRef.current;
+    const newTimestamps = { ...changeTimestampsRef.current };
+    const now = Date.now();
+
+    if (sport === "ALL" && sportType) {
+      const sportKey =
+        sportType === "nba"
+          ? "nbaSpread"
+          : sportType === "nhl"
+          ? "nhlMoneyline"
+          : sportType === "mlb"
+          ? "mlbMoneyline"
+          : null;
+
+      if (!sportKey || !oldData || !oldData[sportKey]) {
         return;
       }
 
-      Object.keys(game).forEach((key) => {
-        const value = game[key];
-        if (value === undefined || value === null || value === "-") return;
-
-        const oldValue = oldSportData[gameIndex][key];
-
-        if (isValueChanged(oldValue, value)) {
-          const changeKey = `${sportType}-${gameIndex}-${key}-${value}`;
-          newTimestamps[changeKey] = now;
+      const oldSportData = oldData[sportKey];
+      newData.forEach((game, gameIndex) => {
+        if (!oldSportData[gameIndex]) {
+          return;
         }
+
+        Object.keys(game).forEach((key) => {
+          const value = game[key];
+          if (value === undefined || value === null || value === "-") return;
+
+          const oldValue = oldSportData[gameIndex][key];
+
+          if (isValueChanged(oldValue, value)) {
+            const changeKey = `${sportType}-${gameIndex}-${key}-${value}`;
+            newTimestamps[changeKey] = now;
+          }
+        });
       });
-    });
-  } else {
-    if (!Array.isArray(oldData)) {
-      return;
-    }
-
-    newData.forEach((game, gameIndex) => {
-      if (!oldData[gameIndex]) return;
-
-      Object.keys(game).forEach((key) => {
-        const value = game[key];
-        if (value === undefined || value === null || value === "-") return;
-
-        const oldValue = oldData[gameIndex][key];
-
-        if (isValueChanged(oldValue, value)) {
-          const changeKey = `${gameIndex}-${key}-${value}`;
-          newTimestamps[changeKey] = now;
-        }
-      });
-    });
-  }
-
-  Object.keys(newTimestamps).forEach((key) => {
-    if ((now - newTimestamps[key]) / 1000 > 60) {
-      delete newTimestamps[key];
-    }
-  });
-  changeTimestampsRef.current = newTimestamps;
-  if (sport === "ALL" && sportType) {
-    const sportKey =
-      sportType === "nba"
-        ? "nbaSpread"
-        : sportType === "nhl"
-        ? "nhlMoneyline"
-        : sportType === "mlb"
-        ? "mlbMoneyline"
-        : null;
-    if (sportKey) {
-      if (!previousDataRef.current) {
-        previousDataRef.current = {};
+    } else {
+      if (!Array.isArray(oldData)) {
+        return;
       }
-      previousDataRef.current[sportKey] = JSON.parse(JSON.stringify(newData));
+
+      newData.forEach((game, gameIndex) => {
+        if (!oldData[gameIndex]) return;
+
+        Object.keys(game).forEach((key) => {
+          const value = game[key];
+          if (value === undefined || value === null || value === "-") return;
+
+          const oldValue = oldData[gameIndex][key];
+
+          if (isValueChanged(oldValue, value)) {
+            const changeKey = `${gameIndex}-${key}-${value}`;
+            newTimestamps[changeKey] = now;
+          }
+        });
+      });
     }
-  } else {
-    previousDataRef.current = JSON.parse(JSON.stringify(newData));
-  }
-};
+
+    Object.keys(newTimestamps).forEach((key) => {
+      if ((now - newTimestamps[key]) / 1000 > 60) {
+        delete newTimestamps[key];
+      }
+    });
+    changeTimestampsRef.current = newTimestamps;
+    if (sport === "ALL" && sportType) {
+      const sportKey =
+        sportType === "nba"
+          ? "nbaSpread"
+          : sportType === "nhl"
+          ? "nhlMoneyline"
+          : sportType === "mlb"
+          ? "mlbMoneyline"
+          : null;
+      if (sportKey) {
+        if (!previousDataRef.current) {
+          previousDataRef.current = {};
+        }
+        previousDataRef.current[sportKey] = JSON.parse(JSON.stringify(newData));
+      }
+    } else {
+      previousDataRef.current = JSON.parse(JSON.stringify(newData));
+    }
+  };
 
   const getTomorrowDate = () => {
     const tomorrow = new Date();
@@ -518,50 +513,55 @@ const updateChangeTimestamps = (newData, sportType = null) => {
     }
   };
   const previousTabRef = useRef(activeTab);
-  useEffect(() => {
-    if (activeTab === "OVERVIEW" && previousTabRef.current !== "OVERVIEW") {
+useEffect(() => {
+  const allSportsAllowed = activeTab === "OVERVIEW" || activeTab === "BLOG";
+
+  if (allSportsAllowed && previousTabRef.current !== activeTab) {
     setSport("ALL");
     previousTabRef.current = activeTab;
     return;
   }
-  if (activeTab !== "OVERVIEW" && sport === "ALL") {
+
+  if (!allSportsAllowed && sport === "ALL") {
     setSport("NBA");
     previousTabRef.current = activeTab;
     return;
   }
 
   previousTabRef.current = activeTab;
-    isFirstLoadRef.current = true;
-    changeTimestampsRef.current = {};
-    previousDataRef.current = [];
-    initialDataFetchedRef.current = false;
+  isFirstLoadRef.current = true;
+  changeTimestampsRef.current = {};
+  previousDataRef.current = [];
+  initialDataFetchedRef.current = false;
 
-    const fetchAndUpdateData = async () => {
-      setLoading(true);
-      try {
-        if (sport === "ALL" && activeTab === "OVERVIEW") {
-          await fetchAllSportsData();
-        } else if (sport !== "ALL") {
-          await fetchData();
-        }
-      } finally {
-        setLoading(false);
+  const fetchAndUpdateData = async () => {
+    setLoading(true);
+    try {
+      if (sport === "ALL" && activeTab === "OVERVIEW") {
+        await fetchAllSportsData();
+      } else if (sport !== "ALL") {
+        await fetchData();
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchAndUpdateData();
+  fetchAndUpdateData();
 
-    let interval;
-    // if (!isCurrentDate()) {
-    //   interval = setInterval(fetchAndUpdateData, 60000);
-    // }
+  let interval;
+  // if (!isCurrentDate()) {
+  //   interval = setInterval(fetchAndUpdateData, 60000);
+  // }
 
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [sport, marketType, selectedDate, activeTab]);
+  return () => {
+    if (interval) {
+      clearInterval(interval);
+    }
+  };
+}, [sport, marketType, selectedDate, activeTab]);
+
+
   useEffect(() => {
     if (!isCurrentDate()) {
       if (socket) {
@@ -587,107 +587,107 @@ const updateChangeTimestamps = (newData, sportType = null) => {
         setIsSocketConnected(true);
       };
 
-newSocket.onmessage = (event) => {
-  try {
-    const data = JSON.parse(event.data);
-    console.log("📡 WebSocket data received:", data);
-    
-    if (sport === "ALL") {
-      setAllSportsData(prevAllSportsData => {
-        const updatedAllSportsData = { ...prevAllSportsData };
-        let hasUpdates = false;
-        
-        if (data.nba_default_data) {
-          const processedNbaDefault = processDefaultData({
-            data: data.nba_default_data,
-          });
-          updatedAllSportsData.nbaSpread = processedNbaDefault;
-          if (!isFirstLoadRef.current) {
-            updateChangeTimestamps(processedNbaDefault, "nba");
-          }
-          hasUpdates = true;
-        }
-        
-        if (data.nhl_default_data) {
-          const processedNhlDefault = processDefaultData({
-            data: data.nhl_default_data,
-          });
-          updatedAllSportsData.nhlMoneyline = processedNhlDefault;
-          if (!isFirstLoadRef.current) {
-            updateChangeTimestamps(processedNhlDefault, "nhl");
-          }
-          hasUpdates = true;
-        }
-        
-        if (data.mlb_default_data) {
-          const processedMlbDefault = processDefaultData({
-            data: data.mlb_default_data,
-          });
-          updatedAllSportsData.mlbMoneyline = processedMlbDefault;
-          if (!isFirstLoadRef.current) {
-            updateChangeTimestamps(processedMlbDefault, "mlb");
-          }
-          hasUpdates = true;
-        }
-  
-        return hasUpdates ? updatedAllSportsData : prevAllSportsData;
-      });
-      return;
-    }
-    let processedData = [];
+      newSocket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          console.log("📡 WebSocket data received:", data);
 
-    if (sport === "NBA") {
-      if (data.nba_money_data && marketType === "MONEYLINE") {
-        processedData = processMoneylineData({
-          data: data.nba_money_data,
-        });
-      } else if (data.nba_spread_data && marketType === "SPREAD") {
-        processedData = processSpreadData({ data: data.nba_spread_data });
-      } else if (data.nba_total_data && marketType === "TOTAL") {
-        processedData = processTotalData({ data: data.nba_total_data });
-      } else if (data.nba_default_data && marketType === "DEFAULT") {
-        processedData = processDefaultData({
-          data: data.nba_default_data,
-        });
-      }
-    } else if (sport === "MLB") {
-      if (data.mlb_money_data && marketType === "MONEYLINE") {
-        processedData = processMoneylineData({
-          data: data.mlb_money_data,
-        });
-      } else if (data.mlb_spread_data && marketType === "SPREAD") {
-        processedData = processSpreadData({ data: data.mlb_spread_data });
-      } else if (data.mlb_total_data && marketType === "TOTAL") {
-        processedData = processTotalData({ data: data.mlb_total_data });
-      } else if (data.mlb_default_data && marketType === "DEFAULT") {
-        processedData = processDefaultData({
-          data: data.mlb_default_data,
-        });
-      }
-    } else if (sport === "NHL") {
-      if (data.nhl_money_data && marketType === "MONEYLINE") {
-        processedData = processMoneylineData({
-          data: data.nhl_money_data,
-        });
-      } else if (data.nhl_spread_data && marketType === "SPREAD") {
-        processedData = processSpreadData({ data: data.nhl_spread_data });
-      } else if (data.nhl_total_data && marketType === "TOTAL") {
-        processedData = processTotalData({ data: data.nhl_total_data });
-      } else if (data.nhl_default_data && marketType === "DEFAULT") {
-        processedData = processDefaultData({
-          data: data.nhl_default_data,
-        });
-      }
-    }
+          if (sport === "ALL") {
+            setAllSportsData((prevAllSportsData) => {
+              const updatedAllSportsData = { ...prevAllSportsData };
+              let hasUpdates = false;
 
-    if (processedData && processedData.length > 0) {
-      updateChangeTimestamps(processedData);
-      setGamesData(processedData);
-    }
-  } catch (error) {
-    console.error("Error processing WebSocket data:", error);
-  }
-};
+              if (data.nba_default_data) {
+                const processedNbaDefault = processDefaultData({
+                  data: data.nba_default_data,
+                });
+                updatedAllSportsData.nbaSpread = processedNbaDefault;
+                if (!isFirstLoadRef.current) {
+                  updateChangeTimestamps(processedNbaDefault, "nba");
+                }
+                hasUpdates = true;
+              }
+
+              if (data.nhl_default_data) {
+                const processedNhlDefault = processDefaultData({
+                  data: data.nhl_default_data,
+                });
+                updatedAllSportsData.nhlMoneyline = processedNhlDefault;
+                if (!isFirstLoadRef.current) {
+                  updateChangeTimestamps(processedNhlDefault, "nhl");
+                }
+                hasUpdates = true;
+              }
+
+              if (data.mlb_default_data) {
+                const processedMlbDefault = processDefaultData({
+                  data: data.mlb_default_data,
+                });
+                updatedAllSportsData.mlbMoneyline = processedMlbDefault;
+                if (!isFirstLoadRef.current) {
+                  updateChangeTimestamps(processedMlbDefault, "mlb");
+                }
+                hasUpdates = true;
+              }
+
+              return hasUpdates ? updatedAllSportsData : prevAllSportsData;
+            });
+            return;
+          }
+          let processedData = [];
+
+          if (sport === "NBA") {
+            if (data.nba_money_data && marketType === "MONEYLINE") {
+              processedData = processMoneylineData({
+                data: data.nba_money_data,
+              });
+            } else if (data.nba_spread_data && marketType === "SPREAD") {
+              processedData = processSpreadData({ data: data.nba_spread_data });
+            } else if (data.nba_total_data && marketType === "TOTAL") {
+              processedData = processTotalData({ data: data.nba_total_data });
+            } else if (data.nba_default_data && marketType === "DEFAULT") {
+              processedData = processDefaultData({
+                data: data.nba_default_data,
+              });
+            }
+          } else if (sport === "MLB") {
+            if (data.mlb_money_data && marketType === "MONEYLINE") {
+              processedData = processMoneylineData({
+                data: data.mlb_money_data,
+              });
+            } else if (data.mlb_spread_data && marketType === "SPREAD") {
+              processedData = processSpreadData({ data: data.mlb_spread_data });
+            } else if (data.mlb_total_data && marketType === "TOTAL") {
+              processedData = processTotalData({ data: data.mlb_total_data });
+            } else if (data.mlb_default_data && marketType === "DEFAULT") {
+              processedData = processDefaultData({
+                data: data.mlb_default_data,
+              });
+            }
+          } else if (sport === "NHL") {
+            if (data.nhl_money_data && marketType === "MONEYLINE") {
+              processedData = processMoneylineData({
+                data: data.nhl_money_data,
+              });
+            } else if (data.nhl_spread_data && marketType === "SPREAD") {
+              processedData = processSpreadData({ data: data.nhl_spread_data });
+            } else if (data.nhl_total_data && marketType === "TOTAL") {
+              processedData = processTotalData({ data: data.nhl_total_data });
+            } else if (data.nhl_default_data && marketType === "DEFAULT") {
+              processedData = processDefaultData({
+                data: data.nhl_default_data,
+              });
+            }
+          }
+
+          if (processedData && processedData.length > 0) {
+            updateChangeTimestamps(processedData);
+            setGamesData(processedData);
+          }
+        } catch (error) {
+          console.error("Error processing WebSocket data:", error);
+        }
+      };
       newSocket.onerror = (error) => {
         console.error("WebSocket error:", error);
         setIsSocketConnected(false);
@@ -709,82 +709,84 @@ newSocket.onmessage = (event) => {
       }
     };
   }, [sport, marketType, selectedDate, activeTab]);
-const processSpreadData = (apiData, sport) => {
-  if (!apiData || !apiData.data) return [];
+  const processSpreadData = (apiData, sport) => {
+    if (!apiData || !apiData.data) return [];
 
-  const processedGames = [];
+    const processedGames = [];
 
-  Object.keys(apiData.data).forEach((spreadKey) => {
-    const spreadObject = apiData.data[spreadKey];
-    if (
-      spreadObject &&
-      typeof spreadObject === "object" &&
-      Object.keys(spreadObject).length === 2
-    ) {
-      const [value1, value2] = Object.keys(spreadObject);
-      const data1 = spreadObject[value1];
-      const data2 = spreadObject[value2];
+    Object.keys(apiData.data).forEach((spreadKey) => {
+      const spreadObject = apiData.data[spreadKey];
+      if (
+        spreadObject &&
+        typeof spreadObject === "object" &&
+        Object.keys(spreadObject).length === 2
+      ) {
+        const [value1, value2] = Object.keys(spreadObject);
+        const data1 = spreadObject[value1];
+        const data2 = spreadObject[value2];
 
-      let homeTeamData, awayTeamData, homeSpread, awaySpread;
-      const isData1Home = !!data1["Home Team"];
-      const isData2Home = !!data2["Home Team"];
+        let homeTeamData, awayTeamData, homeSpread, awaySpread;
+        const isData1Home = !!data1["Home Team"];
+        const isData2Home = !!data2["Home Team"];
 
-      if (isData1Home && !isData2Home) {
-        homeTeamData = data1;
-        awayTeamData = data2;
-        homeSpread = value1;
-        awaySpread = value2;
-      } else if (!isData1Home && isData2Home) {
-        homeTeamData = data2;
-        awayTeamData = data1;
-        homeSpread = value2;
-        awaySpread = value1;
-      } else if (data1["Home Team"] && data2["Home Team"]) {
-        homeTeamData = data1;
-        awayTeamData = data2;
-        homeSpread = value1;
-        awaySpread = value2;
-      } else {
-        return;
+        if (isData1Home && !isData2Home) {
+          homeTeamData = data1;
+          awayTeamData = data2;
+          homeSpread = value1;
+          awaySpread = value2;
+        } else if (!isData1Home && isData2Home) {
+          homeTeamData = data2;
+          awayTeamData = data1;
+          homeSpread = value2;
+          awaySpread = value1;
+        } else if (data1["Home Team"] && data2["Home Team"]) {
+          homeTeamData = data1;
+          awayTeamData = data2;
+          homeSpread = value1;
+          awaySpread = value2;
+        } else {
+          return;
+        }
+
+        const game = {
+          homeTeam: homeTeamData["Home Team"] || "",
+          awayTeam: awayTeamData["Away Team"] || "",
+          homeSpread,
+          awaySpread,
+          homePitcher: homeTeamData["Home Pitcher"] || "N/A",
+          awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
+          homeOpen: formatOdds(homeTeamData["Home Open"]),
+          awayOpen: formatOdds(awayTeamData["Away Open"]),
+          homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
+          awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
+          date: homeTeamData?.Date || awayTeamData?.Date || "",
+        };
+
+        Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
+          const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+
+          const homeOddsKey = `Home ${apiBookmaker}`;
+          const awayOddsKey = `Away ${apiBookmaker}`;
+          const rawHomeOdds = homeTeamData[homeOddsKey];
+          const rawAwayOdds = awayTeamData[awayOddsKey];
+
+          if (rawHomeOdds && rawHomeOdds !== 0) {
+            game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
+              formatOdds(rawHomeOdds);
+          }
+
+          if (rawAwayOdds && rawAwayOdds !== 0) {
+            game[`${componentBookmaker.toLowerCase()}AwayOdds`] =
+              formatOdds(rawAwayOdds);
+          }
+        });
+
+        processedGames.push(game);
       }
+    });
 
-      const game = {
-        homeTeam: homeTeamData["Home Team"] || "",
-        awayTeam: awayTeamData["Away Team"] || "",
-        homeSpread,
-        awaySpread,
-        homePitcher: homeTeamData["Home Pitcher"] || "N/A",
-        awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
-        homeOpen: formatOdds(homeTeamData["Home Open"]),
-        awayOpen: formatOdds(awayTeamData["Away Open"]),
-        homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
-        awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
-        date: homeTeamData?.Date || awayTeamData?.Date || "",
-      };
-
-      Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
-        const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
-
-        const homeOddsKey = `Home ${apiBookmaker}`;
-        const awayOddsKey = `Away ${apiBookmaker}`;
-        const rawHomeOdds = homeTeamData[homeOddsKey];
-        const rawAwayOdds = awayTeamData[awayOddsKey];
-
-        if (rawHomeOdds && rawHomeOdds !== 0) {
-          game[`${componentBookmaker.toLowerCase()}HomeOdds`] = formatOdds(rawHomeOdds);
-        }
-
-        if (rawAwayOdds && rawAwayOdds !== 0) {
-          game[`${componentBookmaker.toLowerCase()}AwayOdds`] = formatOdds(rawAwayOdds);
-        }
-      });
-
-      processedGames.push(game);
-    }
-  });
-
-  return processedGames;
-};
+    return processedGames;
+  };
 
   const processMoneylineData = (apiData) => {
     if (!apiData || !apiData.data) return [];
@@ -883,92 +885,92 @@ const processSpreadData = (apiData, sport) => {
 
     return processedGames;
   };
-const processTotalData = (apiData) => {
-  if (!apiData || !apiData.data) return [];
+  const processTotalData = (apiData) => {
+    if (!apiData || !apiData.data) return [];
 
-  const processedGames = [];
+    const processedGames = [];
 
-  Object.keys(apiData.data).forEach((gameKey) => {
-    if (
-      gameKey.includes("over_under") &&
-      typeof apiData.data[gameKey] === "object"
-    ) {
-      const gameEntry = apiData.data[gameKey];
-      const lineKeys = Object.keys(gameEntry);
-      
-      if (lineKeys.length === 2) {
-        const overKey = lineKeys.find((key) => key.includes("o"));
-        const underKey = lineKeys.find((key) => key.includes("u"));
+    Object.keys(apiData.data).forEach((gameKey) => {
+      if (
+        gameKey.includes("over_under") &&
+        typeof apiData.data[gameKey] === "object"
+      ) {
+        const gameEntry = apiData.data[gameKey];
+        const lineKeys = Object.keys(gameEntry);
 
-        if (overKey && underKey) {
-          const overData = gameEntry[overKey];
-          const underData = gameEntry[underKey];
+        if (lineKeys.length === 2) {
+          const overKey = lineKeys.find((key) => key.includes("o"));
+          const underKey = lineKeys.find((key) => key.includes("u"));
 
-          let homeTeamData, awayTeamData;
+          if (overKey && underKey) {
+            const overData = gameEntry[overKey];
+            const underData = gameEntry[underKey];
 
-          if (overData["Home Team"] && underData["Away Team"]) {
-            homeTeamData = overData;
-            awayTeamData = underData;
-          } else {
-            homeTeamData = underData;
-            awayTeamData = overData;
+            let homeTeamData, awayTeamData;
+
+            if (overData["Home Team"] && underData["Away Team"]) {
+              homeTeamData = overData;
+              awayTeamData = underData;
+            } else {
+              homeTeamData = underData;
+              awayTeamData = overData;
+            }
+
+            const awayTeam = awayTeamData["Away Team"];
+            const homeTeam = homeTeamData["Home Team"];
+            const overValue = overKey;
+            const underValue = underKey;
+
+            // Create a unique game object for each total line
+            const game = {
+              homeTeam: homeTeam,
+              awayTeam: awayTeam,
+              overValue: overValue,
+              underValue: underValue,
+              homePitcher: homeTeamData["Home Pitcher"] || "N/A",
+              awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
+              homeOpen: formatOdds(homeTeamData["Home Open"]),
+              awayOpen: formatOdds(awayTeamData["Away Open"]),
+              homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
+              awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
+              date: homeTeamData?.Date || awayTeamData?.Date || "",
+            };
+
+            // Add bookmaker odds
+            Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
+              const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
+
+              const awayOddsKey = `Away ${apiBookmaker}`;
+              const homeOddsKey = `Home ${apiBookmaker}`;
+
+              if (
+                awayTeamData[awayOddsKey] !== undefined &&
+                awayTeamData[awayOddsKey] !== 0 &&
+                awayTeamData[awayOddsKey] !== "0"
+              ) {
+                game[`${componentBookmaker.toLowerCase()}AwayOdds`] =
+                  formatOdds(awayTeamData[awayOddsKey]);
+              }
+
+              if (
+                homeTeamData[homeOddsKey] !== undefined &&
+                homeTeamData[homeOddsKey] !== 0 &&
+                homeTeamData[homeOddsKey] !== "0"
+              ) {
+                game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
+                  formatOdds(homeTeamData[homeOddsKey]);
+              }
+            });
+
+            // Push each game as a separate entry
+            processedGames.push(game);
           }
-
-          const awayTeam = awayTeamData["Away Team"];
-          const homeTeam = homeTeamData["Home Team"];
-          const overValue = overKey;
-          const underValue = underKey;
-
-          // Create a unique game object for each total line
-          const game = {
-            homeTeam: homeTeam,
-            awayTeam: awayTeam,
-            overValue: overValue,
-            underValue: underValue,
-            homePitcher: homeTeamData["Home Pitcher"] || "N/A",
-            awayPitcher: awayTeamData["Away Pitcher"] || "N/A",
-            homeOpen: formatOdds(homeTeamData["Home Open"]),
-            awayOpen: formatOdds(awayTeamData["Away Open"]),
-            homeBestOdds: formatOdds(homeTeamData["Home Best odds"]),
-            awayBestOdds: formatOdds(awayTeamData["Away Best odds"]),
-            date: homeTeamData?.Date || awayTeamData?.Date || "",
-          };
-
-          // Add bookmaker odds
-          Object.keys(BOOKMAKER_MAP).forEach((apiBookmaker) => {
-            const componentBookmaker = BOOKMAKER_MAP[apiBookmaker];
-
-            const awayOddsKey = `Away ${apiBookmaker}`;
-            const homeOddsKey = `Home ${apiBookmaker}`;
-
-            if (
-              awayTeamData[awayOddsKey] !== undefined &&
-              awayTeamData[awayOddsKey] !== 0 &&
-              awayTeamData[awayOddsKey] !== "0"
-            ) {
-              game[`${componentBookmaker.toLowerCase()}AwayOdds`] =
-                formatOdds(awayTeamData[awayOddsKey]);
-            }
-
-            if (
-              homeTeamData[homeOddsKey] !== undefined &&
-              homeTeamData[homeOddsKey] !== 0 &&
-              homeTeamData[homeOddsKey] !== "0"
-            ) {
-              game[`${componentBookmaker.toLowerCase()}HomeOdds`] =
-                formatOdds(homeTeamData[homeOddsKey]);
-            }
-          });
-
-          // Push each game as a separate entry
-          processedGames.push(game);
         }
       }
-    }
-  });
+    });
 
-  return processedGames;
-};
+    return processedGames;
+  };
 
   const processDefaultData = (apiData) => {
     if (!apiData || !Array.isArray(apiData.data)) return [];
@@ -1023,64 +1025,63 @@ const processTotalData = (apiData) => {
 
     return processedGames;
   };
-const fetchAllSportsData = async () => {
-  setLoading(true);
-  setError(null);
+  const fetchAllSportsData = async () => {
+    setLoading(true);
+    setError(null);
 
-  try {
-    const formattedDate = await formatDateForAPI(selectedDate);
-    
-    const nbaDefaultData = await api.getNbaDefaultData(
-      formattedDate.date,
-      formattedDate.timezone
-    );
-    const processedNbaDefault = processDefaultData(nbaDefaultData, "NBA");
-    
-    const nhlDefaultData = await api.getNhlDefaultData(
-      formattedDate.date,
-      formattedDate.timezone
-    );
-    const processedNhlDefault = processDefaultData(nhlDefaultData, "NHL");
-    
-    const mlbDefaultData = await api.getMlbDefaultData(
-      formattedDate.date,
-      formattedDate.timezone
-    );
-    const processedMlbDefault = processDefaultData(mlbDefaultData, "MLB");
-    // Initialize previousDataRef for first load
-    if (isFirstLoadRef.current) {
-      previousDataRef.current = {
-        nbaSpread: JSON.parse(JSON.stringify(processedNbaDefault)),
-        nhlMoneyline: JSON.parse(JSON.stringify(processedNhlDefault)),
-        mlbMoneyline: JSON.parse(JSON.stringify(processedMlbDefault)),
+    try {
+      const formattedDate = await formatDateForAPI(selectedDate);
+
+      const nbaDefaultData = await api.getNbaDefaultData(
+        formattedDate.date,
+        formattedDate.timezone
+      );
+      const processedNbaDefault = processDefaultData(nbaDefaultData, "NBA");
+
+      const nhlDefaultData = await api.getNhlDefaultData(
+        formattedDate.date,
+        formattedDate.timezone
+      );
+      const processedNhlDefault = processDefaultData(nhlDefaultData, "NHL");
+
+      const mlbDefaultData = await api.getMlbDefaultData(
+        formattedDate.date,
+        formattedDate.timezone
+      );
+      const processedMlbDefault = processDefaultData(mlbDefaultData, "MLB");
+      // Initialize previousDataRef for first load
+      if (isFirstLoadRef.current) {
+        previousDataRef.current = {
+          nbaSpread: JSON.parse(JSON.stringify(processedNbaDefault)),
+          nhlMoneyline: JSON.parse(JSON.stringify(processedNhlDefault)),
+          mlbMoneyline: JSON.parse(JSON.stringify(processedMlbDefault)),
+        };
+        isFirstLoadRef.current = false;
+      } else {
+        updateChangeTimestamps(processedNbaDefault, "nba");
+        updateChangeTimestamps(processedNhlDefault, "nhl");
+        updateChangeTimestamps(processedMlbDefault, "mlb");
+      }
+
+      const newAllSportsData = {
+        nbaSpread: processedNbaDefault,
+        nhlMoneyline: processedNhlDefault,
+        mlbMoneyline: processedMlbDefault,
       };
-      isFirstLoadRef.current = false;
-    } else {
-      updateChangeTimestamps(processedNbaDefault, "nba");
-      updateChangeTimestamps(processedNhlDefault, "nhl");
-      updateChangeTimestamps(processedMlbDefault, "mlb");
+
+      setAllSportsData(newAllSportsData);
+    } catch (err) {
+      console.error("❌ Error fetching all sports data:", err);
+      setError("Failed to fetch all sports data. Please try again later.");
+      setAllSportsData({
+        nbaSpread: [],
+        nhlMoneyline: [],
+        mlbMoneyline: [],
+      });
+    } finally {
+      setLoading(false);
     }
-
-    const newAllSportsData = {
-      nbaSpread: processedNbaDefault,
-      nhlMoneyline: processedNhlDefault,
-      mlbMoneyline: processedMlbDefault,
-    };
-
-    setAllSportsData(newAllSportsData);
-    
-  } catch (err) {
-    console.error("❌ Error fetching all sports data:", err);
-    setError("Failed to fetch all sports data. Please try again later.");
-    setAllSportsData({
-      nbaSpread: [],
-      nhlMoneyline: [],
-      mlbMoneyline: [],
-    });
-  } finally {
-    setLoading(false);
-  }
-};
+  };
   const handleSportChange = (e) => {
     setSport(e.target.value);
   };
@@ -1096,230 +1097,230 @@ const fetchAllSportsData = async () => {
     }
     return odds > 0;
   };
-const renderSportTable = (
-  sportName,
-  marketTypeName,
-  gamesData,
-  tableTitle,
-) => {
-  const sportTypeKey = sportName.toLowerCase();
+  const renderSportTable = (
+    sportName,
+    marketTypeName,
+    gamesData,
+    tableTitle
+  ) => {
+    const sportTypeKey = sportName.toLowerCase();
 
-  return (
-    <div
-      key={`${sportName}-${marketTypeName}`}
-      className="sport-table-section mb-5"
-    >
-      <h2 className="sport-table-title mb-3">{tableTitle}</h2>
-      <div className="betting-table-wrapper table_flow">
-        <table className="betting-table">
-          <thead>
-            <tr>
-              <th className="matchup_td">MATCHUP</th>
-              {sportName === "MLB" && <th>PITCHERS</th>}
-              {/* COMMENTED OUT - OPEN, BEST ODDS, AI PICKS COLUMNS */}
-              <th>OPEN</th>
-              <th>BEST ODDS</th>
-              <th>AI PICKS</th>
-              {Object.entries(BOOKMAKER_LOGOS).map(([name, { logo }], i) => (
-                <th key={i}>
-                  <div className="logo-header">
-                    <img src={logo} alt={name} className="bookmaker-logo" />
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {gamesData.length > 0 ? (
-              gamesData.map((game, index) => (
-                <tr
-                  key={index}
-                  className={
-                    bookmarkedGames.includes(index) ? "bookmarked-row" : ""
-                  }
-                  onClick={() => toggleBookmark(index)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <td>
-                    <div className="game-time">
-                      {game.date} · {game.time} · {sportName}
+    return (
+      <div
+        key={`${sportName}-${marketTypeName}`}
+        className="sport-table-section mb-5"
+      >
+        <h2 className="sport-table-title mb-3">{tableTitle}</h2>
+        <div className="betting-table-wrapper table_flow">
+          <table className="betting-table">
+            <thead>
+              <tr>
+                <th className="matchup_td">MATCHUP</th>
+                {sportName === "MLB" && <th>PITCHERS</th>}
+                {/* COMMENTED OUT - OPEN, BEST ODDS, AI PICKS COLUMNS */}
+                <th>OPEN</th>
+                <th>BEST ODDS</th>
+                <th>AI PICKS</th>
+                {Object.entries(BOOKMAKER_LOGOS).map(([name, { logo }], i) => (
+                  <th key={i}>
+                    <div className="logo-header">
+                      <img src={logo} alt={name} className="bookmaker-logo" />
                     </div>
-
-                    <div className="team-name">{game.awayTeam}</div>
-                    
-                    <div className="team-name">{game.homeTeam}
-                       <FontAwesomeIcon
-                                    icon={faInfoCircle}
-                                    title="View Injuries"
-                                    style={{
-                                     cursor: "pointer",
-                                        color: "#007bff",
-                                        position: "absolute",
-                                        right: "15px",
-                                    }}
-                                    onClick={(e) =>
-                                      handleEyeIconClick(
-                                        game.homeTeam,
-                                        game.awayTeam,
-                                        sportName, 
-                                        e
-                                      )
-                                    }
-                                  />
-                    </div>
-                    
-                  </td>
-                  {sportName === "MLB" && (
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {gamesData.length > 0 ? (
+                gamesData.map((game, index) => (
+                  <tr
+                    key={index}
+                    className={
+                      bookmarkedGames.includes(index) ? "bookmarked-row" : ""
+                    }
+                    onClick={() => toggleBookmark(index)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <td>
-                      <div className="pitcher-name">
-                        {game.awayPitcher || "N/A"}
+                      <div className="game-time">
+                        {game.date} · {game.time} · {sportName}
                       </div>
-                      <div className="pitcher-name">
-                        {game.homePitcher || "N/A"}
+
+                      <div className="team-name">{game.awayTeam}</div>
+
+                      <div className="team-name">
+                        {game.homeTeam}
+                        <FontAwesomeIcon
+                          icon={faInfoCircle}
+                          title="View Injuries"
+                          style={{
+                            cursor: "pointer",
+                            color: "#007bff",
+                            position: "absolute",
+                            right: "15px",
+                          }}
+                          onClick={(e) =>
+                            handleEyeIconClick(
+                              game.homeTeam,
+                              game.awayTeam,
+                              sportName,
+                              e
+                            )
+                          }
+                        />
                       </div>
                     </td>
-                  )}
-                  {/* COMMENTED OUT - OPEN ODDS COLUMN */}
-                  <td>
-                    <div
-                      className={`odd_${
-                        isPositiveOdds(game.awayOpen) ? "y" : "g"
-                      } ${getCellColor(
-                        `${index}-awayOpen`,
-                        game.awayOpen,
-                        sportTypeKey
-                      )}`}
-                    >
-                      {game.awayOpen || "0"}
-                    </div>
-                    <div
-                      className={`odd_${
-                        isPositiveOdds(game.homeOpen) ? "y" : "n"
-                      } ${getCellColor(
-                        `${index}-homeOpen`,
-                        game.homeOpen,
-                        sportTypeKey
-                      )}`}
-                    >
-                      {game.homeOpen || "0"}
-                    </div>
-                  </td>
-                  {/* COMMENTED OUT - BEST ODDS COLUMN */}
-                  <td>
-                    <div
-                      className={`odd_${
-                        isPositiveOdds(game.awayBestOdds) ? "y" : "n"
-                      } ${getCellColor(
-                        `${index}-awayBestOdds`,
-                        game.awayBestOdds,
-                        sportTypeKey
-                      )}`}
-                    >
-                      {game.awayBestOdds || "0"}
-                    </div>
-                    <div
-                      className={`odd_${
-                        isPositiveOdds(game.homeBestOdds) ? "y" : "n"
-                      } ${getCellColor(
-                        `${index}-homeBestOdds`,
-                        game.homeBestOdds,
-                        sportTypeKey
-                      )}`}
-                    >
-                      {game.homeBestOdds || "0"}
-                    </div>
-                  </td>
-                  {/* COMMENTED OUT - AI PICKS COLUMN */}
-                  <td>
-                    <button
-                      className="ai-picks-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAiPicksClick(index);
-                      }}
-                      style={{
-                        background:
-                          "linear-gradient(45deg, #667eea 0%, #764ba2 100%)",
-                        color: "white",
-                        border: "none",
-                        padding: "8px 16px",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        fontSize: "12px",
-                        fontWeight: "600",
-                        textTransform: "uppercase",
-                        transition: "all 0.3s ease",
-                      }}
-                      onMouseOver={(e) => {
-                        e.target.style.transform = "translateY(-2px)";
-                        e.target.style.boxShadow =
-                          "0 4px 12px rgba(102, 126, 234, 0.4)";
-                      }}
-                      onMouseOut={(e) => {
-                        e.target.style.transform = "translateY(0)";
-                        e.target.style.boxShadow = "none";
-                      }}
-                    >
-                      Click Here
-                    </button>
-                  </td>
-                  {Object.keys(BOOKMAKER_LOGOS).map((bookmaker, i) => {
-                    const bookmakerKey = bookmaker.toLowerCase();
-                    const homeOddsKey = `${bookmakerKey}HomeOdds`;
-                    const awayOddsKey = `${bookmakerKey}AwayOdds`;
-                    return (
-                      <td key={i}>
-                        <div
-                          className={`odd ${
-                            isPositiveOdds(game[awayOddsKey])
-                              ? "positive odd_red"
-                              : "negative odd_n"
-                          } ${getCellColor(
-                            `${index}-${awayOddsKey}`,
-                            game[awayOddsKey],
-                            sportTypeKey
-                          )}`}
-                        >
-                          {game[awayOddsKey] || "0"}
+                    {sportName === "MLB" && (
+                      <td>
+                        <div className="pitcher-name">
+                          {game.awayPitcher || "N/A"}
                         </div>
-                        <div
-                          className={`odd ${
-                            isPositiveOdds(game[homeOddsKey])
-                              ? "positive odd_red"
-                              : "negative odd_n"
-                          } ${getCellColor(
-                            `${index}-${homeOddsKey}`,
-                            game[homeOddsKey],
-                            sportTypeKey
-                          )}`}
-                        >
-                          {game[homeOddsKey] || "0"}
+                        <div className="pitcher-name">
+                          {game.homePitcher || "N/A"}
                         </div>
                       </td>
-                    );
-                  })}
+                    )}
+                    {/* COMMENTED OUT - OPEN ODDS COLUMN */}
+                    <td>
+                      <div
+                        className={`odd_${
+                          isPositiveOdds(game.awayOpen) ? "y" : "g"
+                        } ${getCellColor(
+                          `${index}-awayOpen`,
+                          game.awayOpen,
+                          sportTypeKey
+                        )}`}
+                      >
+                        {game.awayOpen || "0"}
+                      </div>
+                      <div
+                        className={`odd_${
+                          isPositiveOdds(game.homeOpen) ? "y" : "n"
+                        } ${getCellColor(
+                          `${index}-homeOpen`,
+                          game.homeOpen,
+                          sportTypeKey
+                        )}`}
+                      >
+                        {game.homeOpen || "0"}
+                      </div>
+                    </td>
+                    {/* COMMENTED OUT - BEST ODDS COLUMN */}
+                    <td>
+                      <div
+                        className={`odd_${
+                          isPositiveOdds(game.awayBestOdds) ? "y" : "n"
+                        } ${getCellColor(
+                          `${index}-awayBestOdds`,
+                          game.awayBestOdds,
+                          sportTypeKey
+                        )}`}
+                      >
+                        {game.awayBestOdds || "0"}
+                      </div>
+                      <div
+                        className={`odd_${
+                          isPositiveOdds(game.homeBestOdds) ? "y" : "n"
+                        } ${getCellColor(
+                          `${index}-homeBestOdds`,
+                          game.homeBestOdds,
+                          sportTypeKey
+                        )}`}
+                      >
+                        {game.homeBestOdds || "0"}
+                      </div>
+                    </td>
+                    {/* COMMENTED OUT - AI PICKS COLUMN */}
+                    <td>
+                      <button
+                        className="ai-picks-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAiPicksClick(index);
+                        }}
+                        style={{
+                          background:
+                            "linear-gradient(45deg, #667eea 0%, #764ba2 100%)",
+                          color: "white",
+                          border: "none",
+                          padding: "8px 16px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          fontSize: "12px",
+                          fontWeight: "600",
+                          textTransform: "uppercase",
+                          transition: "all 0.3s ease",
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.transform = "translateY(-2px)";
+                          e.target.style.boxShadow =
+                            "0 4px 12px rgba(102, 126, 234, 0.4)";
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.transform = "translateY(0)";
+                          e.target.style.boxShadow = "none";
+                        }}
+                      >
+                        Click Here
+                      </button>
+                    </td>
+                    {Object.keys(BOOKMAKER_LOGOS).map((bookmaker, i) => {
+                      const bookmakerKey = bookmaker.toLowerCase();
+                      const homeOddsKey = `${bookmakerKey}HomeOdds`;
+                      const awayOddsKey = `${bookmakerKey}AwayOdds`;
+                      return (
+                        <td key={i}>
+                          <div
+                            className={`odd ${
+                              isPositiveOdds(game[awayOddsKey])
+                                ? "positive odd_red"
+                                : "negative odd_n"
+                            } ${getCellColor(
+                              `${index}-${awayOddsKey}`,
+                              game[awayOddsKey],
+                              sportTypeKey
+                            )}`}
+                          >
+                            {game[awayOddsKey] || "0"}
+                          </div>
+                          <div
+                            className={`odd ${
+                              isPositiveOdds(game[homeOddsKey])
+                                ? "positive odd_red"
+                                : "negative odd_n"
+                            } ${getCellColor(
+                              `${index}-${homeOddsKey}`,
+                              game[homeOddsKey],
+                              sportTypeKey
+                            )}`}
+                          >
+                            {game[homeOddsKey] || "0"}
+                          </div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={
+                      5 + // UPDATED: Changed from 6 to 2 since we removed OPEN, BEST ODDS, AI PICKS columns
+                      (sportName === "MLB" ? 1 : 0) +
+                      Object.keys(BOOKMAKER_LOGOS).length
+                    }
+                    className="text-center py-4"
+                  >
+                    No games available for {tableTitle}
+                  </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan={
-                    5 + // UPDATED: Changed from 6 to 2 since we removed OPEN, BEST ODDS, AI PICKS columns
-                    (sportName === "MLB" ? 1 : 0) +
-                    Object.keys(BOOKMAKER_LOGOS).length
-                  }
-                  className="text-center py-4"
-                >
-                  No games available for {tableTitle}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
   return (
     <section className="backgroung_image">
       <div className="container new_container">
@@ -1332,20 +1333,26 @@ const renderSportTable = (
           <div className="col-12 mt-2">
             <div className="nfl-games-container">
               <div className="selectors">
-                <select value={sport} onChange={handleSportChange}>
-                  {activeTab === "OVERVIEW" && (
-                    <option value="ALL">ALL SPORTS</option>
-                  )}
-                  <option value="NBA">NBA</option>
-                  <option value="NHL">NHL</option>
-                  <option value="MLB">MLB</option>
-                </select>
+                {/* Sports dropdown */}
+                {activeTab !== "MONTHLY PROFITS" && (
+                  <select value={sport} onChange={handleSportChange}>
+                   {(activeTab === "OVERVIEW" || activeTab === "BLOG") && (
+  <option value="ALL">ALL SPORTS</option>
+)}
+                    <option value="NBA">NBA</option>
+                    <option value="NHL">NHL</option>
+                    <option value="MLB">MLB</option>
+                  </select>
+                )}
+
+                {/* Market Type dropdown */}
                 {sport !== "ALL" &&
                   activeTab !== "INJURIES" &&
                   activeTab !== "SCHEDULE" &&
                   activeTab !== "TEAMS" &&
-                  activeTab!=="TEAM"&&
-                  activeTab!=="BLOG"&&
+                  activeTab !== "TEAM" &&
+                  activeTab !== "MONTHLY PROFITS" &&
+                  activeTab !== "BLOG" &&
                   activeTab !== "FUTURES" && (
                     <select
                       value={marketType}
@@ -1360,25 +1367,26 @@ const renderSportTable = (
                     </select>
                   )}
 
-            {(activeTab !== "TEAMS" &&
-  activeTab !== "FUTURES" &&
-  activeTab !== "INJURIES" &&
-  activeTab!== "TEAM"&&
-  activeTab !== "BLOG") && (
-    <div className="date-picker-wrapper">
-      <DatePicker
-        selected={selectedDate}
-        onChange={(date) => setSelectedDate(date)}
-        dateFormat="EEE MMM dd"
-        className="calendar-input"
-        popperPlacement="bottom"
-        maxDate={
-          activeTab === "OVERVIEW" ? getTomorrowDate() : null
-        }
-      />
-    </div>
-)}
-
+                {/* Date picker */}
+                {activeTab !== "TEAMS" &&
+                  activeTab !== "FUTURES" &&
+                  activeTab !== "INJURIES" &&
+                  activeTab !== "TEAM" &&
+                  activeTab !== "MONTHLY PROFITS" &&
+                  activeTab !== "BLOG" && (
+                    <div className="date-picker-wrapper">
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                        dateFormat="EEE MMM dd"
+                        className="calendar-input"
+                        popperPlacement="bottom"
+                        maxDate={
+                          activeTab === "OVERVIEW" ? getTomorrowDate() : null
+                        }
+                      />
+                    </div>
+                  )}
               </div>
             </div>
 
@@ -1849,7 +1857,7 @@ const renderSportTable = (
             )}
             {activeTab === "FUTURES" && (
               <div>
-                <Futures currentSport={sport}/>
+                <Futures currentSport={sport} />
               </div>
             )}
             {/* {activeTab==="TEAM"&&(
@@ -1857,9 +1865,9 @@ const renderSportTable = (
                 <Ourteam/>
               </div>
             )} */}
- {activeTab === "BLOG" && (
+            {activeTab === "BLOG" && (
               <div>
-                < BlogList/>
+                <BlogList currentSport={sport}/>
               </div>
             )}
             {activeTab === "TEAMS" && (
@@ -1877,10 +1885,9 @@ const renderSportTable = (
                 <NBAInjuryTable currentSport={sport} />
               </div>
             )}
-               {activeTab === "MONTHLY PROFITS" && (
+            {activeTab === "MONTHLY PROFITS" && (
               <div>
                 <CalendarEmbed />
-               
               </div>
             )}
           </div>

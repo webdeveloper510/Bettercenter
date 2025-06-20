@@ -36,10 +36,11 @@ import AIPicks from "./Component/Pages/aipicks";
 import GameSelector from "./Component/Pages/test";
 import ManageSubscription from "./Component/Pages/msubscription";
 import MProfile from "./Component/Pages/mprofile";
+import FreePicks from "./Component/Pages/freepicks";
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("accessToken");
   if (!token) {
-    return <Navigate to="/signin" replace />;
+    return <Navigate to="/signup" replace />;
   }
   return children;
 };
@@ -87,7 +88,7 @@ function Layout() {
           <Route path="/gameselector" element={<GameSelector />} />
           <Route path="/subscription" element={<ManageSubscription />} />
           <Route path="/profile" element={<MProfile />} />
-
+          <Route path="/freepicks" element={<FreePicks />} />
           {/* PROTECTED ROUTES - AUTHENTICATION REQUIRED */}
           <Route
             path="/aipicks"
@@ -112,7 +113,7 @@ function Layout() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      
+
       {/* ToastContainer for notifications */}
       <ToastContainer position="top-right" autoClose={3000} />
     </>
