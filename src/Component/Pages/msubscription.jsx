@@ -55,7 +55,6 @@ const ManageSubscription = () => {
         } else {
           setSubscriptionData([]);
           setHasActiveSubscription(false);
-          console.log("No subscription data available");
         }
       } else {
         setSubscriptionData([]);

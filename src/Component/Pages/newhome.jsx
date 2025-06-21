@@ -29,6 +29,7 @@ import InjuryModal from "./injuryModal";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import BlogList from "./blog";
 import Ourteam from "./ourteam";
+import { forwardRef } from "react";
 import CalendarEmbed from "./monthly";
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
@@ -42,15 +43,22 @@ const BOOKMAKER_LOGOS = {
 const getTimezoneFromIP = async () => {
   try {
     const response = await fetch("https://ipapi.co/timezone/");
-    console.log("🚀 ~ getTimezoneFromIP ~ response:", response);
     const timezone = await response.text();
-    console.log("🚀 ~ getTimezoneFromIP ~ timezone:", timezone);
     return timezone.trim();
   } catch (error) {
     console.error("Failed to get timezone from IP:", error);
     return "America/New_York";
   }
 };
+const CustomDateInput = forwardRef(({ value, onClick }, ref) => (
+  <input
+    className="calendar-input"
+    onClick={onClick}
+    value={value}
+    readOnly
+    ref={ref}
+  />
+))
 const formatDateForAPI = async (date) => {
   if (!date) return "";
 
@@ -565,7 +573,6 @@ useEffect(() => {
   useEffect(() => {
     if (!isCurrentDate()) {
       if (socket) {
-        console.log("Closing socket - not current date");
         socket.close();
         setIsSocketConnected(false);
       }
@@ -578,20 +585,16 @@ useEffect(() => {
       }
 
       const wsUrl = `wss://api.bettorcenter.com/ws/chat/`;
-      console.log(`Connecting to WebSocket: ${wsUrl}`);
-
       const newSocket = new WebSocket(wsUrl);
 
       newSocket.onopen = () => {
-        console.log("WebSocket connected");
+
         setIsSocketConnected(true);
       };
 
       newSocket.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          console.log("📡 WebSocket data received:", data);
-
           if (sport === "ALL") {
             setAllSportsData((prevAllSportsData) => {
               const updatedAllSportsData = { ...prevAllSportsData };
@@ -694,7 +697,6 @@ useEffect(() => {
       };
 
       newSocket.onclose = () => {
-        console.log("WebSocket disconnected");
         setIsSocketConnected(false);
       };
 
@@ -704,7 +706,6 @@ useEffect(() => {
     connectWebSocket();
     return () => {
       if (socket) {
-        console.log("Cleaning up WebSocket connection");
         socket.close();
       }
     };
@@ -1374,18 +1375,18 @@ useEffect(() => {
                   activeTab !== "TEAM" &&
                   activeTab !== "MONTHLY PROFITS" &&
                   activeTab !== "BLOG" && (
-                    <div className="date-picker-wrapper">
-                      <DatePicker
-                        selected={selectedDate}
-                        onChange={(date) => setSelectedDate(date)}
-                        dateFormat="EEE MMM dd"
-                        className="calendar-input"
-                        popperPlacement="bottom"
-                        maxDate={
-                          activeTab === "OVERVIEW" ? getTomorrowDate() : null
-                        }
-                      />
-                    </div>
+                   <div className="date-picker-wrapper">
+  <DatePicker
+    selected={selectedDate}
+    onChange={(date) => setSelectedDate(date)}
+    dateFormat="EEE MMM dd"
+    className="calendar-input"
+    popperPlacement="bottom"
+    maxDate={activeTab === "OVERVIEW" ? getTomorrowDate() : null}
+    customInput={<CustomDateInput />}
+  />
+</div>
+
                   )}
               </div>
             </div>

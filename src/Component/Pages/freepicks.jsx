@@ -12,10 +12,6 @@ const FreePicks = () => {
     const fetchFreePicks = async () => {
       try {
         const response = await api.getFreePicksDetail();
-        console.log("🚀 ~ API Response:", response);
-
-        // Since getFreePicksDetail returns response.data, 
-        // the structure is: { message, status, data }
         if (
           response &&
           response.status === 200 &&

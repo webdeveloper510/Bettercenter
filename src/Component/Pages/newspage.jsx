@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const Newspage = () => {
   const [loading, setLoading] = useState(true);
   const [newsData, setNewsData] = useState([]);
-  console.log("🚀 ~ Newspage ~ newsData:", newsData);
   const navigate = useNavigate();
   const getCurrentDate = () => {
     const today = new Date(); 
