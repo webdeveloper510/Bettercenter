@@ -97,7 +97,7 @@ const isValueChanged = (oldVal, newVal) => {
 };
 
 const Games = () => {
-  const [sport, setSport] = useState("ALL");
+  const [sport, setSport] = useState("MLB");
   const [marketType, setMarketType] = useState("DEFAULT");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [allSportsData, setAllSportsData] = useState({
@@ -1335,13 +1335,13 @@ useEffect(() => {
             <div className="nfl-games-container">
               <div className="selectors">
                 {/* Sports dropdown */}
-                {activeTab !== "MONTHLY PROFITS" && (
+                {activeTab !== "MONTHLY PROFITS" && activeTab!== "BLOG" && (
                   <select value={sport} onChange={handleSportChange}>
-                   {(activeTab === "OVERVIEW" || activeTab === "BLOG") && (
+                   {/* {(activeTab === "OVERVIEW" ) && (
   <option value="ALL">ALL SPORTS</option>
-)}
-                    <option value="NBA">NBA</option>
-                    <option value="NHL">NHL</option>
+)} */}
+                    {/* <option value="NBA">NBA</option>
+                    <option value="NHL">NHL</option> */}
                     <option value="MLB">MLB</option>
                   </select>
                 )}
