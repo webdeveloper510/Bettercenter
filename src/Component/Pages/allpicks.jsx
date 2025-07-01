@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Spinner } from "react-bootstrap";
-import { useParams, useLocation, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import "../../Assets/allpicks.css";
 import Faq from "./faq";
 import api from "../../api";
 
 const AllPicks = () => {
-  const location = useLocation();
-  const adminId = location.state?.adminId;
-  const adminName = location.state?.adminName || "Expert";
+  const { adminId, adminName } = useParams();
+  const firstName = adminName?.split("-")[0] || "Expert";
 
   const [loading, setLoading] = useState(true);
   const [membershipPlans, setMembershipPlans] = useState([]);
@@ -19,10 +18,15 @@ const AllPicks = () => {
       try {
         setLoading(true);
         const response = await api.getAdminPicks(adminId);
-        if (response && response.status === 200 && Array.isArray(response.data) && response.data.length > 0) {
+        if (
+          response &&
+          response.status === 200 &&
+          Array.isArray(response.data) &&
+          response.data.length > 0
+        ) {
           setMembershipPlans(response.data);
         } else {
-          setMembershipPlans([]); 
+          setMembershipPlans([]);
         }
       } catch (error) {
         console.error("Failed to fetch admin picks:", error);
@@ -32,10 +36,10 @@ const AllPicks = () => {
       }
     };
 
-    fetchAdminPicks();
+    if (adminId) {
+      fetchAdminPicks();
+    }
   }, [adminId]);
-
-  const firstName = adminName.split(" ")[0];
 
   return (
     <div className="main">
@@ -52,24 +56,24 @@ const AllPicks = () => {
           </div>
         ) : membershipPlans.length === 0 ? (
           <div className="text-center my-5">
-            <p style={{color:"white"}}> No data available.</p>
+            <p style={{ color: "white" }}>No data available.</p>
           </div>
         ) : (
           <Row className="g-4">
             {membershipPlans.map((plan) => (
               <Col key={plan.id} md={4} sm={6}>
                 <Card className="membership-card">
-                <Link to="/pickdetail" state={{ pickId: plan.id }}>
-
+                  <Link to="/pickdetail" state={{ pickId: plan.id }}>
                     <Card.Img
                       variant="top"
-                      src={plan.file_url || "/path-to-default-image.png"}
+                      src={plan.file_url || ""}
                       alt={plan.title}
                     />
                   </Link>
                   <Card.Body>
+                    
                     <Card.Title className="membership-title">
-                      {adminName.toUpperCase()}'S <br />
+                      {/* {adminName.toUpperCase()}'S <br /> */}
                       {plan.title}
                     </Card.Title>
                     <Card.Text className="membership-price">${plan.price}</Card.Text>

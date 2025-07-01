@@ -19,15 +19,10 @@ const Ourteam = () => {
   const [teamData, setTeamData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const handleBuyClick = (adminId, firstName, lastName) => {
-    const adminName = `${firstName} ${lastName}`.trim();
-    navigate('/allpicks', {
-      state: {
-        adminId,
-        adminName
-      }
-    });
-  };
+const handleBuyClick = (adminId, firstName, lastName) => {
+  const adminName = `${firstName}-${lastName}`.trim();
+  navigate(`/allpicks/${adminId}`);
+};
 
   useEffect(() => {
     const getTeamData = async () => {

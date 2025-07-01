@@ -69,8 +69,8 @@ function Layout() {
 
           {/* Public routes - NO AUTHENTICATION REQUIRED */}
           <Route path="/ourteam" element={<Ourteam />} />
-          <Route path="/allpicks" element={<AllPicks />} />
-          <Route path="/allpicks/:adminId" element={<AllPicks />} />
+          <Route path="/allpicks/:adminId/" element={<AllPicks />} />
+         <Route path="/allpicks/:adminId/:adminName" element={<AllPicks />} />
           <Route path="/pickdetail" element={<Pickdetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/signup" element={<Signup />} />

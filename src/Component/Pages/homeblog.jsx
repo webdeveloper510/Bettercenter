@@ -26,16 +26,7 @@ const HomeBlog = () => {
     fetchBlogs();
   }, []);
 
-  const getHoursAgo = (dateString) => {
-    const uploadedTime = new Date(dateString);
-    const now = new Date();
-    const diffInMs = now - uploadedTime;
-    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
-
-    if (diffInHours < 1) return 'Just now';
-    if (diffInHours === 1) return '1 hour ago';
-    return `${diffInHours} hours ago`;
-  };
+  
 
   const filteredArticles =
     selectedTag === 'All'
@@ -78,7 +69,7 @@ const HomeBlog = () => {
                   <div className="article-tag">{article.sports_type || 'General'}</div>
                   <Card.Title className="article-title">{article.title}</Card.Title>
                   <Card.Text className="article-meta">
-                    {getHoursAgo(article.uploaded_at)}
+                    {article.created_at}
                   </Card.Text>
                 </Card.Body>
               </Card>
