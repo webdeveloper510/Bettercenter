@@ -18,7 +18,7 @@ const Signin = () => {
 
 const handleSubmit = async (values, { setSubmitting }) => {
     try {
-        const response = await axios.post("http://54.209.247.111:8000/login", values);
+        const response = await axios.post("https://api.bettorcenter.com/login", values);
         if (response.data?.status === 200) {
             const user_id = response.data?.user_id;
             const token = response.data?.token;
