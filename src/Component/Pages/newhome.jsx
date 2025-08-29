@@ -96,6 +96,7 @@ const isValueChanged = (oldVal, newVal) => {
   return oldNum !== newNum;
 };
 
+
 const Games = () => {
   const [sport, setSport] = useState("MLB");
   const [marketType, setMarketType] = useState("DEFAULT");
@@ -297,10 +298,10 @@ const Games = () => {
         sportType === "nba"
           ? "nbaSpread"
           : sportType === "nhl"
-          ? "nhlMoneyline"
-          : sportType === "mlb"
-          ? "mlbMoneyline"
-          : null;
+            ? "nhlMoneyline"
+            : sportType === "mlb"
+              ? "mlbMoneyline"
+              : null;
 
       if (!sportKey || !oldData || !oldData[sportKey]) {
         return;
@@ -357,10 +358,10 @@ const Games = () => {
         sportType === "nba"
           ? "nbaSpread"
           : sportType === "nhl"
-          ? "nhlMoneyline"
-          : sportType === "mlb"
-          ? "mlbMoneyline"
-          : null;
+            ? "nhlMoneyline"
+            : sportType === "mlb"
+              ? "mlbMoneyline"
+              : null;
       if (sportKey) {
         if (!previousDataRef.current) {
           previousDataRef.current = {};
@@ -472,7 +473,7 @@ const Games = () => {
               processedData = processSpreadData(apiData);
               break;
             case "TOTAL":
-              apiData = await api.getNhlOverUnderData(
+              apiData = await api.getMlbOverUnderData(
                 formattedDate.date,
                 formattedDate.timezone
               );
@@ -480,6 +481,40 @@ const Games = () => {
               break;
             case "DEFAULT":
               apiData = await api.getNhlDefaultData(
+                formattedDate.date,
+                formattedDate.timezone
+              );
+              processedData = processDefaultData(apiData);
+              break;
+            default:
+          }
+          break;
+
+        case "NFL":
+          switch (marketType) {
+            case "MONEYLINE":
+              apiData = await api.getNflMoneyData(
+                formattedDate.date,
+                formattedDate.timezone
+              );
+              processedData = processMoneylineData(apiData);
+              break;
+            case "SPREAD":
+              apiData = await api.getNflSpreadData(
+                formattedDate.date,
+                formattedDate.timezone
+              );
+              processedData = processSpreadData(apiData);
+              break;
+            case "TOTAL":
+              apiData = await api.getNflOverUnderData(
+                formattedDate.date,
+                formattedDate.timezone
+              );
+              processedData = processTotalData(apiData);
+              break;
+            case "DEFAULT":
+              apiData = await api.getNflDefaultData(
                 formattedDate.date,
                 formattedDate.timezone
               );
@@ -521,53 +556,53 @@ const Games = () => {
     }
   };
   const previousTabRef = useRef(activeTab);
-useEffect(() => {
-  const allSportsAllowed = activeTab === "OVERVIEW" || activeTab === "BLOG";
+  useEffect(() => {
+    const allSportsAllowed = activeTab === "OVERVIEW" || activeTab === "BLOG";
 
-  if (allSportsAllowed && previousTabRef.current !== activeTab) {
-    setSport("ALL");
+    if (allSportsAllowed && previousTabRef.current !== activeTab) {
+      setSport("ALL");
+      previousTabRef.current = activeTab;
+      return;
+    }
+
+    if (!allSportsAllowed && sport === "ALL") {
+      setSport("NBA");
+      previousTabRef.current = activeTab;
+      return;
+    }
+
     previousTabRef.current = activeTab;
-    return;
-  }
+    isFirstLoadRef.current = true;
+    changeTimestampsRef.current = {};
+    previousDataRef.current = [];
+    initialDataFetchedRef.current = false;
 
-  if (!allSportsAllowed && sport === "ALL") {
-    setSport("NBA");
-    previousTabRef.current = activeTab;
-    return;
-  }
-
-  previousTabRef.current = activeTab;
-  isFirstLoadRef.current = true;
-  changeTimestampsRef.current = {};
-  previousDataRef.current = [];
-  initialDataFetchedRef.current = false;
-
-  const fetchAndUpdateData = async () => {
-    setLoading(true);
-    try {
-      if (sport === "ALL" && activeTab === "OVERVIEW") {
-        await fetchAllSportsData();
-      } else if (sport !== "ALL") {
-        await fetchData();
+    const fetchAndUpdateData = async () => {
+      setLoading(true);
+      try {
+        if (sport === "ALL" && activeTab === "OVERVIEW") {
+          await fetchAllSportsData();
+        } else if (sport !== "ALL") {
+          await fetchData();
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchAndUpdateData();
+    fetchAndUpdateData();
 
-  let interval;
-  // if (!isCurrentDate()) {
-  //   interval = setInterval(fetchAndUpdateData, 60000);
-  // }
+    let interval;
+    // if (!isCurrentDate()) {
+    //   interval = setInterval(fetchAndUpdateData, 60000);
+    // }
 
-  return () => {
-    if (interval) {
-      clearInterval(interval);
-    }
-  };
-}, [sport, marketType, selectedDate, activeTab]);
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [sport, marketType, selectedDate, activeTab]);
 
 
   useEffect(() => {
@@ -585,10 +620,10 @@ useEffect(() => {
       }
 
       const wsUrl = `wss://api.bettorcenter.com/ws/chat/`;
+
       const newSocket = new WebSocket(wsUrl);
 
       newSocket.onopen = () => {
-
         setIsSocketConnected(true);
       };
 
@@ -717,6 +752,7 @@ useEffect(() => {
 
     Object.keys(apiData.data).forEach((spreadKey) => {
       const spreadObject = apiData.data[spreadKey];
+
       if (
         spreadObject &&
         typeof spreadObject === "object" &&
@@ -781,11 +817,9 @@ useEffect(() => {
               formatOdds(rawAwayOdds);
           }
         });
-
         processedGames.push(game);
       }
     });
-
     return processedGames;
   };
 
@@ -1184,24 +1218,22 @@ useEffect(() => {
                     {/* COMMENTED OUT - OPEN ODDS COLUMN */}
                     <td>
                       <div
-                        className={`odd_${
-                          isPositiveOdds(game.awayOpen) ? "y" : "g"
-                        } ${getCellColor(
-                          `${index}-awayOpen`,
-                          game.awayOpen,
-                          sportTypeKey
-                        )}`}
+                        className={`odd_${isPositiveOdds(game.awayOpen) ? "y" : "g"
+                          } ${getCellColor(
+                            `${index}-awayOpen`,
+                            game.awayOpen,
+                            sportTypeKey
+                          )}`}
                       >
                         {game.awayOpen || "0"}
                       </div>
                       <div
-                        className={`odd_${
-                          isPositiveOdds(game.homeOpen) ? "y" : "n"
-                        } ${getCellColor(
-                          `${index}-homeOpen`,
-                          game.homeOpen,
-                          sportTypeKey
-                        )}`}
+                        className={`odd_${isPositiveOdds(game.homeOpen) ? "y" : "n"
+                          } ${getCellColor(
+                            `${index}-homeOpen`,
+                            game.homeOpen,
+                            sportTypeKey
+                          )}`}
                       >
                         {game.homeOpen || "0"}
                       </div>
@@ -1209,24 +1241,22 @@ useEffect(() => {
                     {/* COMMENTED OUT - BEST ODDS COLUMN */}
                     <td>
                       <div
-                        className={`odd_${
-                          isPositiveOdds(game.awayBestOdds) ? "y" : "n"
-                        } ${getCellColor(
-                          `${index}-awayBestOdds`,
-                          game.awayBestOdds,
-                          sportTypeKey
-                        )}`}
+                        className={`odd_${isPositiveOdds(game.awayBestOdds) ? "y" : "n"
+                          } ${getCellColor(
+                            `${index}-awayBestOdds`,
+                            game.awayBestOdds,
+                            sportTypeKey
+                          )}`}
                       >
                         {game.awayBestOdds || "0"}
                       </div>
                       <div
-                        className={`odd_${
-                          isPositiveOdds(game.homeBestOdds) ? "y" : "n"
-                        } ${getCellColor(
-                          `${index}-homeBestOdds`,
-                          game.homeBestOdds,
-                          sportTypeKey
-                        )}`}
+                        className={`odd_${isPositiveOdds(game.homeBestOdds) ? "y" : "n"
+                          } ${getCellColor(
+                            `${index}-homeBestOdds`,
+                            game.homeBestOdds,
+                            sportTypeKey
+                          )}`}
                       >
                         {game.homeBestOdds || "0"}
                       </div>
@@ -1272,28 +1302,26 @@ useEffect(() => {
                       return (
                         <td key={i}>
                           <div
-                            className={`odd ${
-                              isPositiveOdds(game[awayOddsKey])
-                                ? "positive odd_red"
-                                : "negative odd_n"
-                            } ${getCellColor(
-                              `${index}-${awayOddsKey}`,
-                              game[awayOddsKey],
-                              sportTypeKey
-                            )}`}
+                            className={`odd ${isPositiveOdds(game[awayOddsKey])
+                              ? "positive odd_red"
+                              : "negative odd_n"
+                              } ${getCellColor(
+                                `${index}-${awayOddsKey}`,
+                                game[awayOddsKey],
+                                sportTypeKey
+                              )}`}
                           >
                             {game[awayOddsKey] || "0"}
                           </div>
                           <div
-                            className={`odd ${
-                              isPositiveOdds(game[homeOddsKey])
-                                ? "positive odd_red"
-                                : "negative odd_n"
-                            } ${getCellColor(
-                              `${index}-${homeOddsKey}`,
-                              game[homeOddsKey],
-                              sportTypeKey
-                            )}`}
+                            className={`odd ${isPositiveOdds(game[homeOddsKey])
+                              ? "positive odd_red"
+                              : "negative odd_n"
+                              } ${getCellColor(
+                                `${index}-${homeOddsKey}`,
+                                game[homeOddsKey],
+                                sportTypeKey
+                              )}`}
                           >
                             {game[homeOddsKey] || "0"}
                           </div>
@@ -1335,13 +1363,14 @@ useEffect(() => {
             <div className="nfl-games-container">
               <div className="selectors">
                 {/* Sports dropdown */}
-                {activeTab !== "MONTHLY PROFITS" && activeTab!== "BLOG" && (
+                {activeTab !== "MONTHLY PROFITS" && activeTab !== "BLOG" && (
                   <select value={sport} onChange={handleSportChange}>
-                   {/* {(activeTab === "OVERVIEW" ) && (
+                    {/* {(activeTab === "OVERVIEW" ) && (
   <option value="ALL">ALL SPORTS</option>
 )} */}
                     {/* <option value="NBA">NBA</option>
                     <option value="NHL">NHL</option> */}
+                    <option value="NFL">NFL</option>
                     <option value="MLB">MLB</option>
                   </select>
                 )}
@@ -1375,17 +1404,17 @@ useEffect(() => {
                   activeTab !== "TEAM" &&
                   activeTab !== "MONTHLY PROFITS" &&
                   activeTab !== "BLOG" && (
-                   <div className="date-picker-wrapper">
-  <DatePicker
-    selected={selectedDate}
-    onChange={(date) => setSelectedDate(date)}
-    dateFormat="EEE MMM dd"
-    className="calendar-input"
-    popperPlacement="bottom"
-    maxDate={activeTab === "OVERVIEW" ? getTomorrowDate() : null}
-    customInput={<CustomDateInput />}
-  />
-</div>
+                    <div className="date-picker-wrapper">
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                        dateFormat="EEE MMM dd"
+                        className="calendar-input"
+                        popperPlacement="bottom"
+                        maxDate={activeTab === "OVERVIEW" ? getTomorrowDate() : null}
+                        customInput={<CustomDateInput />}
+                      />
+                    </div>
 
                   )}
               </div>
@@ -1420,7 +1449,7 @@ useEffect(() => {
                       </div>
                     ) : (
                       <>
-                        {renderSportTable(
+                        {/* {renderSportTable(
                           "NBA",
                           "SPREAD",
                           allSportsData.nbaSpread,
@@ -1431,7 +1460,7 @@ useEffect(() => {
                           "MONEYLINE",
                           allSportsData.nhlMoneyline,
                           "NHL Moneyline/Total"
-                        )}
+                        )} */}
                         {renderSportTable(
                           "MLB",
                           "MONEYLINE",
@@ -1461,10 +1490,10 @@ useEffect(() => {
                             {sport === "MLB" && <th>PITCHERS</th>}
                             {(marketType === "SPREAD" ||
                               marketType === "TOTAL") && (
-                              <th>
-                                {marketType === "SPREAD" ? "SPREAD" : "TOTAL"}
-                              </th>
-                            )}
+                                <th>
+                                  {marketType === "SPREAD" ? "SPREAD" : "TOTAL"}
+                                </th>
+                              )}
                             {/* COMMENTED OUT - OPEN, BEST ODDS, AI PICKS HEADERS */}
                             <th>OPEN</th>
                             <th>BEST ODDS</th>
@@ -1543,76 +1572,74 @@ useEffect(() => {
 
                                 {(marketType === "SPREAD" ||
                                   marketType === "TOTAL") && (
-                                  <td>
-                                    {marketType === "SPREAD" ? (
-                                      <>
-                                        <div
-                                          className={`odd_n ${getCellColor(
-                                            `${index}-homeSpread`,
-                                            game.homeSpread
-                                          )}`}
-                                        >
-                                          {game.homeSpread}
-                                        </div>
-                                        <div
-                                          className={`odd_n ${getCellColor(
-                                            `${index}-awaySpread`,
-                                            game.awaySpread
-                                          )}`}
-                                        >
-                                          {game.awaySpread}
-                                        </div>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <div
-                                          className={`odd_n ${getCellColor(
-                                            `${index}-overValue`,
-                                            game.overValue
-                                          )}`}
-                                        >
-                                          {game.overValue || "0"}
-                                        </div>
-                                        <div
-                                          className={`odd_n ${getCellColor(
-                                            `${index}-underValue`,
-                                            game.underValue
-                                          )}`}
-                                        >
-                                          {game.underValue || "0"}
-                                        </div>
-                                      </>
-                                    )}
-                                  </td>
-                                )}
+                                    <td>
+                                      {marketType === "SPREAD" ? (
+                                        <>
+                                          <div
+                                            className={`odd_n ${getCellColor(
+                                              `${index}-homeSpread`,
+                                              game.homeSpread
+                                            )}`}
+                                          >
+                                            {game.homeSpread}
+                                          </div>
+                                          <div
+                                            className={`odd_n ${getCellColor(
+                                              `${index}-awaySpread`,
+                                              game.awaySpread
+                                            )}`}
+                                          >
+                                            {game.awaySpread}
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <div
+                                            className={`odd_n ${getCellColor(
+                                              `${index}-overValue`,
+                                              game.overValue
+                                            )}`}
+                                          >
+                                            {game.overValue || "0"}
+                                          </div>
+                                          <div
+                                            className={`odd_n ${getCellColor(
+                                              `${index}-underValue`,
+                                              game.underValue
+                                            )}`}
+                                          >
+                                            {game.underValue || "0"}
+                                          </div>
+                                        </>
+                                      )}
+                                    </td>
+                                  )}
                                 {/* COMMENTED OUT - OPEN ODDS COLUMN */}
                                 <td>
                                   {(sport === "NBA" &&
                                     marketType === "SPREAD") ||
-                                  (sport === "MLB" &&
-                                    marketType === "MONEYLINE") ? (
+                                    (sport === "MLB" &&
+                                      marketType === "MONEYLINE") ? (
                                     <>
                                       <div
-                                        className={`odd_${
-                                          isPositiveOdds(game.awayOpen)
-                                            ? "y"
-                                            : "g"
-                                        } ${getCellColor(
-                                          `${index}-awayOpen`,
-                                          game.awayOpen
-                                        )}`}
+                                        className={`odd_${isPositiveOdds(game.awayOpen)
+                                          ? "y"
+                                          : "g"
+                                          } ${getCellColor(
+                                            `${index}-awayOpen`,
+                                            game.awayOpen
+                                          )}`}
                                       >
                                         {game.awayOpen || "0"}
                                       </div>
                                       <div
-                                        className={`odd_${
-                                          isPositiveOdds(game.homeOpen)
-                                            ? "y"
-                                            : "n"
-                                        } ${getCellColor(
-                                          `${index}-homeOpen`,
-                                          game.homeOpen
-                                        )}`}
+                                        className={`odd_${isPositiveOdds(game.homeOpen)
+                                          ? "y"
+                                          : "n"
+                                          } ${getCellColor(
+                                            `${index}-homeOpen`,
+                                            game.homeOpen
+                                          )}`}
                                       >
                                         {game.homeOpen || "-"}
                                       </div>
@@ -1620,26 +1647,24 @@ useEffect(() => {
                                   ) : (
                                     <>
                                       <div
-                                        className={`odd_${
-                                          isPositiveOdds(game.homeOpen)
-                                            ? "y"
-                                            : "n"
-                                        } ${getCellColor(
-                                          `${index}-homeOpen`,
-                                          game.homeOpen
-                                        )}`}
+                                        className={`odd_${isPositiveOdds(game.homeOpen)
+                                          ? "y"
+                                          : "n"
+                                          } ${getCellColor(
+                                            `${index}-homeOpen`,
+                                            game.homeOpen
+                                          )}`}
                                       >
                                         {game.homeOpen || "-"}
                                       </div>
                                       <div
-                                        className={`odd_${
-                                          isPositiveOdds(game.awayOpen)
-                                            ? "y"
-                                            : "g"
-                                        } ${getCellColor(
-                                          `${index}-awayOpen`,
-                                          game.awayOpen
-                                        )}`}
+                                        className={`odd_${isPositiveOdds(game.awayOpen)
+                                          ? "y"
+                                          : "g"
+                                          } ${getCellColor(
+                                            `${index}-awayOpen`,
+                                            game.awayOpen
+                                          )}`}
                                       >
                                         {game.awayOpen || "0"}
                                       </div>
@@ -1650,30 +1675,28 @@ useEffect(() => {
                                 <td>
                                   {(sport === "NBA" &&
                                     marketType === "SPREAD") ||
-                                  (sport === "MLB" &&
-                                    marketType === "MONEYLINE") ? (
+                                    (sport === "MLB" &&
+                                      marketType === "MONEYLINE") ? (
                                     <>
                                       <div
-                                        className={`odd_${
-                                          isPositiveOdds(game.awayBestOdds)
-                                            ? "y"
-                                            : "n"
-                                        } ${getCellColor(
-                                          `${index}-awayBestOdds`,
-                                          game.awayBestOdds
-                                        )}`}
+                                        className={`odd_${isPositiveOdds(game.awayBestOdds)
+                                          ? "y"
+                                          : "n"
+                                          } ${getCellColor(
+                                            `${index}-awayBestOdds`,
+                                            game.awayBestOdds
+                                          )}`}
                                       >
                                         {game.awayBestOdds || "0"}
                                       </div>
                                       <div
-                                        className={`odd_${
-                                          isPositiveOdds(game.homeBestOdds)
-                                            ? "y"
-                                            : "n"
-                                        } ${getCellColor(
-                                          `${index}-homeBestOdds`,
-                                          game.homeBestOdds
-                                        )}`}
+                                        className={`odd_${isPositiveOdds(game.homeBestOdds)
+                                          ? "y"
+                                          : "n"
+                                          } ${getCellColor(
+                                            `${index}-homeBestOdds`,
+                                            game.homeBestOdds
+                                          )}`}
                                       >
                                         {game.homeBestOdds || "0"}
                                       </div>
@@ -1681,26 +1704,24 @@ useEffect(() => {
                                   ) : (
                                     <>
                                       <div
-                                        className={`odd_${
-                                          isPositiveOdds(game.homeBestOdds)
-                                            ? "y"
-                                            : "n"
-                                        } ${getCellColor(
-                                          `${index}-homeBestOdds`,
-                                          game.homeBestOdds
-                                        )}`}
+                                        className={`odd_${isPositiveOdds(game.homeBestOdds)
+                                          ? "y"
+                                          : "n"
+                                          } ${getCellColor(
+                                            `${index}-homeBestOdds`,
+                                            game.homeBestOdds
+                                          )}`}
                                       >
                                         {game.homeBestOdds || "0"}
                                       </div>
                                       <div
-                                        className={`odd_${
-                                          isPositiveOdds(game.awayBestOdds)
-                                            ? "y"
-                                            : "n"
-                                        } ${getCellColor(
-                                          `${index}-awayBestOdds`,
-                                          game.awayBestOdds
-                                        )}`}
+                                        className={`odd_${isPositiveOdds(game.awayBestOdds)
+                                          ? "y"
+                                          : "n"
+                                          } ${getCellColor(
+                                            `${index}-awayBestOdds`,
+                                            game.awayBestOdds
+                                          )}`}
                                       >
                                         {game.awayBestOdds || "0"}
                                       </div>
@@ -1755,33 +1776,31 @@ useEffect(() => {
                                       <td key={i}>
                                         {/* FIXED: Check for MLB moneyline to display in correct order */}
                                         {sport === "MLB" &&
-                                        marketType === "MONEYLINE" ? (
+                                          marketType === "MONEYLINE" ? (
                                           <>
                                             <div
-                                              className={`odd ${
-                                                isPositiveOdds(
-                                                  game[awayOddsKey]
-                                                )
-                                                  ? "positive odd_red"
-                                                  : "negative odd_n"
-                                              } ${getCellColor(
-                                                `${index}-${awayOddsKey}`,
+                                              className={`odd ${isPositiveOdds(
                                                 game[awayOddsKey]
-                                              )}`}
+                                              )
+                                                ? "positive odd_red"
+                                                : "negative odd_n"
+                                                } ${getCellColor(
+                                                  `${index}-${awayOddsKey}`,
+                                                  game[awayOddsKey]
+                                                )}`}
                                             >
                                               {game[awayOddsKey] || "0"}
                                             </div>
                                             <div
-                                              className={`odd ${
-                                                isPositiveOdds(
-                                                  game[homeOddsKey]
-                                                )
-                                                  ? "positive odd_red"
-                                                  : "negative odd_n"
-                                              } ${getCellColor(
-                                                `${index}-${homeOddsKey}`,
+                                              className={`odd ${isPositiveOdds(
                                                 game[homeOddsKey]
-                                              )}`}
+                                              )
+                                                ? "positive odd_red"
+                                                : "negative odd_n"
+                                                } ${getCellColor(
+                                                  `${index}-${homeOddsKey}`,
+                                                  game[homeOddsKey]
+                                                )}`}
                                             >
                                               {game[homeOddsKey] || "0"}
                                             </div>
@@ -1789,30 +1808,28 @@ useEffect(() => {
                                         ) : (
                                           <>
                                             <div
-                                              className={`odd ${
-                                                isPositiveOdds(
-                                                  game[homeOddsKey]
-                                                )
-                                                  ? "positive odd_red"
-                                                  : "negative odd_n"
-                                              } ${getCellColor(
-                                                `${index}-${homeOddsKey}`,
+                                              className={`odd ${isPositiveOdds(
                                                 game[homeOddsKey]
-                                              )}`}
+                                              )
+                                                ? "positive odd_red"
+                                                : "negative odd_n"
+                                                } ${getCellColor(
+                                                  `${index}-${homeOddsKey}`,
+                                                  game[homeOddsKey]
+                                                )}`}
                                             >
                                               {game[homeOddsKey] || "0"}
                                             </div>
                                             <div
-                                              className={`odd ${
-                                                isPositiveOdds(
-                                                  game[awayOddsKey]
-                                                )
-                                                  ? "positive odd_red"
-                                                  : "negative odd_n"
-                                              } ${getCellColor(
-                                                `${index}-${awayOddsKey}`,
+                                              className={`odd ${isPositiveOdds(
                                                 game[awayOddsKey]
-                                              )}`}
+                                              )
+                                                ? "positive odd_red"
+                                                : "negative odd_n"
+                                                } ${getCellColor(
+                                                  `${index}-${awayOddsKey}`,
+                                                  game[awayOddsKey]
+                                                )}`}
                                             >
                                               {game[awayOddsKey] || "0"}
                                             </div>
@@ -1831,7 +1848,7 @@ useEffect(() => {
                                   5 + // UPDATED: Changed from 5 to 2 since we removed OPEN, BEST ODDS, AI PICKS columns
                                   (sport === "MLB" ? 1 : 0) +
                                   (marketType === "SPREAD" ||
-                                  marketType === "TOTAL"
+                                    marketType === "TOTAL"
                                     ? 1
                                     : 0) +
                                   Object.keys(BOOKMAKER_LOGOS).length
@@ -1868,7 +1885,7 @@ useEffect(() => {
             )} */}
             {activeTab === "BLOG" && (
               <div>
-                <BlogList currentSport={sport}/>
+                <BlogList currentSport={sport} />
               </div>
             )}
             {activeTab === "TEAMS" && (

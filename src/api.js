@@ -34,87 +34,87 @@ if (token) {
 }
 
 apiClient.interceptors.response.use(
-  response => response,
-  error => {
-    const status = error.response?.status;
-    const errorCode = error.response?.data?.code;
-    if (
-      status === 401 &&
-      errorCode === 'token_not_valid' &&
-      window.location.pathname !== '/signin'
-    ) {
-      logout();
-      window.location.href = '/signin'; 
+    response => response,
+    error => {
+        const status = error.response?.status;
+        const errorCode = error.response?.data?.code;
+        if (
+            status === 401 &&
+            errorCode === 'token_not_valid' &&
+            window.location.pathname !== '/signin'
+        ) {
+            logout();
+            window.location.href = '/signin';
+        }
+
+        return Promise.reject(error);
     }
-
-    return Promise.reject(error);
-  }
 );
-   
 
-   
+
+
 
 const api = {
-     getUserProfile: async () => {
+    getUserProfile: async () => {
         try {
             const token = getAccessToken();
             if (!token) {
                 return { error: 'User not authenticated' };
             }
-            
+
             const response = await apiClient.get('/get-user-profile', {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Profile fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch user profile" };
         }
     },
-      getSubscriptionDetail: async () => {
+    getSubscriptionDetail: async () => {
         try {
             const token = getAccessToken();
             if (!token) {
                 return { error: 'User not authenticated' };
             }
-            
+
             const response = await apiClient.get('/get-active-subscription', {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Profile fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch user profile" };
         }
     },
-     getFAQDetail: async () => {
+    getFAQDetail: async () => {
         try {
             const response = await apiClient.get('/faq-data-get', {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Profile fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch user profile" };
         }
     },
-      getFreePicksDetail: async () => {
+    getFreePicksDetail: async () => {
         try {
             const response = await apiClient.get('/get-free-pick-data', {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Profile fetch error:", error);
@@ -127,39 +127,39 @@ const api = {
             if (!token) {
                 return { error: 'User not authenticated' };
             }
-            
+
             const response = await apiClient.put('/change-password', profileData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Profile update error:", error);
             return error.response ? error.response.data : { message: "Failed to update user profile" };
         }
-    }, 
+    },
     cancelSubscription: async () => {
-    try {
-        const token = getAccessToken();
-        if (!token) {
-            return { error: 'User not authenticated' };
-        }
-        
-        const response = await apiClient.delete('/cancel-stripe-subscription', {
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                return { error: 'User not authenticated' };
             }
-        });
-        
-        return response.data;
-    } catch (error) {
-        console.error("Subscription cancellation error:", error);
-        return error.response ? error.response.data : { message: "Failed to cancel subscription" };
-    }
-},  
+
+            const response = await apiClient.delete('/cancel-stripe-subscription', {
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            return response.data;
+        } catch (error) {
+            console.error("Subscription cancellation error:", error);
+            return error.response ? error.response.data : { message: "Failed to cancel subscription" };
+        }
+    },
     register: async (userData) => {
         try {
 
@@ -176,7 +176,7 @@ const api = {
     getBlogsData: async () => {
         try {
             const response = await apiClient.get(`${API_URL}/get-blog-data`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -186,22 +186,22 @@ const api = {
     },
     getBlogById: async (id) => {
         try {
-          const response = await apiClient.get(`${API_URL}/get-blog-data/${id}`, {
-            headers: { 'Content-Type': 'application/json' }
-          });
-          return response.data;
+            const response = await apiClient.get(`${API_URL}/get-blog-data/${id}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
         } catch (error) {
-          console.error("Error fetching blog by ID:", error);
-          return error.response ? error.response.data : { message: "Failed to fetch blog" };
+            console.error("Error fetching blog by ID:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch blog" };
         }
-      },
-      
-    getMoneyData: async (date,timezone) => {
+    },
+
+    getMoneyData: async (date, timezone) => {
         try {
-            const formattedDate = date || ''; 
+            const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/nba-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -219,7 +219,7 @@ const api = {
             });
             return response.data;
         } catch (error) {
-        return error.response ? error.response.data : { message: "Failed to fetch spread data" };
+            return error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
     getOverUnderData: async (date, timezone) => {
@@ -227,19 +227,21 @@ const api = {
             const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/nba-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
             return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
         }
     },
+
+
     getMlbMoneyData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/mlb-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -252,33 +254,7 @@ const api = {
             const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/mlb-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
-            });
-            return response.data;
-        } catch (error) {
-            console.error("Default data fetch error:", error);
-            return error.response ? error.response.data : { message: "Failed to fetch default data" };
-        }
-    },
-     getNhlDefaultData: async (date, timezone) => {
-        try {
-            const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/nhl-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
-            });
-            return response.data;
-        } catch (error) {
-            console.error("Default data fetch error:", error);
-            return error.response ? error.response.data : { message: "Failed to fetch default data" };
-        }
-    },
-     getNbaDefaultData: async (date, timezone) => {
-        try {
-            const formattedDate = date || '';
-            const formattedTimezone = timezone || '';
-            const response = await apiClient.get(`${API_URL}/nba-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -291,7 +267,7 @@ const api = {
             const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/mlb-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -303,11 +279,90 @@ const api = {
             const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/mlb-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
             return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
+        }
+    },
+
+    getNflMoneyData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nfl-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Money data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch money data" };
+        }
+    },
+    getNflDefaultData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nfl-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Default data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch default data" };
+        }
+    },
+    getNflSpreadData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nfl-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            return error.response ? error.response.data : { message: "Failed to fetch spread data" };
+        }
+    },
+
+    getNflOverUnderData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nfl-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
+        }
+    },
+
+    getNbaDefaultData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nba-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Default data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch default data" };
+        }
+    },
+    getNhlDefaultData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/nhl-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Default data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch default data" };
         }
     },
     getNhlMoneyData: async (date, timezone) => {
@@ -315,7 +370,7 @@ const api = {
             const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/nhl-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -328,7 +383,7 @@ const api = {
             const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/nhl-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -340,7 +395,7 @@ const api = {
             const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/nhl-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -351,7 +406,7 @@ const api = {
         try {
             const formattedDate = date || '';
             const response = await apiClient.get(`${API_URL}/news-data/?date=${formattedDate}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -362,12 +417,12 @@ const api = {
     getNbaTeamsData: async () => {
         try {
             const response = await apiClient.get(`${API_URL}/nba-teams`, {
-                headers: { 'Content-Type': 'application/json' } 
-        
+                headers: { 'Content-Type': 'application/json' }
+
             });
-          
+
             return response.data;
-          
+
         } catch (error) {
             console.error("News data fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch news data" };
@@ -376,7 +431,7 @@ const api = {
     getNhlTeamsData: async () => {
         try {
             const response = await apiClient.get(`${API_URL}/nhl-teams`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -387,7 +442,7 @@ const api = {
     getMlbteamsData: async () => {
         try {
             const response = await apiClient.get(`${API_URL}/mlb-teams`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
         } catch (error) {
@@ -398,7 +453,7 @@ const api = {
     getNbaInjuriesData: async () => {
         try {
             const response = await apiClient.get(`${API_URL}/nba-injuries-data`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data.data;
         } catch (error) {
@@ -409,7 +464,7 @@ const api = {
     getMlbInjuriesData: async () => {
         try {
             const response = await apiClient.get(`${API_URL}/mlb-injuries-data`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data.data;
         } catch (error) {
@@ -420,7 +475,7 @@ const api = {
     getNhlInjuriesData: async () => {
         try {
             const response = await apiClient.get(`${API_URL}/nhl-injuries-data`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
             return response.data.data;
         } catch (error) {
@@ -430,11 +485,11 @@ const api = {
     },
     getNbaScheduleData: async (date) => {
         try {
-            const formattedDate = date || ''; 
+            const formattedDate = date || '';
             const response = await apiClient.get(`${API_URL}/nba-schedule-data/?date=${formattedDate}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
-       
+
             return response.data.data;
         } catch (error) {
             console.error("Schedule data fetch error:", error);
@@ -443,11 +498,11 @@ const api = {
     },
     getNhlScheduleData: async (date) => {
         try {
-            const formattedDate = date || ''; 
+            const formattedDate = date || '';
             const response = await apiClient.get(`${API_URL}/nhl-schedule-data/?date=${formattedDate}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
-          
+
             return response.data.data;
         } catch (error) {
             console.error("Schedule data fetch error:", error);
@@ -456,11 +511,11 @@ const api = {
     },
     getMlbScheduleData: async (date) => {
         try {
-            const formattedDate = date || ''; 
+            const formattedDate = date || '';
             const response = await apiClient.get(`${API_URL}/mlb-schedule-data/?date=${formattedDate}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
-        
+
             return response.data.data;
         } catch (error) {
             console.error("Schedule data fetch error:", error);
@@ -486,15 +541,15 @@ const api = {
                     'Content-Type': 'application/json'
                 }
             });
-    
+
             return response.data;
         } catch (error) {
             console.error("Admin picks fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch admin picks" };
         }
     },
-    
-    
+
+
     getPickDetailsAuth: async (pickId) => {
         try {
             const token = getAccessToken();
@@ -502,13 +557,13 @@ const api = {
                 return new Error('User not authenticated');
             }
             const response = await apiClient.post('/singlepick-with-login/', {
-                     id: pickId,
+                id: pickId,
             }, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Pick details fetch error:", error);
@@ -517,30 +572,30 @@ const api = {
     },
     getPickDetailsPublic: async (pickId) => {
         try {
-            const response = await apiClient.post(`${API_URL}/singlepick-without-login/`,{
+            const response = await apiClient.post(`${API_URL}/singlepick-without-login/`, {
                 id: pickId
-            } ,{
+            }, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Pick details fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch pick details" };
         }
     },
-  
+
     getPickDetails: async (pickId) => {
         try {
             const token = getAccessToken();
-            
+
             if (token) {
-            
+
                 return await api.getPickDetailsAuth(pickId);
             } else {
-        
+
                 return await api.getPickDetailsPublic(pickId);
             }
         } catch (error) {
@@ -554,7 +609,7 @@ const api = {
             if (!token) {
                 return new Error('User not authenticated');
             }
-            
+
             const response = await apiClient.post('/create-order-with-login/', {
                 ...orderData,
             }, {
@@ -562,7 +617,7 @@ const api = {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Order placement error:", error);
@@ -577,34 +632,34 @@ const api = {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Order placement error:", error);
             return error.response ? error.response.data : { message: "Failed to place order" };
         }
     },
-   placeOrder: async function(orderData) {
-    try {
-        const token = getAccessToken();
-        
-        if (token) {
-            return await this.placeOrderAuth(orderData);
-        } else {
-            return await this.placeOrderPublic(orderData);
+    placeOrder: async function (orderData) {
+        try {
+            const token = getAccessToken();
+
+            if (token) {
+                return await this.placeOrderAuth(orderData);
+            } else {
+                return await this.placeOrderPublic(orderData);
+            }
+        } catch (error) {
+            console.error("Order placement error:", error);
+            return error;
         }
-    } catch (error) {
-        console.error("Order placement error:", error);
-        return error;
-    }
-},
+    },
     purchaseOrderAuth: async (orderDetails) => {
         try {
             const token = getAccessToken();
             if (!token) {
                 return new Error('User not authenticated');
             }
-            
+
             const response = await apiClient.post('/update-order-with-login/', {
                 ...orderDetails,
             }, {
@@ -612,7 +667,7 @@ const api = {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Order placement error:", error);
@@ -627,17 +682,17 @@ const api = {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             return response.data;
         } catch (error) {
             console.error("Order placement error:", error);
             return error.response ? error.response.data : { message: "Failed to place order" };
         }
     },
-    purchaseOrder: async function (orderDetails){
+    purchaseOrder: async function (orderDetails) {
         try {
             const token = getAccessToken();
-            
+
             if (token) {
                 return await this.purchaseOrderAuth(orderDetails);
             } else {
@@ -664,7 +719,7 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
     },
-   getSubscriptionStatus: async () => {
+    getSubscriptionStatus: async () => {
         try {
             const token = localStorage.getItem("accessToken");
             const response = await apiClient.get(`${API_URL}/active-inactive-subscription`, {
@@ -680,176 +735,180 @@ const api = {
         }
     },
 
-    processPayment :async(data)=>{
+    processPayment: async (data) => {
         try {
-            const response = await apiClient.post(`${API_URL}/stripe-payment`,data,{
-            headers: {
-                'Content-Type': 'application/json',
-               Authorization: `Bearer ${getAccessToken()}`
-        }});
-        
+            const response = await apiClient.post(`${API_URL}/stripe-payment`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getAccessToken()}`
+                }
+            });
+
             return response.data
         } catch (error) {
-              console.error("Subscription status fetch error:", error);
-              return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
+            console.error("Subscription status fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
     },
-    getNbaSortedInjury :async(data)=>{
+    getNbaSortedInjury: async (data) => {
         try {
-            const response = await axios.post(`${API_URL}/nba-sorted-injuries-data`,data,{
-            headers: {
-                'Content-Type': 'application/json',
-        }});
-        
+            const response = await axios.post(`${API_URL}/nba-sorted-injuries-data`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
             return response.data
         } catch (error) {
-              console.error("Subscription status fetch error:", error);
-              return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
+            console.error("Subscription status fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
     },
-     getNhlSortedInjury :async(data)=>{
+    getNhlSortedInjury: async (data) => {
         try {
-            const response = await axios.post(`${API_URL}/nhl-sorted-injuries-data`,data,{
-            headers: {
-                'Content-Type': 'application/json',
-        }});
-        
+            const response = await axios.post(`${API_URL}/nhl-sorted-injuries-data`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
             return response.data
         } catch (error) {
-              console.error("Subscription status fetch error:", error);
-              return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
+            console.error("Subscription status fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
     },
-      getMlbSortedInjury :async(data)=>{
+    getMlbSortedInjury: async (data) => {
         try {
-            const response = await axios.post(`${API_URL}/mlb-sorted-injuries-data`,data,{
-            headers: {
-                'Content-Type': 'application/json',
-        }});
-        
+            const response = await axios.post(`${API_URL}/mlb-sorted-injuries-data`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
             return response.data
         } catch (error) {
-              console.error("Subscription status fetch error:", error);
-              return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
+            console.error("Subscription status fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch subscription status" };
         }
     },
-      getNbaDropdownData: async (date) => {
+    getNbaDropdownData: async (date) => {
         try {
-            const formattedDate = date || new Date().toISOString().split('T')[0]; 
+            const formattedDate = date || new Date().toISOString().split('T')[0];
             const response = await apiClient.get(`${API_URL}/nba-select-tab-data/?date=${formattedDate}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
-       
+
             return response.data.data;
         } catch (error) {
             console.error("Schedule data fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
-     getNhlDropdownData: async (date) => {
+    getNhlDropdownData: async (date) => {
         try {
-            const formattedDate = date || new Date().toISOString().split('T')[0]; 
+            const formattedDate = date || new Date().toISOString().split('T')[0];
             const response = await apiClient.get(`${API_URL}/nhl-select-tab-data/?date=${formattedDate}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
-       
+
             return response.data.data;
         } catch (error) {
             console.error("Schedule data fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
-      getMlbDropdownData: async (date) => {
+    getMlbDropdownData: async (date) => {
         try {
             const formattedDate = date || new Date().toISOString().split('T')[0];
             const response = await apiClient.get(`${API_URL}/mlb-select-tab-data/?date=${formattedDate}`, {
-                headers: { 'Content-Type': 'application/json' } 
+                headers: { 'Content-Type': 'application/json' }
             });
-       
+
             return response.data.data;
         } catch (error) {
             console.error("Schedule data fetch error:", error);
             return error.response ? error.response.data : { message: "Failed to fetch schedule data" };
         }
     },
-getNbaFutureData: async (date, location, pick_name) => {
-    try {
-        const formattedDate = date || new Date().toISOString().split('T')[0];
-        
-        const payload = {
-            date_str: formattedDate
-        };
-        
-        if (location) {
-            payload.location = location;
-        }
-        
-        if (pick_name) {
-            payload.pick_name = pick_name;
-        }
-        
-        const response = await apiClient.post(`${API_URL}/nba-future-data`, payload, {
-            headers: { 'Content-Type': 'application/json' } 
-        });
-   
-        return response.data.data;
-    } catch (error) {
-        console.error("NBA future data fetch error:", error);
-        return error.response ? error.response.data : { message: "Failed to fetch NBA future data" };
-    }
-},
+    getNbaFutureData: async (date, location, pick_name) => {
+        try {
+            const formattedDate = date || new Date().toISOString().split('T')[0];
 
-getNhlFutureData: async (date, location, pick_name) => {
-    try {
-        const formattedDate = date || new Date().toISOString().split('T')[0];
-        const payload = {
-            date_str: formattedDate
-        };
-        
-        if (location) {
-            payload.location = location;
-        }
-        
-        if (pick_name) {
-            payload.pick_name = pick_name;
-        }
-        
-        const response = await apiClient.post(`${API_URL}/nhl-future-data`, payload, {
-            headers: { 'Content-Type': 'application/json' } 
-        });
-   
-        return response.data.data;
-    } catch (error) {
-        console.error("NHL future data fetch error:", error);
-        return error.response ? error.response.data : { message: "Failed to fetch NHL future data" };
-    }
-},
+            const payload = {
+                date_str: formattedDate
+            };
 
-getMlbFutureData: async (date, location, pick_name) => {
-    try {
-        const formattedDate = date || new Date().toISOString().split('T')[0];
-        const payload = {
-            date_str: formattedDate
-        };
-        
-        if (location) {
-            payload.location = location;
+            if (location) {
+                payload.location = location;
+            }
+
+            if (pick_name) {
+                payload.pick_name = pick_name;
+            }
+
+            const response = await apiClient.post(`${API_URL}/nba-future-data`, payload, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            return response.data.data;
+        } catch (error) {
+            console.error("NBA future data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch NBA future data" };
         }
-        
-        if (pick_name) {
-            payload.pick_name = pick_name;
+    },
+
+    getNhlFutureData: async (date, location, pick_name) => {
+        try {
+            const formattedDate = date || new Date().toISOString().split('T')[0];
+            const payload = {
+                date_str: formattedDate
+            };
+
+            if (location) {
+                payload.location = location;
+            }
+
+            if (pick_name) {
+                payload.pick_name = pick_name;
+            }
+
+            const response = await apiClient.post(`${API_URL}/nhl-future-data`, payload, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            return response.data.data;
+        } catch (error) {
+            console.error("NHL future data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch NHL future data" };
         }
-        
-        const response = await apiClient.post(`${API_URL}/mlb-future-data`, payload, {
-            headers: { 'Content-Type': 'application/json' } 
-        });
-   
-        return response.data.data;
-    } catch (error) {
-        console.error("MLB future data fetch error:", error);
-        return error.response ? error.response.data : { message: "Failed to fetch MLB future data" };
+    },
+
+    getMlbFutureData: async (date, location, pick_name) => {
+        try {
+            const formattedDate = date || new Date().toISOString().split('T')[0];
+            const payload = {
+                date_str: formattedDate
+            };
+
+            if (location) {
+                payload.location = location;
+            }
+
+            if (pick_name) {
+                payload.pick_name = pick_name;
+            }
+
+            const response = await apiClient.post(`${API_URL}/mlb-future-data`, payload, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            return response.data.data;
+        } catch (error) {
+            console.error("MLB future data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch MLB future data" };
+        }
     }
-}
 };
 
 
