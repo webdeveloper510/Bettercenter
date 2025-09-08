@@ -11,7 +11,6 @@ import fanduelLogo from "../../Assets/images/fanduel.webp";
 import caesarsLogo from "../../Assets/images/caesors.png";
 import betriversLogo from "../../Assets/images/betrivers.png";
 import bet365Logo from "../../Assets/images/bet365.webp";
-import unibetLogo from "../../Assets/images/unibet.png";
 import Schedule from "./Schedule";
 import NBAInjuryTable from "./injury";
 import Futures from "./futures";
@@ -459,28 +458,28 @@ const Games = () => {
         case "NCAAF":
           switch (marketType) {
             case "MONEYLINE":
-              apiData = await api.getMlbMoneyData(
+              apiData = await api.getNcaafMoneyData(
                 formattedDate.date,
                 formattedDate.timezone
               );
               processedData = processMoneylineData(apiData);
               break;
             case "SPREAD":
-              apiData = await api.getMlbSpreadData(
+              apiData = await api.getNcaafSpreadData(
                 formattedDate.date,
                 formattedDate.timezone
               );
               processedData = processSpreadData(apiData);
               break;
             case "TOTAL":
-              apiData = await api.getMlbOverUnderData(
+              apiData = await api.getNcaafOverUnderData(
                 formattedDate.date,
                 formattedDate.timezone
               );
               processedData = processTotalData(apiData);
               break;
             case "DEFAULT":
-              apiData = await api.getMlbDefaultData(
+              apiData = await api.getNcaafDefaultData(
                 formattedDate.date,
                 formattedDate.timezone
               );
