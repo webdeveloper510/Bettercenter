@@ -1,8 +1,5 @@
-
 import axios from 'axios';
-import { format } from 'date-fns';
-
-//export const API_URL = 'http://54.209.247.111:8000';
+//export const API_URL = 'http://54.209.247.111:8000';  
 export const API_URL = 'https://api.bettorcenter.com';
 
 const getAccessToken = () => localStorage.getItem('accessToken');
@@ -249,6 +246,7 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch money data" };
         }
     },
+
     getMlbDefaultData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
@@ -262,6 +260,7 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch default data" };
         }
     },
+
     getMlbSpreadData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
@@ -274,11 +273,66 @@ const api = {
             return error.response ? error.response.data : { message: "Failed to fetch spread data" };
         }
     },
+
     getMlbOverUnderData: async (date, timezone) => {
         try {
             const formattedDate = date || '';
             const formattedTimezone = timezone || '';
             const response = await apiClient.get(`${API_URL}/mlb-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            return error.response ? error.response.data : { message: "Failed to fetch over/under data" };
+        }
+    },
+
+    getNcaafMoneyData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/ncaaf-money-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Money data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch money data" };
+        }
+    },
+
+    getNcaafDefaultData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/ncaaf-default-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Default data fetch error:", error);
+            return error.response ? error.response.data : { message: "Failed to fetch default data" };
+        }
+    },
+
+    getNcaafSpreadData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/ncaaf-spread-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.data;
+        } catch (error) {
+            return error.response ? error.response.data : { message: "Failed to fetch spread data" };
+        }
+    },
+
+    getNcaafOverUnderData: async (date, timezone) => {
+        try {
+            const formattedDate = date || '';
+            const formattedTimezone = timezone || '';
+            const response = await apiClient.get(`${API_URL}/ncaaf-over-under-data/?date=${formattedDate}&timezone=${formattedTimezone}`, {
                 headers: { 'Content-Type': 'application/json' }
             });
             return response.data;
