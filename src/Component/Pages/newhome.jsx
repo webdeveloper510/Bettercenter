@@ -30,6 +30,7 @@ import BlogList from "./blog";
 import Ourteam from "./ourteam";
 import { forwardRef } from "react";
 import CalendarEmbed from "./monthly";
+import { useLocation } from "react-router-dom";
 const BOOKMAKER_LOGOS = {
   BetMGM: { logo: betmgmLogo },
   DraftKings: { logo: draftkingsLogo },
@@ -118,7 +119,7 @@ const Games = () => {
   const initialDataFetchedRef = useRef(false);
   const allSportsDataCache = useRef(null);
   const lastAllSportsFetchTime = useRef(null);
-
+  const location = useLocation();
   const tabs = [
     "OVERVIEW",
     // "GAMES",
@@ -139,7 +140,14 @@ const Games = () => {
   const navigate = useNavigate();
   const [bookmarkedGames, setBookmarkedGames] = useState([]);
   const currentSportMarketRef = useRef("");
-
+useEffect(() => {
+  console.log("🚀 ~ Games ~ location.state?.activeTab:", location.state?.activeTab)
+  if (location.state?.activeTab) {
+    setActiveTab(location.state.activeTab);
+    // Clear the state after using it
+    window.history.replaceState({}, document.title);
+  }
+}, [location]);
   const totalPages = 4;
   const isCurrentDate = () => {
     const today = new Date();

@@ -70,9 +70,7 @@ const HomeBlog = () => {
               <Col md={6} lg={3} key={key} className="mb-4">
                 <Card
                   className="article-card h-100"
-                  onClick={() =>
-                    navigate("/news", { state: { newsIndex: key } })
-                  }
+           onClick={() => navigate(`/blog/${article.id}`)}
                   style={{ cursor: "pointer" }}
                 >
                   <Card.Img
@@ -101,11 +99,20 @@ const HomeBlog = () => {
           )}
         </Row>
 
-        <div className="text-center mt-3">
-          <a href="/newspage" className="view-more-link text-uppercase">
-            View More Articles
-          </a>
-        </div>
+    <div className="text-center mt-3">
+  <button 
+    onClick={() => navigate('/', { state: { activeTab: 'BLOG' } })}
+    className="view-more-link text-uppercase"
+    style={{ 
+      background: 'none', 
+      border: 'none', 
+      cursor: 'pointer',
+      textDecoration: 'underline'
+    }}
+  >
+    View More Articles
+  </button>
+</div>
       </Container>
     </section>
   );
