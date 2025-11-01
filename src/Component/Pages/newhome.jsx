@@ -145,14 +145,17 @@ const Games = () => {
   const navigate = useNavigate();
   const [bookmarkedGames, setBookmarkedGames] = useState([]);
   const currentSportMarketRef = useRef("");
-useEffect(() => {
-  console.log("🚀 ~ Games ~ location.state?.activeTab:", location.state?.activeTab)
-  if (location.state?.activeTab) {
-    setActiveTab(location.state.activeTab);
-    // Clear the state after using it
-    window.history.replaceState({}, document.title);
-  }
-}, [location]);
+  useEffect(() => {
+    console.log(
+      "🚀 ~ Games ~ location.state?.activeTab:",
+      location.state?.activeTab
+    );
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+      // Clear the state after using it
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
   const totalPages = 4;
   const isCurrentDate = () => {
     const today = new Date();
@@ -1472,14 +1475,12 @@ useEffect(() => {
     );
   };
   return (
-    
     <section className="backgroung_image">
-         
       <div className="container new_container">
         <div className="row">
           <div className="top_banner mt-5">
             <PromoBanner />
-               <HomeBlog />
+            <HomeBlog />
           </div>
         </div>
         <div className="row">
@@ -2104,8 +2105,6 @@ useEffect(() => {
           </div>
         </div>
       </div>
-
-
 
       <StaticInfo />
       <Faq />
