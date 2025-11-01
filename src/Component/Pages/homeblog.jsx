@@ -39,7 +39,7 @@ const HomeBlog = () => {
     <section className="blog-articles py-5">
       <Container>
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h3 className="text-white mb-0 title_blog">Blog Articles</h3>
+          <h3 className="text-white mb-0 title_blog">Blog Articles </h3>
 
           <Dropdown onSelect={(e) => setSelectedTag(e)}>
             <Dropdown.Toggle

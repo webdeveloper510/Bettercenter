@@ -1433,11 +1433,14 @@ useEffect(() => {
     );
   };
   return (
+    
     <section className="backgroung_image">
+         
       <div className="container new_container">
         <div className="row">
           <div className="top_banner mt-5">
             <PromoBanner />
+               <HomeBlog />
           </div>
         </div>
         <div className="row">
@@ -2008,7 +2011,7 @@ useEffect(() => {
         </div>
       </div>
 
-      <HomeBlog />
+
 
       <StaticInfo />
       <Faq />
