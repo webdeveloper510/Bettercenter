@@ -209,6 +209,40 @@ const api = {
         : { message: "Failed to fetch blog" };
     }
   },
+// ADD COMMENT
+addBlogComment: async (blogId, commentText) => {
+  try {
+    const response = await apiClient.post(
+      `${API_URL}/add-blog-comment`,
+      {
+        blog_id: blogId,
+        comment_text: commentText,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Comment add error:", error);
+    return error.response ? error.response.data : { message: "Failed to add comment" };
+  }
+},
+
+getBlogComments: async (blogId) => {
+  try {
+    const response = await apiClient.get(
+      `${API_URL}/get-blog-commnets/${blogId}`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data; 
+  } catch (error) {
+    console.error("Error getting blog comments:", error);
+    return [];
+  }
+},
 
   getMoneyData: async (date, timezone) => {
     try {
