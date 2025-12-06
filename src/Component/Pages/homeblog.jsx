@@ -16,7 +16,7 @@ const HomeBlog = () => {
       try {
         const response = await api.getBlogsData();
         if (response && response.data) {
-          setAllArticles(response.data.slice(0, 4)); 
+          setAllArticles(response.data.slice(0, 4));
         }
       } catch (error) {
         console.error("Failed to fetch home blogs", error);
@@ -33,7 +33,11 @@ const HomeBlog = () => {
       ? allArticles
       : allArticles.filter((article) => article.sports_type === selectedTag);
 
-  const uniqueTags = ["All", ...new Set(allArticles.map((a) => a.sports_type))];
+  const uniqueTags = [
+    "All",
+    "NCAAF",
+    ...new Set(allArticles.map((a) => a.sports_type)),
+  ];
 
   return (
     <section className="blog-articles py-5">
@@ -70,7 +74,7 @@ const HomeBlog = () => {
               <Col md={6} lg={3} key={key} className="mb-4">
                 <Card
                   className="article-card h-100"
-           onClick={() => navigate(`/blog/${article.id}`)}
+                  onClick={() => navigate(`/blog/${article.id}`)}
                   style={{ cursor: "pointer" }}
                 >
                   <Card.Img
@@ -99,20 +103,20 @@ const HomeBlog = () => {
           )}
         </Row>
 
-    <div className="text-center mt-3">
-  <button 
-    onClick={() => navigate('/', { state: { activeTab: 'BLOG' } })}
-    className="view-more-link text-uppercase"
-    style={{ 
-      background: 'none', 
-      border: 'none', 
-      cursor: 'pointer',
-      textDecoration: 'underline'
-    }}
-  >
-    View More Articles
-  </button>
-</div>
+        <div className="text-center mt-3">
+          <button
+            onClick={() => navigate("/", { state: { activeTab: "BLOG" } })}
+            className="view-more-link text-uppercase"
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
+          >
+            View More Articles
+          </button>
+        </div>
       </Container>
     </section>
   );

@@ -98,7 +98,7 @@ const isValueChanged = (oldVal, newVal) => {
 
 const Games = () => {
   const [sport, setSport] = useState("ALL_GAMES");
-  const [marketType, setMarketType] = useState("DEFAULT");
+  const [marketType, setMarketType] = useState("SPREAD");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [allSportsData, setAllSportsData] = useState({
     nbaSpread: [],
