@@ -35,7 +35,7 @@ const HomeBlog = () => {
 
   const uniqueTags = [
     "All",
-    "NCAAF",
+    "NCAAB",
     ...new Set(allArticles.map((a) => a.sports_type)),
   ];
 
