@@ -16,7 +16,7 @@ const HomeBlog = () => {
       try {
         const response = await api.getBlogsData();
         if (response && response.data) {
-          setAllArticles(response.data.slice(0, 4));
+          setAllArticles(response.data); 
         }
       } catch (error) {
         console.error("Failed to fetch home blogs", error);
@@ -70,7 +70,7 @@ const HomeBlog = () => {
               <p className="text-white">Loading blogs...</p>
             </Col>
           ) : filteredArticles.length > 0 ? (
-            filteredArticles.map((article, key) => (
+filteredArticles.slice(0, 4).map((article, key) => (
               <Col md={6} lg={3} key={key} className="mb-4">
                 <Card
                   className="article-card h-100"
